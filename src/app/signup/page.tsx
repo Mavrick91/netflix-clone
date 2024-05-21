@@ -1,17 +1,17 @@
 "use client";
 
 import { Button } from "@/components/Button";
+import WarningError from "@/components/WarningError";
+import { auth } from "@/firebase";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import Step1 from "./_components/Step1";
-import { auth } from "@/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
-import { useEffect } from "react";
 
 const formSchema = z.object({
 	email: z
@@ -77,15 +77,8 @@ const SignUpPage = () => {
 				<form onSubmit={handleSubmit(processForm)} className="grow bg-primary-white">
 					<div className="mx-auto flex w-[500px] flex-col px-8 pb-16 pt-5" tabIndex={0}>
 						{error && (
-							<div className="mt-8 rounded-md bg-[#d89d31] p-4">
-								<div className="flex items-center">
-									<Icon icon="material-symbols:warning" className="mr-4 shrink-0 text-2xl text-black" />
-									<div className="text-base">
-										<span id="" data-uia="">
-											Sorry, we are unable to complete the sign-up process now. Please try again later.
-										</span>
-									</div>
-								</div>
+							<div className="mt-8">
+								<WarningError>Sorry, we are unable to complete the sign-up process now. Please try again later.</WarningError>
 							</div>
 						)}
 

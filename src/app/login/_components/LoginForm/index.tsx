@@ -1,14 +1,20 @@
 "use client";
 
 import { Button } from "@/components/Button";
+import WarningError from "@/components/WarningError";
 import FormInput from "@/components/input/FormInput";
+import { auth } from "@/firebase";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-	customer: z
+	email: z
 		.string({
 			required_error: "Please enter your email address.",
 		})
@@ -18,22 +24,45 @@ const formSchema = z.object({
 		.string({
 			required_error: "Please enter your password.",
 		})
-		.min(4, "Password must be at least 4 characters long")
+		.min(6, "Password must be at least 6 characters long")
 		.max(60, "Password must be less than 60 characters long"),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 const LoginForm = () => {
+	const router = useRouter();
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 	});
 
-	const { handleSubmit } = methods;
+	const { handleSubmit, watch } = methods;
+
+	const watchEmail = watch("email");
+
+	const {
+		mutate: signIn,
+		isPending,
+		error,
+		isSuccess,
+		data: userCredentials,
+	} = useMutation({
+		mutationFn: async ({ email, password }: { email: string; password: string }) => signInWithEmailAndPassword(auth, email, password),
+	});
 
 	const onSubmit: SubmitHandler<FormData> = async (data) => {
-		console.log("🚀 ~ data:", data);
+		try {
+			signIn({ email: data.email, password: data.password });
+		} catch (error) {
+			console.error(error);
+		}
 	};
+
+	useEffect(() => {
+		if (isSuccess) {
+			router.push("/browse");
+		}
+	}, [isSuccess, router, userCredentials]);
 
 	return (
 		<div className="flex max-h-[707px] flex-col rounded-md bg-[#000000b3] px-16 py-12">
@@ -42,14 +71,22 @@ const LoginForm = () => {
 			</header>
 			<FormProvider {...methods}>
 				<form className="flex w-80 flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-					<FormInput name="customer">
+					{error && (
+						<WarningError>
+							<b className="font-medium">Incorrect password for {watchEmail}</b>
+						</WarningError>
+					)}
+
+					<FormInput name="email">
 						<FormInput.Text label="Email address" type="email" />
 					</FormInput>
 					<FormInput name="password">
 						<FormInput.Text label="Password" type="password" />
 					</FormInput>
 
-					<Button type="submit">Submit</Button>
+					<Button type="submit" loading={isPending}>
+						Submit
+					</Button>
 
 					<Link className="text-center" href="/LoginHelp">
 						<span className="underline-offset-2 hover:text-primary-white-hover hover:underline">Forgot password?</span>

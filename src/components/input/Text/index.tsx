@@ -8,7 +8,6 @@ type Props = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const Text = ({ label, mode = "dark", ...props }: Props) => {
-	console.log("🚀 ~ mode:", mode);
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
