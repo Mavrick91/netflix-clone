@@ -5,6 +5,7 @@ import { createContext, InputHTMLAttributes, ReactNode, useContext } from "react
 import { Controller, ControllerProps, useFormContext } from "react-hook-form";
 import Text from "../Text";
 import ErrorMessage from "@/components/ErrorMessage";
+import RadioGroup from "../Radio";
 
 type FormInputContextProps = {
 	name: string;
@@ -39,7 +40,7 @@ export default function FormInput({ name, children, disabled }: FormInputProps) 
 	);
 }
 
-type TextProps = { label: string } & InputHTMLAttributes<HTMLInputElement> & Omit<ControllerProps, "render" | "name">;
+type TextProps = { label: string; mode?: "light" | "dark" } & InputHTMLAttributes<HTMLInputElement> & Omit<ControllerProps, "render" | "name">;
 
 const RHFText = ({ shouldUnregister, ...props }: TextProps) => {
 	const { name, control, disabled } = useContext(FormInputContext)!;
@@ -55,3 +56,22 @@ const RHFText = ({ shouldUnregister, ...props }: TextProps) => {
 };
 
 FormInput.Text = RHFText;
+
+type RadioProps = InputHTMLAttributes<HTMLInputElement> & Omit<ControllerProps, "render" | "name">;
+
+const RHFRadio = ({ shouldUnregister, ...props }: RadioProps) => {
+	const { name, control, disabled } = useContext(FormInputContext)!;
+
+	return (
+		<Controller
+			shouldUnregister={shouldUnregister}
+			name={name}
+			control={control}
+			render={({ field }) => {
+				return <RadioGroup {...field} {...props} checked={field.value === props.value} />;
+			}}
+		/>
+	);
+};
+
+FormInput.Radio = RHFRadio;

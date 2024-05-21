@@ -4,9 +4,10 @@ import React, { InputHTMLAttributes, useState } from "react";
 
 type Props = {
 	label: string;
+	mode?: "dark" | "light";
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const Text = ({ label, ...props }: Props) => {
+const Text = ({ label, mode = "dark", ...props }: Props) => {
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
@@ -16,6 +17,8 @@ const Text = ({ label, ...props }: Props) => {
 					"absolute inset-x-4 top-3.5 z-10 select-none truncate whitespace-nowrap text-[#ffffffc7] transition-all group-focus-within:top-2 group-focus-within:text-xs",
 					{
 						"!top-2 !text-xs": props.value,
+						"text-[#ffffffc7]": mode === "dark",
+						"text-[#000000b2]": mode === "light",
 					}
 				)}
 			>
@@ -30,13 +33,21 @@ const Text = ({ label, ...props }: Props) => {
 						"min-h-4 w-full min-w-4 rounded-sm border border-[#808080b3] bg-transparent px-4 pb-2 pt-6 text-sm focus:ring-1 focus:ring-white focus-visible:outline-none",
 						{
 							"pr-10": props.type === "password",
+							"focus:ring-white text-white": mode === "dark",
+							"focus:ring-black text-black": mode === "light",
 						}
 					)}
 				/>
 				{props.type === "password" && (
 					<div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center justify-center">
 						<button onClick={() => setShowPassword(!showPassword)} type="button">
-							<Icon icon={showPassword ? "ph:eye-slash" : "ph:eye"} />
+							<Icon
+								icon={showPassword ? "ph:eye-slash" : "ph:eye"}
+								className={classNames({
+									"text-[#ffffffc7]": mode === "dark",
+									"text-[#000000b2]": mode === "light",
+								})}
+							/>
 						</button>
 					</div>
 				)}
