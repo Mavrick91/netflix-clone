@@ -1,10 +1,11 @@
 import ImageClient from "@/components/ImageClient";
-import SignInButton from "@/components/SignInButton";
-import NetflixPlan from "./_components/NetflixPlan";
+import Separator1 from "@/components/Separator1";
+import Link from "next/link";
 import Category1 from "./_components/Category1";
 import Category2 from "./_components/Category2";
-import Separator1 from "@/components/Separator1";
 import FAQ from "./_components/FAQ";
+import NetflixPlan from "./_components/NetflixPlan";
+import { buttonVariants } from "@/components/Button";
 
 export default function Home() {
 	return (
@@ -20,7 +21,9 @@ export default function Home() {
 				<header className="netflix-container relative z-10 mx-auto w-full px-8 py-6">
 					<div className="flex items-center justify-between">
 						<span>Netflix</span>
-						<SignInButton />
+						<Link href="/login" className={buttonVariants({ size: "sm" })}>
+							Sign In
+						</Link>
 					</div>
 				</header>
 

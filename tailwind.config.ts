@@ -5,7 +5,10 @@ const config: Config = {
 	theme: {
 		extend: {
 			colors: {
-				"red-button": "rgb(229, 9, 20)",
+				"primary-red": "#e50914",
+				"primary-red-hover": "#c11119",
+				"primary-white": "#ffffff",
+				"primary-white-hover": "#ffffffb3",
 			},
 		},
 	},
