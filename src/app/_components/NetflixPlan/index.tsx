@@ -16,7 +16,7 @@ const NetflixPlan = () => {
 				}}
 			>
 				<PopcornIcon />
-				<div className="pl-8">
+				<div className="pl-8 text-primary-white">
 					<p className="text-xl font-medium">The Netflix you love for just $6.99.</p>
 					<p className="mb-2 mt-1">Get the Standard with ads plan.</p>
 					<Link href="/signup" className="flex items-center text-[#448ef4] underline-offset-2 hover:underline">

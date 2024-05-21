@@ -55,7 +55,7 @@ const FAQ_QUESTIONS = [
 
 const FAQ = () => {
 	return (
-		<div className="netflix-container mx-auto flex flex-col items-center justify-center py-20">
+		<div className="netflix-container mx-auto flex flex-col items-center justify-center py-20 text-primary-white">
 			<h2 className="text-5xl font-black">Frequently Asked Questions</h2>
 			<div className="my-6 w-full">
 				<ul className="space-y-2 text-2xl">

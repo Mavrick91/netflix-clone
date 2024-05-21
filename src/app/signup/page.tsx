@@ -1,28 +1,19 @@
 "use client";
 
 import { Button } from "@/components/Button";
-import Link from "next/link";
-import { useState } from "react";
-import Step1 from "./_components/Step1";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import Step2 from "./_components/Step2";
-
-const steps = [
-	{
-		id: "Step 1",
-		fields: ["offer"],
-	},
-	{
-		id: "Step 2",
-		fields: ["email", "password"],
-	},
-	{ id: "Step 3", name: "Complete" },
-];
+import Step1 from "./_components/Step1";
+import { auth } from "@/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
+import { useEffect } from "react";
 
 const formSchema = z.object({
-	"plan-select": z.string(),
 	email: z
 		.string({
 			required_error: "Please enter your email address.",
@@ -33,50 +24,42 @@ const formSchema = z.object({
 		.string({
 			required_error: "Please enter your password.",
 		})
-		.min(4, "Password must be at least 4 characters long")
+		.min(6, "Password must be at least 6 characters long")
 		.max(60, "Password must be less than 60 characters long"),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 const SignUpPage = () => {
-	const [currentStep, setCurrentStep] = useState(1);
-
+	const router = useRouter();
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			"plan-select": "1",
 			email: "",
 			password: "",
 		},
 	});
+	const { handleSubmit } = methods;
 	const {
-		handleSubmit,
-		reset,
-		trigger,
-		formState: { errors },
-		watch,
-	} = methods;
-	console.log("🚀 ~ watch:", watch());
+		mutate: signUp,
+		isPending,
+		error,
+		isSuccess,
+	} = useMutation({
+		mutationFn: async ({ email, password }: { email: string; password: string }) => createUserWithEmailAndPassword(auth, email, password),
+	});
 
-	type FieldName = keyof FormData;
+	useEffect(() => {
+		if (isSuccess) {
+			router.push("/");
+		}
+	}, [isSuccess, router]);
 
-	const processForm: SubmitHandler<FormData> = (data) => {
-		console.log(data);
-		reset();
-	};
-
-	const next = async () => {
-		const fields = steps[currentStep].fields;
-		const output = await trigger(fields as FieldName[], { shouldFocus: true });
-
-		if (!output) return;
-
-		if (currentStep < steps.length - 1) {
-			if (currentStep === steps.length - 2) {
-				await handleSubmit(processForm)();
-			}
-			setCurrentStep((step) => step + 1);
+	const processForm: SubmitHandler<FormData> = async (data) => {
+		try {
+			signUp({ email: data.email, password: data.password });
+		} catch (error) {
+			console.error("Error signing up:", error);
 		}
 	};
 
@@ -92,22 +75,25 @@ const SignUpPage = () => {
 			</div>
 			<FormProvider {...methods}>
 				<form onSubmit={handleSubmit(processForm)} className="grow bg-primary-white">
-					{currentStep === 0 && (
-						<div className="mx-auto flex max-w-[1100px] flex-col px-8 pb-16 pt-5" tabIndex={0}>
-							<Step1 />
-							<Button tabIndex={0} className="mx-auto mt-6 h-auto w-full max-w-[340px] py-5 text-2xl" size="lg" onClick={next}>
-								Next
-							</Button>
-						</div>
-					)}
-					{currentStep === 1 && (
-						<div className="mx-auto flex max-w-[440px] flex-col px-8 pb-16 pt-5" tabIndex={0}>
-							<Step2 />
-							<Button tabIndex={0} className="mx-auto mt-6 h-auto w-full py-5 text-2xl" size="lg" onClick={next}>
-								Next
-							</Button>
-						</div>
-					)}
+					<div className="mx-auto flex w-[500px] flex-col px-8 pb-16 pt-5" tabIndex={0}>
+						{error && (
+							<div className="mt-8 rounded-md bg-[#d89d31] p-4">
+								<div className="flex items-center">
+									<Icon icon="material-symbols:warning" className="mr-4 shrink-0 text-2xl text-black" />
+									<div className="text-base">
+										<span id="" data-uia="">
+											Sorry, we are unable to complete the sign-up process now. Please try again later.
+										</span>
+									</div>
+								</div>
+							</div>
+						)}
+
+						<Step1 />
+						<Button loading={isPending} type="submit" tabIndex={0} className="mx-auto mt-6 h-auto w-full py-4 text-2xl" size="lg">
+							Create account
+						</Button>
+					</div>
 				</form>
 			</FormProvider>
 		</div>

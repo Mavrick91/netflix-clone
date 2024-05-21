@@ -3,7 +3,7 @@ import React from "react";
 
 const Category2 = () => {
 	return (
-		<div className="netflix-container mx-auto flex items-center justify-center py-20">
+		<div className="netflix-container mx-auto flex items-center justify-center py-20 text-primary-white">
 			<div className="h-[519px] basis-1/2">
 				<div className="relative h-full">
 					<ImageClient alt="" fill src="/images/device-pile.png" />

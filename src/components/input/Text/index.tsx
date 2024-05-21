@@ -8,19 +8,17 @@ type Props = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const Text = ({ label, mode = "dark", ...props }: Props) => {
+	console.log("🚀 ~ mode:", mode);
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (
 		<div className="group relative inline-flex flex-wrap align-top">
 			<label
-				className={classNames(
-					"absolute inset-x-4 top-3.5 z-10 select-none truncate whitespace-nowrap text-[#ffffffc7] transition-all group-focus-within:top-2 group-focus-within:text-xs",
-					{
-						"!top-2 !text-xs": props.value,
-						"text-[#ffffffc7]": mode === "dark",
-						"text-[#000000b2]": mode === "light",
-					}
-				)}
+				className={classNames("absolute inset-x-4 top-3.5 z-10 select-none truncate whitespace-nowrap transition-all group-focus-within:top-2 group-focus-within:text-xs", {
+					"!top-2 !text-xs": props.value,
+					"text-[#ffffffc7]": mode === "dark",
+					"text-[#000000b2]": mode === "light",
+				})}
 			>
 				{label}
 			</label>

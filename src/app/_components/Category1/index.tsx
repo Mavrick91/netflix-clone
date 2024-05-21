@@ -3,7 +3,7 @@ import React from "react";
 
 const Category1 = () => {
 	return (
-		<div className="netflix-container mx-auto flex items-center justify-center py-20">
+		<div className="netflix-container mx-auto flex items-center justify-center py-20 text-primary-white">
 			<div className="flex basis-1/2 flex-col gap-4">
 				<h2 data-uia="nmhp-card-animation-text-title" className="text-5xl font-black">
 					Enjoy on your TV
