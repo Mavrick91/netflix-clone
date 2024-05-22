@@ -6,6 +6,8 @@ import { auth } from "@/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { setCookie, clearToken } from "@/actions/cookie";
 import { getSessionId } from "@/actions/firebase";
+import { getAccountDetails } from "@/actions/tmdb";
+import { TMBD, TMDBAccount } from "../../../types";
 
 interface AuthContextType {
 	currentUser: CustomUser | null;
@@ -23,7 +25,7 @@ export const useAuth = (): AuthContextType => {
 };
 
 type CustomUser = User & {
-	tmdbSessionId: string | null;
+	tmdb: TMBD | null;
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -38,12 +40,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 				const sessionId = await getSessionId(user.uid);
 				const token = await user.getIdToken();
 
-				const updatedUser: CustomUser = {
-					...user,
-					tmdbSessionId: sessionId,
-				};
+				if (sessionId) {
+					const accountTMDBDetails = await getAccountDetails(sessionId);
 
-				setCurrentUser(updatedUser);
+					const updatedUser: CustomUser = {
+						...user,
+						tmdb: { sessionId, ...accountTMDBDetails },
+					};
+
+					setCurrentUser(updatedUser);
+				} else {
+					setCurrentUser({ ...user, tmdb: null });
+				}
 
 				await setCookie(token);
 

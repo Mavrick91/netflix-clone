@@ -2,6 +2,7 @@
 
 import db from "@/firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
+import { TMDBAccount } from "../../types";
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
@@ -13,7 +14,7 @@ export const getRequestToken = async (): Promise<string> => {
 	return requestToken;
 };
 
-export const createSession = async (requestToken: string, userId: string): Promise<string> => {
+export const createSession = async (requestToken: string, userId: string) => {
 	const sessionResponse = await fetch(`https://api.themoviedb.org/3/authentication/session/new?api_key=${TMDB_API_KEY}`, {
 		method: "POST",
 		headers: {
@@ -34,6 +35,11 @@ export const createSession = async (requestToken: string, userId: string): Promi
 	await setDoc(userDoc, {
 		tmdbSessionId: sessionId,
 	});
+};
 
-	return sessionId;
+export const getAccountDetails = async (sessionId: string): Promise<TMDBAccount> => {
+	const accountResponse = await fetch(`https://api.themoviedb.org/3/account?api_key=${TMDB_API_KEY}&session_id=${sessionId}`);
+	const accountData: TMDBAccount = await accountResponse.json();
+
+	return accountData;
 };

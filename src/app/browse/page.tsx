@@ -1,6 +1,5 @@
-"use client";
-
 const BrowsePage = () => {
+	const;
 	return <div></div>;
 };
 
