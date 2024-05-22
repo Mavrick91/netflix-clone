@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import Step1 from "./_components/Step1";
+import NetflixLogo from "@/components/NetflixLogo";
 
 const formSchema = z.object({
 	email: z
@@ -66,8 +67,8 @@ const SignUpPage = () => {
 	return (
 		<div className="flex h-dvh flex-col">
 			<div className="relative flex h-[90px] shrink-0 items-center justify-between border border-[#e6e6e6] bg-primary-white">
-				<Link href="/" className="">
-					Netflix
+				<Link href="/" className="mx-11">
+					<NetflixLogo />
 				</Link>
 				<Link href="/login" className="mx-11 text-xl font-medium underline-offset-2 hover:underline">
 					Sign In

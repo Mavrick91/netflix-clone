@@ -4,9 +4,7 @@ export async function middleware(request: NextRequest) {
 	const token = request.cookies.get("token")?.value;
 	const { pathname } = request.nextUrl;
 
-	// Check if the user has a token
 	if (token) {
-		// If user is trying to access the login or signup pages, redirect to browse
 		if (pathname === "/" || pathname === "/login" || pathname === "/signup") {
 			return NextResponse.redirect(new URL("/browse", request.url));
 		}
@@ -23,14 +21,19 @@ export async function middleware(request: NextRequest) {
 			if (response.ok) {
 				return NextResponse.next();
 			} else {
-				return NextResponse.redirect(new URL("/", request.url));
+				// Clear the token if it's invalid
+				const clearResponse = NextResponse.redirect(new URL("/", request.url));
+				clearResponse.cookies.set("token", "", { httpOnly: true, secure: true, path: "/", maxAge: -1 });
+				return clearResponse;
 			}
 		} catch (error) {
 			console.error("Fetch error:", error);
-			return NextResponse.redirect(new URL("/", request.url));
+			// Clear the token in case of fetch error
+			const clearResponse = NextResponse.redirect(new URL("/", request.url));
+			clearResponse.cookies.set("token", "", { httpOnly: true, secure: true, path: "/", maxAge: -1 });
+			return clearResponse;
 		}
 	} else {
-		// If no token, allow the user to access the public pages or redirect to home if trying to access /browse
 		if (pathname === "/browse") {
 			return NextResponse.redirect(new URL("/", request.url));
 		}

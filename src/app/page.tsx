@@ -6,6 +6,7 @@ import Category2 from "./_components/Category2";
 import FAQ from "./_components/FAQ";
 import NetflixPlan from "./_components/NetflixPlan";
 import { buttonVariants } from "@/components/Button";
+import NetflixLogo from "@/components/NetflixLogo";
 
 export default function Home() {
 	return (
@@ -20,7 +21,7 @@ export default function Home() {
 				/>
 				<header className="netflix-container relative z-10 mx-auto w-full px-8 py-6 text-primary-white">
 					<div className="flex items-center justify-between">
-						<span>Netflix</span>
+						<NetflixLogo />
 						<Link href="/login" className={buttonVariants({ size: "sm" })}>
 							Sign In
 						</Link>
