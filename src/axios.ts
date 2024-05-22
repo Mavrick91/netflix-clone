@@ -1,10 +1,10 @@
-import axios from "axios";
+import defaultAxios from "axios";
 
-const instance = axios.create({
+const axios = defaultAxios.create({
 	baseURL: "https://api.themoviedb.org/3",
 	params: {
 		api_key: process.env.NEXT_PUBLIC_TMDB_API_KEY,
 	},
 });
 
-export default instance;
+export default axios;
