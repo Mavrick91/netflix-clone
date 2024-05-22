@@ -1,5 +1,6 @@
 "use client";
 
+import { setCookie } from "@/actions/cookie";
 import { Button } from "@/components/Button";
 import WarningError from "@/components/WarningError";
 import FormInput from "@/components/input/FormInput";
@@ -34,6 +35,10 @@ const LoginForm = () => {
 	const router = useRouter();
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
+		defaultValues: {
+			email: "clownclowed@gmail.com",
+			password: "aaaaaa",
+		},
 	});
 
 	const { handleSubmit, watch } = methods;
@@ -59,9 +64,15 @@ const LoginForm = () => {
 	};
 
 	useEffect(() => {
-		if (isSuccess) {
-			router.push("/browse");
-		}
+		const handleSuccess = async () => {
+			if (isSuccess) {
+				const token = await userCredentials.user.getIdToken();
+				await setCookie(token);
+				router.push("/browse");
+			}
+		};
+
+		handleSuccess();
 	}, [isSuccess, router, userCredentials]);
 
 	return (

@@ -7,6 +7,5 @@ export async function setCookie(token: string) {
 }
 
 export async function clearToken() {
-	console.log("🚀 all cookie", cookies().getAll());
 	cookies().set("token", "", { httpOnly: true, secure: true, path: "/", maxAge: -1 });
 }
