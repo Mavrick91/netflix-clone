@@ -1,45 +1,32 @@
 "use server";
 
-import db from "@/firebase";
-import { collection, doc, setDoc } from "firebase/firestore";
-import { TMDBAccount } from "../../types";
+import tmdbFetch from "@/utils/tmdbFetch";
+import { Movie } from "../../types";
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY;
-
-export const getRequestToken = async (): Promise<string> => {
-	const tokenResponse = await fetch(`https://api.themoviedb.org/3/authentication/token/new?api_key=${TMDB_API_KEY}`);
-	const tokenData = await tokenResponse.json();
-	const requestToken = tokenData.request_token;
-
-	return requestToken;
+export const getTrendingMovies = async (): Promise<Movie> => {
+	return tmdbFetch("/trending/movie/week");
 };
 
-export const createSession = async (requestToken: string, userId: string) => {
-	const sessionResponse = await fetch(`https://api.themoviedb.org/3/authentication/session/new?api_key=${TMDB_API_KEY}`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ request_token: requestToken }),
-	});
+export const getUpcomingMovies = async (): Promise<Movie> => {
+	const today = new Date().toISOString();
+	const nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString();
 
-	if (!sessionResponse.ok) {
-		console.log("🚀 ~ response error:", await sessionResponse.text());
-		throw new Error("Failed to create session");
-	}
-
-	const sessionData = await sessionResponse.json();
-	const sessionId = sessionData.session_id;
-
-	const userDoc = doc(collection(db, "users"), userId);
-	await setDoc(userDoc, {
-		tmdbSessionId: sessionId,
-	});
+	return tmdbFetch(
+		"/discover/movie",
+		{},
+		{
+			region: "US",
+			sort_by: "release_date.desc",
+			"release_date.gte": today,
+			"release_date.lte": nextMonth,
+		}
+	);
 };
 
-export const getAccountDetails = async (sessionId: string): Promise<TMDBAccount> => {
-	const accountResponse = await fetch(`https://api.themoviedb.org/3/account?api_key=${TMDB_API_KEY}&session_id=${sessionId}`);
-	const accountData: TMDBAccount = await accountResponse.json();
+export const getAwardedMovies = async (): Promise<Movie> => {
+	return tmdbFetch("/movie/top_rated");
+};
 
-	return accountData;
+export const getBannerMovies = async (): Promise<Movie> => {
+	return tmdbFetch("/movie/now_playing");
 };

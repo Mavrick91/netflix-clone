@@ -1,5 +1,4 @@
 import MainHeader from "@/components/MainHeader";
-import { TMDBSessionManager } from "@/components/TMDBSessionManager";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,9 +12,9 @@ export default async function BrowseLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<TMDBSessionManager>
+		<div className="h-full bg-[#141414]">
 			<MainHeader />
 			{children}
-		</TMDBSessionManager>
+		</div>
 	);
 }

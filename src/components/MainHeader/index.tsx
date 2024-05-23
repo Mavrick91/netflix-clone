@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NetflixLogo from "../NetflixLogo";
-import Link from "next/link";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/Providers/AuthProvider";
+import LinkComponent from "../LinkComponent";
 
 const navLinks = [
 	{ href: "/browse", label: "Home" },
@@ -17,28 +18,46 @@ const navLinks = [
 
 const MainHeader = () => {
 	const pathname = usePathname();
+	const { logout } = useAuth();
+	const [isScrolled, setIsScrolled] = useState(false);
 
 	const getLinkClasses = (path: string) =>
 		classNames("text-primary-white-hover", {
 			"text-white font-medium": pathname === path,
 		});
 
+	useEffect(() => {
+		const handleScroll = () => {
+			if (document.documentElement.scrollTop > 0) {
+				setIsScrolled(true);
+			} else {
+				setIsScrolled(false);
+			}
+		};
+
+		document.addEventListener("scroll", () => handleScroll());
+
+		return () => {
+			document.removeEventListener("scroll", () => handleScroll());
+		};
+	}, []);
+
 	return (
 		<header
-			className="flex h-[68px] items-center px-14"
-			style={{
-				backgroundImage: "linear-gradient(180deg,rgba(0,0,0,.7) 10%,transparent)",
-			}}
+			className={classNames("fixed top-0 z-20 flex h-[68px] w-full items-center px-14 transition-colors duration-500", {
+				"bg-black bg-opacity-100": isScrolled,
+				"bg-gradient-to-b from-black/70 to-transparent bg-opacity-70": !isScrolled,
+			})}
 		>
 			<div className="flex items-center">
-				<NetflixLogo />
+				<button type="button" onClick={() => logout()}>
+					<NetflixLogo />
+				</button>
 				<nav className="ml-6">
 					<ul className="flex space-x-6 text-sm">
 						{navLinks.map(({ href, label }) => (
-							<li key={href}>
-								<Link href={href} className={getLinkClasses(href)}>
-									{label}
-								</Link>
+							<li key={href} className={getLinkClasses(href)}>
+								<LinkComponent href={href}>{label}</LinkComponent>
 							</li>
 						))}
 					</ul>

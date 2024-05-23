@@ -1,18 +1,18 @@
 import ImageClient from "@/components/ImageClient";
 import Separator1 from "@/components/Separator1";
-import Link from "next/link";
 import Category1 from "./_components/Category1";
 import Category2 from "./_components/Category2";
 import FAQ from "./_components/FAQ";
 import NetflixPlan from "./_components/NetflixPlan";
 import { buttonVariants } from "@/components/Button";
 import NetflixLogo from "@/components/NetflixLogo";
+import LinkComponent from "@/components/LinkComponent";
 
 export default function Home() {
 	return (
 		<div>
 			<div className="relative flex min-h-[44rem] flex-col">
-				<ImageClient fill src="/images/background-signin.jpg" alt="background signin" className="z-0" />
+				<ImageClient priority fill src="/images/background-signin.jpg" alt="background signin" className="z-0" />
 				<div
 					className="absolute inset-0 z-10 bg-black/40"
 					style={{
@@ -22,9 +22,9 @@ export default function Home() {
 				<header className="netflix-container relative z-10 mx-auto w-full px-8 py-6 text-primary-white">
 					<div className="flex items-center justify-between">
 						<NetflixLogo />
-						<Link href="/login" className={buttonVariants({ size: "sm" })}>
+						<LinkComponent href="/login" className={buttonVariants({ size: "sm" })}>
 							Sign In
-						</Link>
+						</LinkComponent>
 					</div>
 				</header>
 

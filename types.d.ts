@@ -1,28 +1,24 @@
-export interface TMDBContextType {
-	sessionId: string | null;
-	requestToken: string | null;
-	error: string | null;
-	fetchRequestToken: () => Promise<void>;
-	createSession: (token: string) => Promise<void>;
-}
-
-export interface TMDBAccount {
-	avatar: {
-		gravatar: {
-			hash: string;
-		};
-		tmdb: {
-			avatar_path: string | null;
-		};
-	};
+export interface MovieResult {
+	backdrop_path: string;
 	id: number;
-	iso_639_1: string;
-	iso_3166_1: string;
-	name: string;
-	include_adult: boolean;
-	username: string;
+	original_title: string;
+	overview: string;
+	poster_path: string;
+	media_type: string;
+	adult: boolean;
+	title: string;
+	original_language: string;
+	genre_ids: number[];
+	popularity: float;
+	release_date: string;
+	video: number;
+	vote_average: float;
+	vote_count: number;
 }
 
-export interface TMBD extends TMDBAccount {
-	sessionId: string | null;
+export interface Movie {
+	page: number;
+	results: MovieResult[];
+	total_pages: number;
+	total_results: number;
 }

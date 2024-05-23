@@ -1,16 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { User, onAuthStateChanged, signOut } from "firebase/auth";
+import { clearToken, setCookie } from "@/actions/cookie";
 import { auth } from "@/firebase";
+import { User, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { setCookie, clearToken } from "@/actions/cookie";
-import { getSessionId } from "@/actions/firebase";
-import { getAccountDetails } from "@/actions/tmdb";
-import { TMBD, TMDBAccount } from "../../../types";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
-	currentUser: CustomUser | null;
+	currentUser: User | null;
 	logout: () => Promise<void>;
 }
 
@@ -24,57 +21,36 @@ export const useAuth = (): AuthContextType => {
 	return context;
 };
 
-type CustomUser = User & {
-	tmdb: TMBD | null;
-};
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-	const [currentUser, setCurrentUser] = useState<CustomUser | null>(null);
+	const [currentUser, setCurrentUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
-	const searchParams = useSearchParams();
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, async (user) => {
+			console.log("🚀 ~ user:", user);
 			if (user) {
-				const sessionId = await getSessionId(user.uid);
 				const token = await user.getIdToken();
 
-				if (sessionId) {
-					const accountTMDBDetails = await getAccountDetails(sessionId);
-
-					const updatedUser: CustomUser = {
-						...user,
-						tmdb: { sessionId, ...accountTMDBDetails },
-					};
-
-					setCurrentUser(updatedUser);
-				} else {
-					setCurrentUser({ ...user, tmdb: null });
-				}
-
 				await setCookie(token);
+			} else await clearToken();
 
-				const currentParams = new URLSearchParams(searchParams.toString());
-				const redirectUrl = `/browse?${currentParams.toString()}`;
-				router.push(redirectUrl);
-			} else {
-				await clearToken();
-				setCurrentUser(null);
-			}
-
+			setCurrentUser(user);
 			setLoading(false);
 		});
 
 		return unsubscribe;
-	}, [router, searchParams]);
+	}, []);
 
 	const logout = async () => {
 		await clearToken();
 		await signOut(auth);
+		router.push("/");
 	};
 
-	if (loading) return null;
+	if (loading) {
+		return null;
+	}
 
-	return <AuthContext.Provider value={{ currentUser, logout }}>{!loading && children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={{ currentUser, logout }}>{children}</AuthContext.Provider>;
 };

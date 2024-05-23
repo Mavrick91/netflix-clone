@@ -6,7 +6,15 @@ const Category2 = () => {
 		<div className="netflix-container mx-auto flex items-center justify-center py-20 text-primary-white">
 			<div className="h-[519px] basis-1/2">
 				<div className="relative h-full">
-					<ImageClient alt="" fill src="/images/device-pile.png" />
+					<ImageClient
+						priority={false}
+						alt="Device Pile Image"
+						fill
+						src="/images/device-pile.png"
+						sizes="(max-width: 768px) 100vw, 
+                   (max-width: 1200px) 50vw, 
+                   33vw"
+					/>
 					<div className="absolute left-[15%] top-[7%] -z-10 scale-90">
 						<video autoPlay playsInline muted loop>
 							<source src="/videos/video-devices.mp4" type="video/mp4" />

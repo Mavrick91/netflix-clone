@@ -49,10 +49,12 @@ const LoginForm = () => {
 		mutate: signIn,
 		isPending,
 		error,
-		isSuccess,
-		data: userCredentials,
 	} = useMutation({
 		mutationFn: async ({ email, password }: { email: string; password: string }) => signInWithEmailAndPassword(auth, email, password),
+		onSuccess: () => {
+			console.log("success");
+			router.push("/browse");
+		},
 	});
 
 	const onSubmit: SubmitHandler<FormData> = async (data) => {
@@ -62,18 +64,6 @@ const LoginForm = () => {
 			console.error(error);
 		}
 	};
-
-	useEffect(() => {
-		const handleSuccess = async () => {
-			if (isSuccess) {
-				const token = await userCredentials.user.getIdToken();
-				await setCookie(token);
-				router.push("/browse");
-			}
-		};
-
-		handleSuccess();
-	}, [isSuccess, router, userCredentials]);
 
 	return (
 		<div className="flex max-h-[707px] flex-col rounded-md bg-[#000000b3] px-16 py-12">
