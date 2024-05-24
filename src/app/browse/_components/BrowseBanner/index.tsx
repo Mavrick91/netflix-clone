@@ -1,4 +1,5 @@
 import { getBannerMovies } from "@/actions/tmdb";
+import InfoIcon from "@/assets/images/svg/InfoIcon";
 import ImageClient from "@/components/ImageClient";
 import React from "react";
 
@@ -55,6 +56,11 @@ const BrowseBanner = async () => {
 							{randomMovie.overview}
 						</p>
 					</div>
+
+					<button className="mt-5 flex items-center gap-2 rounded bg-[#6d6d6eb3] py-3 pl-6 pr-8 text-xl font-medium text-white transition-all hover:bg-[#6d6d6e66]" type="button">
+						<InfoIcon />
+						<span>More Info</span>
+					</button>
 				</div>
 			</div>
 		</div>
