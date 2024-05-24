@@ -1,9 +1,10 @@
 "use client";
 
 import { clearToken, setCookie } from "@/actions/cookie";
+import { AUTH_PATHS } from "@/constans/route";
 import { auth } from "@/firebase";
 import { User, onAuthStateChanged, signOut } from "firebase/auth";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
@@ -21,26 +22,42 @@ export const useAuth = (): AuthContextType => {
 	return context;
 };
 
+const handleAuthStateChange = async (
+	user: User | null,
+	setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>,
+	setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+	pathname: string,
+	router: any
+) => {
+	console.log("🚀 ~ user:", user);
+	if (user) {
+		const token = await user.getIdToken();
+		await setCookie(token);
+
+		if (AUTH_PATHS.includes(pathname)) {
+			router.push("/browse");
+		}
+	} else {
+		await clearToken();
+	}
+
+	setCurrentUser(user);
+	setLoading(false);
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const [currentUser, setCurrentUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
+	const pathname = usePathname();
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, async (user) => {
-			console.log("🚀 ~ user:", user);
-			if (user) {
-				const token = await user.getIdToken();
-
-				await setCookie(token);
-			} else await clearToken();
-
-			setCurrentUser(user);
-			setLoading(false);
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			handleAuthStateChange(user, setCurrentUser, setLoading, pathname, router);
 		});
 
 		return unsubscribe;
-	}, []);
+	}, [pathname, router]);
 
 	const logout = async () => {
 		await clearToken();
