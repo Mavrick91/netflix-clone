@@ -17,7 +17,7 @@ const NetflixCarousel = ({ movies }: Props) => {
 		infinite: true,
 		speed: 500,
 		slidesToScroll: 4,
-		slidesToShow: 10,
+		slidesToShow: 6,
 		nextArrow: <NextArrow />,
 		prevArrow: <PrevArrow />,
 		responsive: [
@@ -30,17 +30,23 @@ const NetflixCarousel = ({ movies }: Props) => {
 			{
 				breakpoint: 992,
 				settings: {
-					slidesToShow: 6,
+					slidesToShow: 4,
 				},
 			},
 			{
 				breakpoint: 768,
 				settings: {
-					slidesToShow: 4,
+					slidesToShow: 3,
 				},
 			},
 			{
 				breakpoint: 576,
+				settings: {
+					slidesToShow: 3,
+				},
+			},
+			{
+				breakpoint: 359,
 				settings: {
 					slidesToShow: 2,
 				},
@@ -56,7 +62,7 @@ const NetflixCarousel = ({ movies }: Props) => {
 
 					return (
 						<div key={movie.title} className="slick-slide-custom transition-all hover:scale-110">
-							<ImageTMDB image={movie.poster_path} alt={movie.title} />
+							<ImageTMDB image={movie.backdrop_path} alt={movie.title} />
 						</div>
 					);
 				})}

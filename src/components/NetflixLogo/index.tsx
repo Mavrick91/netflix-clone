@@ -2,7 +2,7 @@ import ImageClient from "../ImageClient";
 
 const NetflixLogo = () => {
 	return (
-		<div className="relative h-[30px] w-[172px]">
+		<div className="relative w-full md:h-[20px] md:w-[100px] lg:h-[30px] lg:w-[172px]">
 			<ImageClient
 				src="/images/netflix-logo.png"
 				alt="Netflix Logo"

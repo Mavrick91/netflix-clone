@@ -43,11 +43,11 @@ const BrowseBanner = async () => {
 						backgroundSize: "100% 100%",
 					}}
 				/>
-				<div className="relative top-[22%] ml-[33px] w-5/12">
+				<div className="relative ml-[33px] md:top-1/4 lg:top-[22%] lg:w-3/5">
 					<div className="flex flex-col text-white">
-						<h1 className="text-[85px] font-bold leading-[80px]">{randomMovie.title || randomMovie.original_title}</h1>
+						<h1 className="font-bold md:text-2xl md:leading-6 lg:text-[75px] lg:leading-[80px]">{randomMovie.title || randomMovie.original_title}</h1>
 						<p
-							className="mt-10 text-[1.2vw]"
+							className="mt-10 text-[1.2vw] md:mt-5"
 							style={{
 								textShadow: "2px 2px 4px rgba(0,0,0,.45)",
 							}}

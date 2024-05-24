@@ -44,7 +44,7 @@ const MainHeader = () => {
 
 	return (
 		<header
-			className={classNames("fixed top-0 z-20 flex h-[68px] w-full items-center px-14 transition-colors duration-500", {
+			className={classNames("fixed top-0 z-20 flex md:h-[54px] lg:h-[68px] w-full items-center md:px-7 lg:px-12 transition-colors duration-500", {
 				"bg-black bg-opacity-100": isScrolled,
 				"bg-gradient-to-b from-black/70 to-transparent bg-opacity-70": !isScrolled,
 			})}
@@ -53,7 +53,7 @@ const MainHeader = () => {
 				<button type="button" onClick={() => logout()}>
 					<NetflixLogo />
 				</button>
-				<nav className="ml-6">
+				<nav className="ml-6 hidden lg:block">
 					<ul className="flex space-x-6 text-sm">
 						{navLinks.map(({ href, label }) => (
 							<li key={href} className={getLinkClasses(href)}>
