@@ -5,13 +5,13 @@ import QueryClientProvider from "./QueryClientProvider";
 import { AuthProvider } from "./AuthProvider";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-	return (
-		<QueryClientProvider>
-			<Suspense>
-				<AuthProvider>{children}</AuthProvider>
-			</Suspense>
-		</QueryClientProvider>
-	);
+  return (
+    <QueryClientProvider>
+      <Suspense>
+        <AuthProvider>{children}</AuthProvider>
+      </Suspense>
+    </QueryClientProvider>
+  );
 };
 
 export default Providers;

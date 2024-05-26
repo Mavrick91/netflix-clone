@@ -4,14 +4,14 @@ import HeaderCarousel from "@/components/HeaderCarousel";
 import { memo } from "react";
 
 const AwardWinningMovies = async () => {
-	const data = await getAwardedMovies();
+  const data = await getAwardedMovies();
 
-	return (
-		<div>
-			<HeaderCarousel title="Critically Acclaimed Movies" />
-			<Carousel movies={data?.results} />
-		</div>
-	);
+  return (
+    <div>
+      <HeaderCarousel title="Critically Acclaimed Movies" />
+      <Carousel movies={data?.results} />
+    </div>
+  );
 };
 
 export default memo(AwardWinningMovies);
