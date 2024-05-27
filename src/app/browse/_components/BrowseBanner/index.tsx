@@ -1,7 +1,8 @@
+import React from "react";
+
 import { getBannerMovies } from "@/actions/tmdb";
 import InfoIcon from "@/assets/images/svg/InfoIcon";
 import ImageClient from "@/components/ImageClient";
-import React from "react";
 
 const fetchRandomMovie = async () => {
   const data = await getBannerMovies();

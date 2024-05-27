@@ -1,6 +1,6 @@
 import {
-  QueryClientProvider as Provider,
   QueryClient,
+  QueryClientProvider as Provider,
 } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();

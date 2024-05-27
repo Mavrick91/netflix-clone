@@ -1,6 +1,7 @@
 "use server";
 
 import tmdbFetch from "@/utils/tmdbFetch";
+
 import { Movie } from "../../types";
 
 export const getTrendingMovies = async (): Promise<Movie> => {

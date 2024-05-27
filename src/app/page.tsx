@@ -1,12 +1,13 @@
+import { buttonVariants } from "@/components/Button";
 import ImageClient from "@/components/ImageClient";
+import LinkComponent from "@/components/LinkComponent";
+import NetflixLogo from "@/components/NetflixLogo";
 import Separator1 from "@/components/Separator1";
+
 import Category1 from "./_components/Category1";
 import Category2 from "./_components/Category2";
 import FAQ from "./_components/FAQ";
 import NetflixPlan from "./_components/NetflixPlan";
-import { buttonVariants } from "@/components/Button";
-import NetflixLogo from "@/components/NetflixLogo";
-import LinkComponent from "@/components/LinkComponent";
 
 export default function Home() {
   return (

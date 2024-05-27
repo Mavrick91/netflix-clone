@@ -1,5 +1,6 @@
-import { verifyIdToken } from "@/firebaseAdmin";
 import { NextRequest, NextResponse } from "next/server";
+
+import { verifyIdToken } from "@/firebaseAdmin";
 
 export async function POST(request: NextRequest) {
   const { token } = await request.json();

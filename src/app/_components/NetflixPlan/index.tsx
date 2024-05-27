@@ -1,9 +1,10 @@
 "use client";
 
-import PopcornIcon from "@/assets/images/svg/PopcornIcon";
-import React from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import React from "react";
+
+import PopcornIcon from "@/assets/images/svg/PopcornIcon";
 
 const NetflixPlan = () => {
   return (

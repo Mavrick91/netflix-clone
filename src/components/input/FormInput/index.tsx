@@ -1,6 +1,5 @@
 "use client";
 
-import { getNestedError } from "@/utils/form";
 import {
   createContext,
   InputHTMLAttributes,
@@ -8,9 +7,12 @@ import {
   useContext,
 } from "react";
 import { Controller, ControllerProps, useFormContext } from "react-hook-form";
-import Text from "../Text";
+
 import ErrorMessage from "@/components/ErrorMessage";
+import { getNestedError } from "@/utils/form";
+
 import RadioGroup from "../Radio";
+import Text from "../Text";
 
 type FormInputContextProps = {
   name: string;

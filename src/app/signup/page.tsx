@@ -1,8 +1,5 @@
 "use client";
 
-import { Button } from "@/components/Button";
-import WarningError from "@/components/WarningError";
-import { auth } from "@/firebase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -11,8 +8,13 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import Step1 from "./_components/Step1";
+
+import { Button } from "@/components/Button";
 import NetflixLogo from "@/components/NetflixLogo";
+import WarningError from "@/components/WarningError";
+import { auth } from "@/firebase";
+
+import Step1 from "./_components/Step1";
 
 const formSchema = z.object({
   email: z

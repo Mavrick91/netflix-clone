@@ -1,8 +1,9 @@
 "use client";
 
 import React, { Suspense } from "react";
-import QueryClientProvider from "./QueryClientProvider";
+
 import { AuthProvider } from "./AuthProvider";
+import QueryClientProvider from "./QueryClientProvider";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (

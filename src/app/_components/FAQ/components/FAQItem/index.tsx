@@ -1,8 +1,8 @@
 "use client";
 
-import React, { ReactNode, useState } from "react";
 import { Icon } from "@iconify/react";
 import classNames from "classnames";
+import React, { ReactNode, useState } from "react";
 
 type Props = {
   question: string;

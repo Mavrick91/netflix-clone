@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import NetflixLogo from "../NetflixLogo";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
 import { useAuth } from "@/Providers/AuthProvider";
+
 import LinkComponent from "../LinkComponent";
+import NetflixLogo from "../NetflixLogo";
 
 const navLinks = [
   { href: "/browse", label: "Home" },

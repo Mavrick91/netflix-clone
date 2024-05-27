@@ -1,5 +1,6 @@
-import FormInput from "@/components/input/FormInput";
 import React from "react";
+
+import FormInput from "@/components/input/FormInput";
 
 const Step1 = () => {
   return (

@@ -1,7 +1,8 @@
+import { cva,type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/utils/utils";
+
 import LoadingSpinner from "@/assets/images/svg/LoadingSpinner";
+import { cn } from "@/utils/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50",

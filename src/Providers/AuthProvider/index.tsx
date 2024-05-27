@@ -1,11 +1,12 @@
 "use client";
 
+import { onAuthStateChanged, signOut,User } from "firebase/auth";
+import { usePathname, useRouter } from "next/navigation";
+import React, { createContext, useContext, useEffect, useState } from "react";
+
 import { clearToken, setCookie } from "@/actions/cookie";
 import { AUTH_PATHS } from "@/constans/route";
 import { auth } from "@/firebase";
-import { User, onAuthStateChanged, signOut } from "firebase/auth";
-import { usePathname, useRouter } from "next/navigation";
-import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
   currentUser: User | null;

@@ -1,5 +1,6 @@
-import ImageClient from "@/components/ImageClient";
 import React from "react";
+
+import ImageClient from "@/components/ImageClient";
 
 const Category1 = () => {
   return (

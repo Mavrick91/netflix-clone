@@ -1,5 +1,6 @@
-import MainHeader from "@/components/MainHeader";
 import type { Metadata } from "next";
+
+import MainHeader from "@/components/MainHeader";
 
 export const metadata: Metadata = {
   title: "Home - Netflix clone",

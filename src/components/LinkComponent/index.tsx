@@ -1,7 +1,7 @@
 "use client";
 
-import React, { forwardRef } from "react";
 import Link, { LinkProps } from "next/link";
+import React, { forwardRef } from "react";
 
 type Props = {
   href: string;

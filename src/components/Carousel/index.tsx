@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
-import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./carousel.css";
-import ImageTMDB from "../ImageTMDB";
+
+import React from "react";
+import Slider, { Settings } from "react-slick";
+
 import { MovieResult } from "../../../types";
+import ImageTMDB from "../ImageTMDB";
 
 type Props = {
   movies: MovieResult[];

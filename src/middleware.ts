@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { AUTH_PATHS } from "./constans/route";
 
 const VERIFY_TOKEN_URL = "http://localhost:3000/api/verifyToken";
