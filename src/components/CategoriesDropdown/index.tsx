@@ -29,7 +29,8 @@ const CategoriesDropdown = ({ categories }: CategoriesDropdown) => {
     <div className="relative z-10 mt-16 flex items-center border-white p-2">
       <div
         className={classNames("flex items-center shrink-0 ", {
-          "text-white text-4xl font-bold": !categorySelected,
+          "text-white text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold":
+            !categorySelected,
           "text-lg text-gray-300": categorySelected,
         })}
       >
