@@ -5,7 +5,7 @@ import BrowseBanner from "@/app/browse/_components/BrowseBanner";
 import TrendMovies from "@/app/browse/_components/TrendMovies";
 import UpcomingMovies from "@/app/browse/_components/UpcomingMovies";
 
-const DisplayMovies = () => {
+const MediaDisplay = () => {
   return (
     <div>
       <BrowseBanner />
@@ -18,4 +18,4 @@ const DisplayMovies = () => {
   );
 };
 
-export default DisplayMovies;
+export default MediaDisplay;

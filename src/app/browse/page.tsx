@@ -1,7 +1,7 @@
-import DisplayMovies from "@/components/DisplayMovies";
+import MediaDisplay from "@/components/MediaDisplay";
 
 const BrowsePage = () => {
-  return <DisplayMovies />;
+  return <MediaDisplay />;
 };
 
 export default BrowsePage;
