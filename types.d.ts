@@ -39,3 +39,12 @@ export interface TVShow {
   vote_average: number;
   vote_count: stirng;
 }
+
+export interface CategoriesItem {
+  id: number;
+  name: string;
+}
+
+export interface Categories {
+  genres: CategoriesItem[];
+}

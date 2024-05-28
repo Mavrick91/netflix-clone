@@ -1,17 +1,18 @@
 import InfoIcon from "@/assets/images/svg/InfoIcon";
+import CategoriesDropdown from "@/components/CategoriesDropdown";
 import ImageClient from "@/components/ImageClient";
 
-import { Movie, TVShow } from "../../../../../types";
+import { CategoriesItem, Movie, TVShow } from "../../../../../types";
 
 type BrowseBannerProps = {
   bannerInfo: Movie | TVShow;
+  categories?: CategoriesItem[];
 };
 
-const BrowseBanner = async ({ bannerInfo }: BrowseBannerProps) => {
-  console.log("bannerinfo: ", bannerInfo);
+const BrowseBanner = async ({ bannerInfo, categories }: BrowseBannerProps) => {
   return (
     <div className="relative inset-x-0 top-0 bg-black">
-      <div className="flex h-[56vw] items-end">
+      <div className="flex h-[56vw] flex-col">
         <ImageClient
           src={`https://image.tmdb.org/t/p/original/${bannerInfo.backdrop_path}`}
           fill
@@ -34,31 +35,40 @@ const BrowseBanner = async ({ bannerInfo }: BrowseBannerProps) => {
             backgroundSize: "100% 100%",
           }}
         />
-        <div className="relative mb-96 ml-[33px] lg:w-3/5">
-          <div className="flex flex-col text-white">
-            <h1 className="font-bold md:text-2xl md:leading-6 lg:text-[75px] lg:leading-[80px]">
-              {bannerInfo.title ||
-                bannerInfo.original_title ||
-                bannerInfo.original_name ||
-                bannerInfo.name}
-            </h1>
-            <p
-              className="mt-10 text-[1.2vw] md:mt-5"
-              style={{
-                textShadow: "2px 2px 4px rgba(0,0,0,.45)",
-              }}
-            >
-              {bannerInfo.overview}
-            </p>
-          </div>
 
-          <button
-            className="mt-5 flex items-center gap-2 rounded bg-[#6d6d6eb3] py-3 pl-6 pr-8 text-xl font-medium text-white transition-all hover:bg-[#6d6d6e66]"
-            type="button"
-          >
-            <InfoIcon />
-            <span>More Info</span>
-          </button>
+        <div className="ml-[33px] flex flex-col justify-between grow">
+          {categories ? (
+            <CategoriesDropdown categories={categories} />
+          ) : (
+            <div />
+          )}
+
+          <div className="relative lg:w-3/5">
+            <div className="flex flex-col text-white">
+              <h1 className="font-bold md:text-2xl md:leading-6 lg:text-[75px] lg:leading-[80px]">
+                {bannerInfo.title ||
+                  bannerInfo.original_title ||
+                  bannerInfo.original_name ||
+                  bannerInfo.name}
+              </h1>
+              <p
+                className="mt-10 text-[1.2vw] md:mt-5"
+                style={{
+                  textShadow: "2px 2px 4px rgba(0,0,0,.45)",
+                }}
+              >
+                {bannerInfo.overview}
+              </p>
+            </div>
+
+            <button
+              className="mt-5 flex items-center gap-2 rounded bg-[#6d6d6eb3] py-3 pl-6 pr-8 text-xl font-medium text-white transition-all hover:bg-[#6d6d6e66]"
+              type="button"
+            >
+              <InfoIcon />
+              <span>More Info</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

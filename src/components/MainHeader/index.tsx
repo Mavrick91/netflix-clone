@@ -11,7 +11,7 @@ import NetflixLogo from "../NetflixLogo";
 
 const navLinks = [
   { href: "/browse", label: "Home" },
-  { href: "/browse/genre/83", label: "TV Shows" },
+  { href: "/browse/genre", label: "TV Shows" },
   { href: "/browse/genre/34399", label: "Movies" },
   { href: "/latest", label: "New & Popular" },
   { href: "/browse/my-list", label: "My List" },

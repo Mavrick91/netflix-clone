@@ -2,7 +2,7 @@
 
 import tmdbFetch from "@/utils/tmdbFetch";
 
-import { MediaResults, Movie, TVShow } from "../../types";
+import { Categories, MediaResults, Movie, TVShow } from "../../types";
 
 export const getTrendingMovies = async (): Promise<MediaResults<Movie>> => {
   return tmdbFetch("/trending/movie/week");
@@ -34,6 +34,16 @@ export const getBannerMovies = async (): Promise<MediaResults<Movie>> => {
   return tmdbFetch("/movie/now_playing");
 };
 
-export const getGenreTvShows = async (): Promise<MediaResults<TVShow>> => {
-  return tmdbFetch("/discover/tv", {});
+export const getGenreTvShows = async (): Promise<Categories> => {
+  return tmdbFetch("/genre/tv/list");
+};
+
+export const getTvShowsByGenre = async (
+  genreId: string,
+): Promise<MediaResults<TVShow>> => {
+  return tmdbFetch(
+    "/discover/tv",
+    {},
+    { with_genres: `${genreId ? genreId : "10759"}` },
+  );
 };
