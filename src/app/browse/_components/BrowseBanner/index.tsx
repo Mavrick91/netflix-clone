@@ -28,7 +28,7 @@ const BrowseBanner = async () => {
 
   return (
     <div className="relative inset-x-0 top-0 bg-black">
-      <div className="h-[56vw] flex items-end">
+      <div className="flex h-[56vw] items-end">
         <ImageClient
           src={`https://image.tmdb.org/t/p/original/${randomMovie.backdrop_path}`}
           fill
@@ -51,7 +51,7 @@ const BrowseBanner = async () => {
             backgroundSize: "100% 100%",
           }}
         />
-        <div className="relative ml-[33px] mb-96 lg:w-3/5">
+        <div className="relative mb-96 ml-[33px] lg:w-3/5">
           <div className="flex flex-col text-white">
             <h1 className="font-bold md:text-2xl md:leading-6 lg:text-[75px] lg:leading-[80px]">
               {randomMovie.title || randomMovie.original_title}
