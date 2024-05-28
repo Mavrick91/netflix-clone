@@ -1,23 +1,7 @@
-import { getBannerMovies } from "@/actions/tmdb";
 import InfoIcon from "@/assets/images/svg/InfoIcon";
 import ImageClient from "@/components/ImageClient";
 
 import { Movie, TVShow } from "../../../../../types";
-
-const fetchRandomMovie = async () => {
-  const data = await getBannerMovies();
-  const movies = data?.results || [];
-
-  const moviesWithBackdrop = movies.filter((movie) => movie.backdrop_path);
-
-  if (moviesWithBackdrop.length > 0) {
-    return moviesWithBackdrop[
-      Math.floor(Math.random() * moviesWithBackdrop.length)
-    ];
-  }
-
-  return null;
-};
 
 type BrowseBannerProps = {
   bannerInfo: Movie | TVShow;

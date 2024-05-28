@@ -25,19 +25,20 @@ export const useAuth = (): AuthContextType => {
 
 const handleAuthStateChange = async (
   user: User | null,
+  currentUser: User | null,
   setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   pathname: string,
   router: any,
 ) => {
-  if (user) {
+  if (user && !currentUser) {
     const token = await user.getIdToken();
     await setCookie(token);
 
     if (AUTH_PATHS.includes(pathname)) {
       router.push("/browse");
     }
-  } else {
+  } else if (!user) {
     await clearToken();
   }
 
@@ -53,11 +54,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      handleAuthStateChange(user, setCurrentUser, setLoading, pathname, router);
+      handleAuthStateChange(
+        user,
+        currentUser,
+        setCurrentUser,
+        setLoading,
+        pathname,
+        router,
+      );
     });
 
     return unsubscribe;
-  }, [pathname, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const logout = async () => {
     await clearToken();

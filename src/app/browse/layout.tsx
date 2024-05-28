@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import MainHeader from "@/components/MainHeader";
 
@@ -15,7 +16,7 @@ export default async function BrowseLayout({
   return (
     <div className="h-full bg-[#141414]">
       <MainHeader />
-      {children}
+      <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
     </div>
   );
 }

@@ -36,6 +36,10 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const { pathname, search } = request.nextUrl;
 
+  if (request.method !== "GET") {
+    return NextResponse.next();
+  }
+
   if (token) {
     if (AUTH_PATHS.includes(pathname)) {
       return NextResponse.redirect(new URL(`/browse${search}`, request.url));
@@ -56,5 +60,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [...AUTH_PATHS, "/browse"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|images|videos|favicon.ico).*)",
+    "/",
+    "/login",
+    "/signup",
+    "/browse",
+  ],
 };
