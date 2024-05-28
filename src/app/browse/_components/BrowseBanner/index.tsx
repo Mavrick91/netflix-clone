@@ -1,8 +1,8 @@
-import React from "react";
-
 import { getBannerMovies } from "@/actions/tmdb";
 import InfoIcon from "@/assets/images/svg/InfoIcon";
 import ImageClient from "@/components/ImageClient";
+
+import { Movie, TVShow } from "../../../../../types";
 
 const fetchRandomMovie = async () => {
   const data = await getBannerMovies();
@@ -19,20 +19,19 @@ const fetchRandomMovie = async () => {
   return null;
 };
 
-const BrowseBanner = async () => {
-  const randomMovie = await fetchRandomMovie();
+type BrowseBannerProps = {
+  bannerInfo: Movie | TVShow;
+};
 
-  if (!randomMovie) {
-    return null;
-  }
-
+const BrowseBanner = async ({ bannerInfo }: BrowseBannerProps) => {
+  console.log("bannerinfo: ", bannerInfo);
   return (
     <div className="relative inset-x-0 top-0 bg-black">
       <div className="flex h-[56vw] items-end">
         <ImageClient
-          src={`https://image.tmdb.org/t/p/original/${randomMovie.backdrop_path}`}
+          src={`https://image.tmdb.org/t/p/original/${bannerInfo.backdrop_path}`}
           fill
-          alt={randomMovie.title || randomMovie.original_title}
+          alt={bannerInfo.backdrop_path}
         />
         <div
           className="absolute inset-0 right-[26%] transition-all"
@@ -54,7 +53,10 @@ const BrowseBanner = async () => {
         <div className="relative mb-96 ml-[33px] lg:w-3/5">
           <div className="flex flex-col text-white">
             <h1 className="font-bold md:text-2xl md:leading-6 lg:text-[75px] lg:leading-[80px]">
-              {randomMovie.title || randomMovie.original_title}
+              {bannerInfo.title ||
+                bannerInfo.original_title ||
+                bannerInfo.original_name ||
+                bannerInfo.name}
             </h1>
             <p
               className="mt-10 text-[1.2vw] md:mt-5"
@@ -62,7 +64,7 @@ const BrowseBanner = async () => {
                 textShadow: "2px 2px 4px rgba(0,0,0,.45)",
               }}
             >
-              {randomMovie.overview}
+              {bannerInfo.overview}
             </p>
           </div>
 

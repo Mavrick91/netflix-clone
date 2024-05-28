@@ -2,13 +2,13 @@
 
 import tmdbFetch from "@/utils/tmdbFetch";
 
-import { Movie } from "../../types";
+import { MediaResults, Movie, TVShow } from "../../types";
 
-export const getTrendingMovies = async (): Promise<Movie> => {
+export const getTrendingMovies = async (): Promise<MediaResults<Movie>> => {
   return tmdbFetch("/trending/movie/week");
 };
 
-export const getUpcomingMovies = async (): Promise<Movie> => {
+export const getUpcomingMovies = async (): Promise<MediaResults<Movie>> => {
   const today = new Date().toISOString();
   const nextMonth = new Date(
     new Date().setMonth(new Date().getMonth() + 1),
@@ -26,10 +26,14 @@ export const getUpcomingMovies = async (): Promise<Movie> => {
   );
 };
 
-export const getAwardedMovies = async (): Promise<Movie> => {
+export const getAwardedMovies = async (): Promise<MediaResults<Movie>> => {
   return tmdbFetch("/movie/top_rated");
 };
 
-export const getBannerMovies = async (): Promise<Movie> => {
+export const getBannerMovies = async (): Promise<MediaResults<Movie>> => {
   return tmdbFetch("/movie/now_playing");
+};
+
+export const getGenreTvShows = async (): Promise<MediaResults<TVShow>> => {
+  return tmdbFetch("/discover/tv", {});
 };

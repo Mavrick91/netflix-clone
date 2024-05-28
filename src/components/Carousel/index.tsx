@@ -7,11 +7,11 @@ import "./carousel.css";
 import React from "react";
 import Slider, { Settings } from "react-slick";
 
-import { MovieResult } from "../../../types";
+import { Movie } from "../../../types";
 import ImageTMDB from "../ImageTMDB";
 
 type Props = {
-  movies: MovieResult[];
+  movies: Movie[];
 };
 
 const NetflixCarousel = ({ movies }: Props) => {

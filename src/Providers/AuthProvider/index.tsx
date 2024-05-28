@@ -1,6 +1,6 @@
 "use client";
 
-import { onAuthStateChanged, signOut,User } from "firebase/auth";
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -30,7 +30,6 @@ const handleAuthStateChange = async (
   pathname: string,
   router: any,
 ) => {
-  console.log("🚀 ~ user:", user);
   if (user) {
     const token = await user.getIdToken();
     await setCookie(token);
