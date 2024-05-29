@@ -39,7 +39,7 @@ export const getGenreTvShows = async (): Promise<Categories> => {
 };
 
 export const getTvShowsByGenre = async (
-  genreId: string,
+  genreId: string | null,
 ): Promise<MediaResults<TVShow>> => {
   return tmdbFetch(
     "/discover/tv",

@@ -1,6 +1,6 @@
 import React from "react";
 
-const InfoIcon = () => {
+const InfoIcon = (props: any) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,6 +11,7 @@ const InfoIcon = () => {
       role="img"
       data-icon="CircleIStandard"
       aria-hidden="true"
+      {...props}
     >
       <path
         fillRule="evenodd"

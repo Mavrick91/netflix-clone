@@ -1,17 +1,15 @@
 import InfoIcon from "@/assets/images/svg/InfoIcon";
-import CategoriesDropdown from "@/components/CategoriesDropdown";
 import ImageClient from "@/components/ImageClient";
 
-import { CategoriesItem, Movie, TVShow } from "../../../../../types";
+import { Movie, TVShow } from "../../../../../types";
 
 type BrowseBannerProps = {
   bannerInfo: Movie | TVShow;
-  categories?: CategoriesItem[];
 };
 
-const BrowseBanner = async ({ bannerInfo, categories }: BrowseBannerProps) => {
+const BrowseBanner = ({ bannerInfo }: BrowseBannerProps) => {
   return (
-    <div className="relative inset-x-0 top-0 bg-black">
+    <div className="relative inset-x-0 top-0 z-50 bg-black">
       <div className="flex h-[56vw] flex-col">
         <ImageClient
           src={`https://image.tmdb.org/t/p/original/${bannerInfo.backdrop_path}`}
@@ -36,23 +34,17 @@ const BrowseBanner = async ({ bannerInfo, categories }: BrowseBannerProps) => {
           }}
         />
 
-        <div className="ml-[33px] flex flex-col justify-between grow">
-          {categories ? (
-            <CategoriesDropdown categories={categories} />
-          ) : (
-            <div />
-          )}
-
-          <div className="relative lg:w-3/5">
-            <div className="flex flex-col text-white">
-              <h1 className="font-bold md:text-2xl md:leading-6 lg:text-[75px] lg:leading-[80px]">
+        <div className="flex grow items-end px-[4%]">
+          <div className="relative mb-[10vw] w-4/5">
+            <div className="flex flex-col justify-end text-white">
+              <h1 className="text-[5vw] font-bold leading-[5vw]">
                 {bannerInfo.title ||
                   bannerInfo.original_title ||
                   bannerInfo.original_name ||
                   bannerInfo.name}
               </h1>
               <p
-                className="mt-10 text-[1.2vw] md:mt-5"
+                className="my-1 line-clamp-4 text-[1.2vw] sm:my-4 sm:line-clamp-3 md:mt-5"
                 style={{
                   textShadow: "2px 2px 4px rgba(0,0,0,.45)",
                 }}
@@ -62,10 +54,10 @@ const BrowseBanner = async ({ bannerInfo, categories }: BrowseBannerProps) => {
             </div>
 
             <button
-              className="mt-5 flex items-center gap-2 rounded bg-[#6d6d6eb3] py-3 pl-6 pr-8 text-xl font-medium text-white transition-all hover:bg-[#6d6d6e66]"
+              className="flex items-center gap-2 rounded bg-[#6d6d6eb3] px-3 py-1 text-[9px] font-medium text-white transition-all hover:bg-[#6d6d6e66] sm:py-2 sm:text-sm lg:mt-5 lg:py-3 lg:pl-6 lg:pr-8 lg:text-xl"
               type="button"
             >
-              <InfoIcon />
+              <InfoIcon className="size-3 sm:size-5 lg:size-6" />
               <span>More Info</span>
             </button>
           </div>
