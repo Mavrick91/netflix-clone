@@ -4,9 +4,9 @@ import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
+import { MovieCategory, ShowTVCategory } from "@/constans/media-ids";
 import { NAV_LINKS } from "@/constans/route";
 import { useAuth } from "@/Providers/AuthProvider";
-import { isTVShowCategory } from "@/utils/media";
 
 import { CategoriesItem } from "../../../types";
 import GenreSelection from "../GenreSelection";
@@ -18,29 +18,34 @@ const paddingClasses = "px-[4%]";
 
 type MainHeaderProps = {
   categories?: CategoriesItem[];
-  genreId?: string;
+  categoryId?: typeof ShowTVCategory | typeof MovieCategory;
+  genreIdSelected?: string | null;
 };
 
-const MainHeader: React.FC<MainHeaderProps> = ({ categories, genreId }) => {
+const MainHeader: React.FC<MainHeaderProps> = ({
+  categories,
+  genreIdSelected,
+  categoryId,
+}) => {
   const pathname = usePathname();
   const { logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const getActiveLink = useCallback(
-    (path: string) => {
-      if (genreId) {
-        if (isTVShowCategory(genreId) && path.match(/^\/browse\/genre./)) {
-          return true;
-        }
+    (path: string, name: string) => {
+      if (categoryId === ShowTVCategory && name === NAV_LINKS[1].name) {
+        return true;
+      } else if (categoryId === MovieCategory && name === NAV_LINKS[2].name) {
+        return true;
       }
       return pathname === path;
     },
-    [genreId, pathname],
+    [categoryId, pathname],
   );
 
-  const getLinkClasses = (path: string) =>
+  const getLinkClasses = (path: string, name: string) =>
     classNames("text-primary-white-hover", {
-      "text-white font-medium": getActiveLink(path),
+      "text-white font-medium": getActiveLink(path, name),
     });
 
   useEffect(() => {
@@ -75,7 +80,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ categories, genreId }) => {
           <nav className="ml-6 hidden lg:flex">
             <ul className="flex space-x-6 text-sm">
               {NAV_LINKS.map(({ id, name }) => (
-                <li key={id} className={getLinkClasses(id)}>
+                <li key={id} className={getLinkClasses(id, name)}>
                   <LinkComponent href={id}>{name}</LinkComponent>
                 </li>
               ))}
@@ -96,8 +101,12 @@ const MainHeader: React.FC<MainHeaderProps> = ({ categories, genreId }) => {
           },
         )}
       >
-        {categories && (
-          <GenreSelection categories={categories} genreId={genreId} />
+        {categories && categoryId && (
+          <GenreSelection
+            categories={categories}
+            categoryId={categoryId}
+            genreIdSelected={genreIdSelected}
+          />
         )}
       </div>
     </div>

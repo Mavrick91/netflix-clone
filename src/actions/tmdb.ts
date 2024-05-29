@@ -38,6 +38,10 @@ export const getGenreTvShows = async (): Promise<Categories> => {
   return tmdbFetch("/genre/tv/list");
 };
 
+export const getGenreMovies = async (): Promise<Categories> => {
+  return tmdbFetch("/genre/movie/list");
+};
+
 export const getTvShowsByGenre = async (
   genreId: string | null,
 ): Promise<MediaResults<TVShow>> => {
@@ -45,5 +49,15 @@ export const getTvShowsByGenre = async (
     "/discover/tv",
     {},
     { with_genres: `${genreId ? genreId : "10759"}` },
+  );
+};
+
+export const getMoviesByGenre = async (
+  genreId: string | null,
+): Promise<MediaResults<Movie>> => {
+  return tmdbFetch(
+    "/discover/movie",
+    {},
+    { with_genres: `${genreId ? genreId : "28"}` },
   );
 };

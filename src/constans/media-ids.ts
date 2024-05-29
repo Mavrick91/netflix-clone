@@ -1,20 +1,3 @@
-export const TVShowsIds = [
-  "10759",
-  "16",
-  "35",
-  "80",
-  "99",
-  "18",
-  "10751",
-  "10752",
-  "9648",
-  "10763",
-  "10764",
-  "10765",
-  "10766",
-  "10767",
-  "10768",
-  "37",
-];
+export const ShowTVCategory = "83";
 
-export const TVCategory = "83";
+export const MovieCategory = "34399";

@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import React, { useMemo } from "react";
 
-import { TVCategory, TVShowsIds } from "@/constans/media-ids";
+import { MovieCategory, ShowTVCategory } from "@/constans/media-ids";
 
 import { CategoriesItem } from "../../../types";
 import LinkComponent from "../LinkComponent";
@@ -11,33 +11,44 @@ import MainDropdown from "../MainDropdown";
 
 type GenreSelectionProps = {
   categories: CategoriesItem[];
-  genreId?: string;
+  genreIdSelected?: string | null;
+  categoryId: typeof ShowTVCategory | typeof MovieCategory;
 };
 
 const GenreSelection: React.FC<GenreSelectionProps> = ({
   categories,
-  genreId,
+  genreIdSelected,
+  categoryId,
 }) => {
   const categorySelected = useMemo(() => {
-    if (!genreId || genreId === TVCategory) return;
-    return categories.find((category) => `${category.id}` === genreId);
-  }, [categories, genreId]);
+    if (!genreIdSelected) {
+      return;
+    }
+    return categories.find((category) => `${category.id}` === genreIdSelected);
+  }, [categories, genreIdSelected]);
 
   const formattedCategories = useMemo(
     () =>
       categories.map((category) => ({
         ...category,
-        id: `/browse/genre/${category.id}`,
+        id: `/browse/genre/${category.id}?cb=${categoryId}`,
       })),
-    [categories],
+    [categories, categoryId],
   );
 
   const backUrl = useMemo(() => {
-    if (genreId && TVShowsIds.includes(genreId)) {
-      return `/browse/genre/${TVCategory}`;
+    if (categoryId === ShowTVCategory) {
+      return `/browse/genre/${ShowTVCategory}`;
     }
-    return "/";
-  }, [genreId]);
+    return `/browse/genre/${MovieCategory}`;
+  }, [categoryId]);
+
+  const label = useMemo(() => {
+    if (categoryId === ShowTVCategory) {
+      return "TV Shows";
+    }
+    return "Movies";
+  }, [categoryId]);
 
   return (
     <div className="relative z-10 flex items-center border-white py-2">
@@ -50,10 +61,11 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({
       >
         {categorySelected ? (
           <LinkComponent className="flex items-center" href={backUrl}>
-            TV Shows<div className="pl-2">{`>`}</div>
+            {label}
+            <div className="pl-2">{`>`}</div>
           </LinkComponent>
         ) : (
-          `TV Shows`
+          label
         )}
       </div>
 
