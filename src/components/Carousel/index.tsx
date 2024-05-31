@@ -60,7 +60,7 @@ const NetflixCarousel = ({ movies }: Props) => {
     <div className="netflix-carousel">
       <Slider {...settings}>
         {movies.map((movie) => {
-          if (!movie.poster_path) return null;
+          if (!movie.backdrop_path) return null;
 
           return (
             <div

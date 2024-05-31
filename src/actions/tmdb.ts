@@ -11,7 +11,7 @@ export const getTrendingMovies = async (): Promise<MediaResults<Movie>> => {
 export const getUpcomingMovies = async (): Promise<MediaResults<Movie>> => {
   const today = new Date().toISOString();
   const nextMonth = new Date(
-    new Date().setMonth(new Date().getMonth() + 1),
+    new Date().setMonth(new Date().getMonth() + 2),
   ).toISOString();
 
   return tmdbFetch(
@@ -19,9 +19,8 @@ export const getUpcomingMovies = async (): Promise<MediaResults<Movie>> => {
     {},
     {
       region: "US",
-      sort_by: "release_date.desc",
-      "release_date.gte": today,
-      "release_date.lte": nextMonth,
+      "primary_release_date.gte": today,
+      "primary_release_date.lte": nextMonth,
     },
   );
 };
@@ -44,20 +43,22 @@ export const getGenreMovies = async (): Promise<Categories> => {
 
 export const getTvShowsByGenre = async (
   genreId: string | null,
+  extraParams?: Record<string, string>,
 ): Promise<MediaResults<TVShow>> => {
   return tmdbFetch(
     "/discover/tv",
     {},
-    { with_genres: `${genreId ? genreId : "10759"}` },
+    { with_genres: `${genreId ? genreId : "10759"}`, ...extraParams },
   );
 };
 
 export const getMoviesByGenre = async (
   genreId: string | null,
+  extraParams?: Record<string, string>,
 ): Promise<MediaResults<Movie>> => {
   return tmdbFetch(
     "/discover/movie",
     {},
-    { with_genres: `${genreId ? genreId : "28"}` },
+    { with_genres: `${genreId ? genreId : "28"}`, ...extraParams },
   );
 };

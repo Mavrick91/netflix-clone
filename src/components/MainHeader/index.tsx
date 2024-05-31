@@ -91,24 +91,24 @@ const MainHeader: React.FC<MainHeaderProps> = ({
           </div>
         </div>
       </header>
-      <div
-        className={classNames(
-          paddingClasses,
-          "py-1.5 transition-all duration-500",
-          {
-            "bg-black/100": isScrolled,
-            "bg-black/0": !isScrolled,
-          },
-        )}
-      >
-        {categories && categoryId && (
+      {categories && categoryId && (
+        <div
+          className={classNames(
+            paddingClasses,
+            "py-1.5 transition-all duration-500",
+            {
+              "bg-black/100": isScrolled,
+              "bg-black/0": !isScrolled,
+            },
+          )}
+        >
           <GenreSelection
             categories={categories}
             categoryId={categoryId}
             genreIdSelected={genreIdSelected}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

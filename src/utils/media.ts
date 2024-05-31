@@ -10,9 +10,11 @@ import { Categories, MediaResults, Movie, TVShow } from "../../types";
 
 type CategoryData = {
   genreList: Categories;
-  data: MediaResults<Movie> | MediaResults<TVShow>;
+  data: Promise<MediaResults<Movie>> | Promise<MediaResults<TVShow>>;
   categoryId: typeof ShowTVCategory | typeof MovieCategory;
   genreIdSelected: string | null;
+  isTVCategory: boolean;
+  isMovieCategory: boolean;
 };
 
 export const getCategoryData = async (
@@ -26,27 +28,27 @@ export const getCategoryData = async (
 
   if (isTVCategory) {
     const genreList = await getGenreTvShows();
-    const data = await getTvShowsByGenre(
-      genreId === ShowTVCategory ? null : genreId,
-    );
+    const data = getTvShowsByGenre(genreId === ShowTVCategory ? null : genreId);
     return {
       genreList,
       data,
       categoryId: ShowTVCategory,
       genreIdSelected: genreId !== ShowTVCategory ? genreId : null,
+      isTVCategory: true,
+      isMovieCategory: false,
     };
   }
 
   if (isMovieCategory) {
     const genreList = await getGenreMovies();
-    const data = await getMoviesByGenre(
-      genreId === MovieCategory ? null : genreId,
-    );
+    const data = getMoviesByGenre(genreId === MovieCategory ? null : genreId);
     return {
       genreList,
       data,
       categoryId: MovieCategory,
       genreIdSelected: genreId !== MovieCategory ? genreId : null,
+      isTVCategory: false,
+      isMovieCategory: true,
     };
   }
 
