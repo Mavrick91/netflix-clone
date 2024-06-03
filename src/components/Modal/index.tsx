@@ -65,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 					exit="exit"
 				>
 					<motion.div
-						className="relative mt-8 border border-red-500"
+						className="relative mt-8"
 						variants={modalVariants}
 						initial="hidden"
 						animate="visible"
