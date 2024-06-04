@@ -2,9 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { AUTH_PATHS } from "./constants/route";
 
-const VERIFY_TOKEN_URL = "http://localhost:3000/api/verifyToken";
+const getVerifyTokenUrl = () => {
+	if (process.env.VERCEL_ENV) {
+		const vercelUrl = `https://${process.env.VERCEL_URL}`;
+
+		return `${vercelUrl}/api/verifyToken`;
+	}
+
+	return "http://localhost:3000/api/verifyToken";
+};
 
 async function verifyToken(token: string) {
+	const VERIFY_TOKEN_URL = getVerifyTokenUrl();
+
 	try {
 		const response = await fetch(VERIFY_TOKEN_URL, {
 			method: "POST",
@@ -14,7 +24,7 @@ async function verifyToken(token: string) {
 			body: JSON.stringify({ token }),
 		});
 
-		return response.ok;
+		return response.status === 200;
 	} catch (error) {
 		console.error("Fetch error:", error);
 		return false;
