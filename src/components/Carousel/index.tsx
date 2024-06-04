@@ -63,11 +63,9 @@ const NetflixCarousel = ({ movies }: Props) => {
 					if (!movie.backdrop_path) return null;
 
 					return (
-						<div
-							key={movie.title}
-							className="slick-slide-custom transition-all hover:scale-110"
-						>
+						<div key={movie.title} className="slick-slide-custom rounded">
 							<ImageTMDB
+								className="overflow-hidden rounded transition-all duration-300 ease-in-out hover:z-50 hover:scale-110"
 								image={movie.backdrop_path}
 								imageProps={{
 									alt: movie.title,
