@@ -41,8 +41,10 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 				id: `${season.seasonNumber}`,
 				name: (
 					<div className="grid grid-cols-2 items-center gap-2 text-left">
-						<h2 className="col-span-1 text-lg">Season {season.seasonNumber}</h2>
-						<span className="col-span-1 text-left">
+						<h2 className="col-span-1 text-sm md:text-base">
+							Season {season.seasonNumber}
+						</h2>
+						<span className="col-span-1 text-left text-[13px]">
 							({season.episodeCount} Episodes)
 						</span>
 					</div>
@@ -88,17 +90,16 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 						<button
 							type="button"
 							key={episode.id}
-							className="col-span-1 flex items-center gap-4 border-b border-[#404040] p-4 text-left hover:bg-[#333]"
+							className="col-span-1 flex flex-col items-center gap-4 border-b border-[#404040] p-4 text-left hover:bg-[#333] md:flex-row"
 						>
-							<div className="mx-5 w-[26px] shrink-0 text-2xl text-[#d2d2d2]">
+							<div className="mx-5 hidden w-[26px] shrink-0 text-2xl text-[#d2d2d2] md:block">
 								{episode.episode_number}
 							</div>
 							<ImageTMDB
-								className="w-[130px] shrink-0 rounded"
+								className="h-[140px] w-full shrink-0 rounded md:h-[73px] md:w-[130px]"
 								image={episode.still_path || season.poster_path || ""}
 								imageProps={{
-									width: 130,
-									height: 73,
+									fill: true,
 									priority: true,
 									alt: episode.name || "",
 								}}

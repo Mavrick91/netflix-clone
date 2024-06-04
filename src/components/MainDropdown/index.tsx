@@ -27,7 +27,7 @@ const MainDropdown = ({ items, label }: MainDropdownProps) => {
 				ref={buttonRef}
 				onClick={toggleDropdown}
 				className={classNames(
-					"text-white border transition-all relative border-white pr-7 text-[8px] lg:pr-14 h-auto lg:py-1 pl-2 lg:font-bold text-sm lg:text-lg bg-black hover:bg-transparent",
+					"text-white border transition-all relative border-white pr-7 lg:pr-14 h-auto lg:py-1 pl-2 lg:font-bold text-sm lg:text-lg bg-black hover:bg-transparent",
 					{
 						"bg-transparent": isDropdownOpen,
 					},

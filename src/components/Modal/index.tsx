@@ -60,7 +60,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 		<AnimatePresence>
 			{isOpen && (
 				<motion.div
-					className="fixed inset-0 z-[1000] flex justify-center overflow-y-auto bg-black/50"
+					className="fixed inset-0 z-[1000] flex justify-center overflow-y-auto bg-black/50 px-4"
 					variants={backdropVariants}
 					initial="hidden"
 					animate="visible"

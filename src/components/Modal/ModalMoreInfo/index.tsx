@@ -44,9 +44,9 @@ const ModalMoreInfo: React.FC<ModalInfoProps> = ({
 	}
 
 	return (
-		<div className="w-[939px] overflow-hidden rounded-t">
+		<div className="max-w-[939px] overflow-hidden rounded-t">
 			<Header bannerMedia={bannerMedia} />
-			<div className="bg-[#131313] px-12">
+			<div className="bg-[#131313] px-4 sm:px-6 md:px-8 lg:px-10">
 				<Content infoParsed={infoParsed} />
 				{!isInfoParsedMovie(infoParsed) && (
 					<TVShowEpisodes infoParsed={infoParsed} />

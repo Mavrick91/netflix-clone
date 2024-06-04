@@ -6,7 +6,7 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ bannerMedia }) => (
-	<div className="relative flex h-[528px] flex-col">
+	<div className="relative flex h-[200px] flex-col sm:h-[310px] md:h-[410px] lg:h-[528px]">
 		<BannerContent
 			bannerMedia={bannerMedia as unknown as Movie | TVShow}
 			showMoreInfo={false}

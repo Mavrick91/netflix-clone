@@ -17,7 +17,7 @@ const ImageTMDB: React.FC<ImageTMDBProps> = ({
 	const imageUrl = `https://image.tmdb.org/t/p/original/${image}`;
 
 	return (
-		<div className={classNames("relative h-auto", className)}>
+		<div className={classNames("relative", className)}>
 			<ImageClient src={imageUrl} {...imageProps} />
 		</div>
 	);

@@ -20,7 +20,7 @@ const MoreLikeThis: React.FC<MoreLikeThisProps> = ({
 		<h3 className="mb-5 mt-12 text-2xl font-bold text-white">More Like This</h3>
 		<div
 			className={classNames(
-				"grid grid-cols-3 gap-4 overflow-hidden transition-all",
+				"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-hidden transition-all",
 				{
 					"max-h-[960px]": isCollapsed,
 					"max-h-[9960px]": !isCollapsed,
