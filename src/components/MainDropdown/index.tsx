@@ -21,7 +21,7 @@ const MainDropdown = ({ items, label }: MainDropdownProps) => {
 		useClickOutside();
 
 	return (
-		<div className="relative ml-5 flex w-full lg:ml-10">
+		<div className="relative z-[1000] ml-5 flex w-full lg:ml-10">
 			<button
 				type="button"
 				ref={buttonRef}

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import CloseIcon from "@/assets/images/svg/CloseIcon";
+import useClickOutside from "@/hooks/useClickOutside";
 
 type ModalProps = {
 	isOpen: boolean;
@@ -42,6 +43,7 @@ const backdropVariants = {
 };
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+	const { dropdownRef } = useClickOutside();
 	useEffect(() => {
 		if (isOpen) {
 			document.body.style.overflow = "hidden";
@@ -67,6 +69,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 					<motion.div
 						className="relative mt-8"
 						variants={modalVariants}
+						ref={dropdownRef}
 						initial="hidden"
 						animate="visible"
 						exit="exit"

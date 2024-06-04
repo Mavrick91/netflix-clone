@@ -23,15 +23,11 @@ const useClickOutside = (): UseClickOutside => {
 	}, []);
 
 	const handleClickOutside = useCallback((event: MouseEvent) => {
-		console.log("🚀 ~ dropdownRef.current:", dropdownRef.current);
-		console.log(
-			"🚀 ~ !dropdownRef.current.contains(event.target as Node):",
-			!dropdownRef.current?.contains(event.target as Node),
-		);
 		if (
-			(dropdownRef.current &&
-				!dropdownRef.current.contains(event.target as Node)) ||
-			(buttonRef.current && !buttonRef.current.contains(event.target as Node))
+			!!dropdownRef.current &&
+			!dropdownRef.current.contains(event.target as Node) &&
+			!!buttonRef.current &&
+			!buttonRef.current.contains(event.target as Node)
 		) {
 			setIsDropdownOpen(false);
 		}
