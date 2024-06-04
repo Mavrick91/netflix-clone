@@ -27,7 +27,7 @@ const MainDropdown = ({ items, label }: MainDropdownProps) => {
 				ref={buttonRef}
 				onClick={toggleDropdown}
 				className={classNames(
-					"text-white border transition-all relative border-white pr-7 text-[8px] lg:pr-14 h-auto  lg:py-1 pl-2 lg:font-bold text-sm lg:text-lg bg-black hover:bg-transparent",
+					"text-white border transition-all relative border-white pr-7 text-[8px] lg:pr-14 h-auto lg:py-1 pl-2 lg:font-bold text-sm lg:text-lg bg-black hover:bg-transparent",
 					{
 						"bg-transparent": isDropdownOpen,
 					},
@@ -46,7 +46,7 @@ const MainDropdown = ({ items, label }: MainDropdownProps) => {
 						{items.map((item) => (
 							<LinkComponent
 								href={`${item.id}`}
-								className="col-span-1 whitespace-nowrap px-3 py-1 text-[10px] underline-offset-2 hover:underline"
+								className="col-span-1 whitespace-nowrap px-3 py-1 text-sm underline-offset-2 hover:underline lg:text-lg"
 								key={item.id}
 							>
 								{item.name}
