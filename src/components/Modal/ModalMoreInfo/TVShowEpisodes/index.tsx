@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import classNames from "classnames";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { getTVShowEpisodesBySeason } from "@/actions/tmdb";
 import LoadingSpinner from "@/assets/images/svg/LoadingSpinner";
@@ -12,6 +11,10 @@ import { InfoParsedTVShow } from "@/types/InfoParsed";
 const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 	const [selectedSeason, setSelectedSeason] = useState<number>(1);
 	const [isCollapsed, setIsCollapsed] = useState(true);
+	const episodeRef = useRef<HTMLButtonElement>(null);
+	const episodeHeaderRef = useRef<HTMLParagraphElement>(null);
+	const [collapsedHeight, setCollapsedHeight] = useState(0);
+	const [totalHeight, setTotalHeight] = useState(0);
 
 	const { data: season, isFetching } = useQuery({
 		queryKey: ["getTVShowEpisodesBySeason", infoParsed.showId, selectedSeason],
@@ -51,6 +54,25 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 				),
 			}));
 
+	const calculateHeights = useCallback(() => {
+		if (episodeRef.current && episodeHeaderRef.current) {
+			const episodeHeight = episodeRef.current.offsetHeight;
+			setCollapsedHeight(
+				episodeHeight * 10 + episodeHeaderRef.current.offsetHeight,
+			);
+			setTotalHeight(
+				episodeHeight * (season?.episodes?.length || 0) +
+					episodeHeaderRef.current.offsetHeight,
+			);
+		}
+	}, [season]);
+
+	useEffect(() => {
+		calculateHeights();
+		window.addEventListener("resize", calculateHeights);
+		return () => window.removeEventListener("resize", calculateHeights);
+	}, [season, calculateHeights]);
+
 	return (
 		<div className="mb-24 flex flex-col">
 			<div className="mb-5 mt-12 flex w-full items-center justify-between">
@@ -65,15 +87,15 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 			</div>
 
 			<div
-				className={classNames(
-					"grid grid-cols-1 transition-all overflow-hidden",
-					{
-						"max-h-[1338px]": isCollapsed,
-						"max-h-[9960px]": !isCollapsed,
-					},
-				)}
+				className="grid grid-cols-1 overflow-hidden transition-all"
+				style={{
+					maxHeight: isCollapsed ? `${collapsedHeight}px` : `${totalHeight}px`,
+				}}
 			>
-				<p className="flex items-center gap-1 text-sm font-medium text-white">
+				<p
+					className="flex items-center gap-1 text-sm font-medium text-white"
+					ref={episodeHeaderRef}
+				>
 					<span>Season {selectedSeason}:</span>
 					{season && (
 						<span className="flex text-[13px] font-light">
@@ -86,10 +108,11 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 						<LoadingSpinner className="size-10 text-white" />
 					</div>
 				) : (
-					season?.episodes.map((episode) => (
+					season?.episodes.map((episode, index) => (
 						<button
 							type="button"
 							key={episode.id}
+							ref={index === 0 ? episodeRef : null} // Assign ref only to the first element
 							className="col-span-1 flex flex-col items-center gap-4 border-b border-[#404040] p-4 text-left hover:bg-[#333] md:flex-row"
 						>
 							<div className="mx-5 hidden w-[26px] shrink-0 text-2xl text-[#d2d2d2] md:block">
