@@ -40,7 +40,7 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 			.map((season) => ({
 				id: `${season.seasonNumber}`,
 				name: (
-					<div className="grid grid-cols-2 items-center text-left">
+					<div className="grid grid-cols-2 items-center gap-2 text-left">
 						<h2 className="col-span-1 text-lg">Season {season.seasonNumber}</h2>
 						<span className="col-span-1 text-left">
 							({season.episodeCount} Episodes)
@@ -66,7 +66,7 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 				className={classNames(
 					"grid grid-cols-1 transition-all overflow-hidden",
 					{
-						"max-h-[1180px]": isCollapsed,
+						"max-h-[1338px]": isCollapsed,
 						"max-h-[9960px]": !isCollapsed,
 					},
 				)}
@@ -94,9 +94,14 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 								{episode.episode_number}
 							</div>
 							<ImageTMDB
-								className="h-[83px] w-[148px] shrink-0 rounded"
-								image={episode.still_path || season.poster_path}
-								alt={episode.name}
+								className="w-[130px] shrink-0 rounded"
+								image={episode.still_path || season.poster_path || ""}
+								imageProps={{
+									width: 130,
+									height: 73,
+									priority: true,
+									alt: episode.name || "",
+								}}
 							/>
 							<div className="flex flex-col">
 								<div className="mb-3 text-white">{episode.name}</div>

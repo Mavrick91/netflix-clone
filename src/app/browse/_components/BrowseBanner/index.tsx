@@ -20,9 +20,9 @@ const BrowseBanner = ({
 
 	return (
 		<div className="relative inset-x-0 top-0 z-50 bg-black">
-			<div className="flex h-[56vw] flex-col">
+			<div className="relative flex h-[56vw] flex-col">
 				<BannerContent
-					bannerMedia={bannerMedia}
+					bannerMedia={bannerMedia as unknown as Movie | TVShow}
 					onMoreInfoClick={() => setShowMoreInfo(true)}
 				/>
 			</div>

@@ -8,10 +8,16 @@ type Props = {
 
 const RecommendationMovie = ({ media }: Props) => {
 	return (
-		<div className="col-span-1 flex flex-col rounded">
+		<div className="col-span-1 flex flex-col overflow-hidden rounded">
 			<ImageTMDB
+				className="w-[267px]"
 				image={media.backdrop_path}
-				alt={isMovie(media) ? media.title : media.name}
+				imageProps={{
+					alt: isMovie(media) ? media.title : media.name,
+					width: 267,
+					height: 150,
+					priority: true,
+				}}
 			/>
 			<div className="flex grow flex-col justify-between bg-[#2F2F2F] text-white">
 				<div className="flex justify-between gap-4 p-4 text-[#e7e7e7]">

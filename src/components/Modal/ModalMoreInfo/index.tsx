@@ -9,7 +9,6 @@ import {
 import { isDetailsMovie } from "@/utils/media";
 import { isInfoParsedMovie } from "@/utils/utils";
 
-import Modal from "..";
 import Content from "./Content";
 import Header from "./Header";
 import InfoSection from "./InfoSection";

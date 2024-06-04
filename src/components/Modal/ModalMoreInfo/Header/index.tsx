@@ -1,5 +1,5 @@
 import BannerContent from "@/components/BannerContent";
-import { DetailsMovie, DetailsTVShow } from "@/types";
+import { DetailsMovie, DetailsTVShow, Movie, TVShow } from "@/types";
 
 type HeaderProps = {
 	bannerMedia: DetailsMovie | DetailsTVShow;
@@ -7,7 +7,10 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ bannerMedia }) => (
 	<div className="relative flex h-[528px] flex-col">
-		<BannerContent bannerMedia={bannerMedia} showMoreInfo={false} />
+		<BannerContent
+			bannerMedia={bannerMedia as unknown as Movie | TVShow}
+			showMoreInfo={false}
+		/>
 	</div>
 );
 

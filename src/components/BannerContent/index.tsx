@@ -1,9 +1,10 @@
 import InfoIcon from "@/assets/images/svg/InfoIcon";
 import ImageClient from "@/components/ImageClient";
-import { DetailsMovie, DetailsTVShow } from "@/types";
+import { Movie, TVShow } from "@/types";
+import { isMovie } from "@/utils/utils";
 
 type BannerContentProps = {
-	bannerMedia: DetailsMovie | DetailsTVShow;
+	bannerMedia: Movie | TVShow;
 	onMoreInfoClick?: () => void;
 	showMoreInfo?: boolean;
 };
@@ -16,9 +17,9 @@ const BannerContent: React.FC<BannerContentProps> = ({
 	<>
 		<ImageClient
 			src={`https://image.tmdb.org/t/p/original/${bannerMedia.backdrop_path}`}
-			fill
 			alt={bannerMedia.backdrop_path}
-			className="bg-top object-contain"
+			fill
+			priority
 		/>
 		<div
 			className="absolute inset-0 right-[26%] transition-all"
@@ -41,10 +42,9 @@ const BannerContent: React.FC<BannerContentProps> = ({
 			<div className="relative mb-[10vw] w-4/5">
 				<div className="flex flex-col justify-end text-white">
 					<h1 className="text-[5vw] font-bold leading-[5vw]">
-						{bannerMedia.title ||
-							bannerMedia.original_title ||
-							bannerMedia.original_name ||
-							bannerMedia.name}
+						{isMovie(bannerMedia)
+							? bannerMedia.title || bannerMedia.original_title
+							: bannerMedia.original_name || bannerMedia.name}
 					</h1>
 					{showMoreInfo && (
 						<p

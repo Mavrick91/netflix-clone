@@ -26,7 +26,7 @@ const NetflixCarousel = ({ movies }: Props) => {
 			{
 				breakpoint: 1200,
 				settings: {
-					slidesToShow: 10,
+					slidesToShow: 6,
 				},
 			},
 			{
@@ -48,7 +48,7 @@ const NetflixCarousel = ({ movies }: Props) => {
 				},
 			},
 			{
-				breakpoint: 359,
+				breakpoint: 360,
 				settings: {
 					slidesToShow: 2,
 				},
@@ -67,7 +67,15 @@ const NetflixCarousel = ({ movies }: Props) => {
 							key={movie.title}
 							className="slick-slide-custom transition-all hover:scale-110"
 						>
-							<ImageTMDB image={movie.backdrop_path} alt={movie.title} />
+							<ImageTMDB
+								image={movie.backdrop_path}
+								imageProps={{
+									alt: movie.title,
+									width: 272,
+									height: 153,
+									quality: 100,
+								}}
+							/>
 						</div>
 					);
 				})}

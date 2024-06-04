@@ -1,37 +1,24 @@
 import classNames from "classnames";
-import Image from "next/image";
+import { ImageProps } from "next/image";
+
+import ImageClient from "../ImageClient";
 
 interface ImageTMDBProps {
 	image: string;
-	alt: string;
 	className?: string;
+	imageProps: Omit<ImageProps, "src">;
 }
 
-const ImageTMDB: React.FC<ImageTMDBProps> = ({ image, className, alt }) => {
+const ImageTMDB: React.FC<ImageTMDBProps> = ({
+	image,
+	className,
+	imageProps,
+}) => {
 	const imageUrl = `https://image.tmdb.org/t/p/original/${image}`;
 
 	return (
-		<div
-			className={classNames("relative w-full", className)}
-			style={{ maxHeight: "152px", overflow: "hidden" }}
-		>
-			<div
-				className="relative"
-				style={{
-					paddingBottom: "calc(650 / 974 * 100%)",
-					height: "0",
-					overflow: "hidden",
-				}}
-			>
-				<Image
-					src={imageUrl}
-					alt={alt}
-					layout="fill"
-					objectFit="cover"
-					className="absolute inset-0 size-full"
-					loading="lazy"
-				/>
-			</div>
+		<div className={classNames("relative h-auto", className)}>
+			<ImageClient src={imageUrl} {...imageProps} />
 		</div>
 	);
 };
