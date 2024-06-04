@@ -76,7 +76,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 					<button type="button" onClick={() => logout()}>
 						<NetflixLogo />
 					</button>
-					<nav className="ml-6 hidden lg:flex">
+					<nav className="ml-14 hidden lg:flex">
 						<ul className="flex space-x-6 text-sm">
 							{NAV_LINKS.map(({ id, name }) => (
 								<li key={id} className={getLinkClasses(id, name)}>

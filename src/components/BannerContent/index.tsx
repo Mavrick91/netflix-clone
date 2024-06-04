@@ -39,8 +39,8 @@ const BannerContent: React.FC<BannerContentProps> = ({
 			}}
 		/>
 		<div className="flex grow items-end px-[4%]">
-			<div className="relative mb-[10vw] w-4/5">
-				<div className="flex flex-col justify-end text-white">
+			<div className="relative mb-[10vw] w-4/5 space-y-2 sm:space-y-4 md:space-y-7">
+				<div className="flex flex-col justify-end space-y-2 text-white sm:space-y-4 md:space-y-7">
 					<h1 className="text-[5vw] font-bold leading-[5vw]">
 						{isMovie(bannerMedia)
 							? bannerMedia.title || bannerMedia.original_title

@@ -2,14 +2,12 @@ import ImageClient from "@/components/ImageClient";
 
 const NetflixLogo = () => {
 	return (
-		<div className="relative aspect-[5/1] h-[14px] md:h-[20px] lg:h-[30px]">
+		<div className="relative h-auto w-[80px] sm:w-[100px] md:w-[125px] lg:w-[170px]">
 			<ImageClient
 				src="/images/netflix-logo.png"
 				alt="Netflix Logo"
-				fill
-				sizes="(max-width: 768px) 100vw, 
-               (max-width: 1200px) 50vw, 
-               172px"
+				width={170}
+				height={26}
 			/>
 		</div>
 	);
