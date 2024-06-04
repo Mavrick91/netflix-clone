@@ -4,11 +4,15 @@ import { isMovie } from "@/utils/utils";
 
 type Props = {
 	media: Movie | TVShow;
+	itemRef: React.RefObject<HTMLDivElement> | null;
 };
 
-const RecommendationMovie = ({ media }: Props) => {
+const RecommendationMovie = ({ media, itemRef }: Props) => {
 	return (
-		<div className="col-span-1 flex flex-col overflow-hidden rounded">
+		<div
+			ref={itemRef}
+			className="col-span-1 flex flex-col overflow-hidden rounded"
+		>
 			<ImageTMDB
 				className="h-[153px] w-full"
 				image={media.backdrop_path}

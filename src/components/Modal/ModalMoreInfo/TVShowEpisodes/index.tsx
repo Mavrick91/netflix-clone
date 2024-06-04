@@ -1,26 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { getTVShowEpisodesBySeason } from "@/actions/tmdb";
 import LoadingSpinner from "@/assets/images/svg/LoadingSpinner";
 import BorderExpand from "@/components/BorderExpand";
 import ImageTMDB from "@/components/ImageTMDB";
 import SecondaryDropdown from "@/components/SecondaryDropdown";
+import useDynamicHeight from "@/hooks/useDynamicHeight";
 import { InfoParsedTVShow } from "@/types/InfoParsed";
 
 const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 	const [selectedSeason, setSelectedSeason] = useState<number>(1);
 	const [isCollapsed, setIsCollapsed] = useState(true);
-	const episodeRef = useRef<HTMLButtonElement>(null);
-	const episodeHeaderRef = useRef<HTMLParagraphElement>(null);
-	const [collapsedHeight, setCollapsedHeight] = useState(0);
-	const [totalHeight, setTotalHeight] = useState(0);
 
 	const { data: season, isFetching } = useQuery({
 		queryKey: ["getTVShowEpisodesBySeason", infoParsed.showId, selectedSeason],
 		queryFn: () => getTVShowEpisodesBySeason(infoParsed.showId, selectedSeason),
 		staleTime: 60 * 60 * 6000, // 6 hours
 	});
+
+	const { itemRef, collapsedHeight, totalHeight } = useDynamicHeight(
+		season?.episodes || [],
+		10,
+	);
 
 	const hasAtLeast11Episodes = useMemo(
 		() => (season?.episodes || []).length >= 11,
@@ -54,25 +56,6 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 				),
 			}));
 
-	const calculateHeights = useCallback(() => {
-		if (episodeRef.current && episodeHeaderRef.current) {
-			const episodeHeight = episodeRef.current.offsetHeight;
-			setCollapsedHeight(
-				episodeHeight * 10 + episodeHeaderRef.current.offsetHeight,
-			);
-			setTotalHeight(
-				episodeHeight * (season?.episodes?.length || 0) +
-					episodeHeaderRef.current.offsetHeight,
-			);
-		}
-	}, [season]);
-
-	useEffect(() => {
-		calculateHeights();
-		window.addEventListener("resize", calculateHeights);
-		return () => window.removeEventListener("resize", calculateHeights);
-	}, [season, calculateHeights]);
-
 	return (
 		<div className="mb-24 flex flex-col">
 			<div className="mb-5 mt-12 flex w-full items-center justify-between">
@@ -86,16 +69,8 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 				</div>
 			</div>
 
-			<div
-				className="grid grid-cols-1 overflow-hidden transition-all"
-				style={{
-					maxHeight: isCollapsed ? `${collapsedHeight}px` : `${totalHeight}px`,
-				}}
-			>
-				<p
-					className="flex items-center gap-1 text-sm font-medium text-white"
-					ref={episodeHeaderRef}
-				>
+			<div className="grid grid-cols-1 overflow-hidden">
+				<p className="flex items-center gap-1 text-sm font-medium text-white">
 					<span>Season {selectedSeason}:</span>
 					{season && (
 						<span className="flex text-[13px] font-light">
@@ -108,35 +83,44 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 						<LoadingSpinner className="size-10 text-white" />
 					</div>
 				) : (
-					season?.episodes.map((episode, index) => (
-						<button
-							type="button"
-							key={episode.id}
-							ref={index === 0 ? episodeRef : null} // Assign ref only to the first element
-							className="col-span-1 flex flex-col items-center gap-4 border-b border-[#404040] p-4 text-left hover:bg-[#333] md:flex-row"
-						>
-							<div className="mx-5 hidden w-[26px] shrink-0 text-2xl text-[#d2d2d2] md:block">
-								{episode.episode_number}
-							</div>
-							<ImageTMDB
-								className="h-[140px] w-full shrink-0 rounded md:h-[73px] md:w-[130px]"
-								image={episode.still_path || season.poster_path || ""}
-								imageProps={{
-									fill: true,
-									priority: true,
-									alt: episode.name || "",
-								}}
-							/>
-							<div className="flex flex-col">
-								<div className="mb-3 text-white">{episode.name}</div>
-								{episode.overview && (
-									<div className="line-clamp-2 text-sm text-[#D2D2D2]">
-										{episode.overview}
-									</div>
-								)}
-							</div>
-						</button>
-					))
+					<div
+						className="transition-all"
+						style={{
+							maxHeight: isCollapsed
+								? `${collapsedHeight}px`
+								: `${totalHeight}px`,
+						}}
+					>
+						{season?.episodes.map((episode, index) => (
+							<button
+								type="button"
+								key={episode.id}
+								ref={index === 0 ? itemRef : null}
+								className="col-span-1 flex w-full flex-col gap-4 border-b border-[#404040] p-4 text-left hover:bg-[#333] md:flex-row md:items-center"
+							>
+								<div className="mx-5 hidden w-[26px] shrink-0 text-2xl text-[#d2d2d2] md:block">
+									{episode.episode_number}
+								</div>
+								<ImageTMDB
+									className="h-[140px] w-full shrink-0 rounded md:h-[73px] md:w-[130px]"
+									image={episode.still_path || season.poster_path || ""}
+									imageProps={{
+										fill: true,
+										priority: true,
+										alt: episode.name || "",
+									}}
+								/>
+								<div className="flex flex-col">
+									<div className="mb-3 text-white">{episode.name}</div>
+									{episode.overview && (
+										<div className="line-clamp-2 text-sm text-[#D2D2D2]">
+											{episode.overview}
+										</div>
+									)}
+								</div>
+							</button>
+						))}
+					</div>
 				)}
 			</div>
 			{hasAtLeast11Episodes && (
