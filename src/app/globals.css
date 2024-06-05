@@ -3,56 +3,63 @@
 @tailwind utilities;
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+	display: none;
 }
 
 :root {
-  --foreground-rgb: #333;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 255, 255, 255;
+	--foreground-rgb: #333;
+	--background-start-rgb: 0, 0, 0;
+	--background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+	:root {
+		--foreground-rgb: 255, 255, 255;
+		--background-start-rgb: 0, 0, 0;
+		--background-end-rgb: 0, 0, 0;
+	}
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  height: 100dvh;
-  background-color: rgb(var(--background-start-rgb));
+	color: rgb(var(--foreground-rgb));
+	height: 100dvh;
+	background-color: rgb(var(--background-start-rgb));
+	overflow-x: hidden;
 }
 
 @layer base {
-  .arrow-down {
-    border-color: #fff transparent transparent;
-    border-style: solid;
-    border-width: 5px 5px 0;
-    height: 0;
-    position: absolute;
-    right: 10px;
-    top: 44%;
-    width: 0;
-  }
+	.arrow-down {
+		border-color: #fff transparent transparent;
+		border-style: solid;
+		border-width: 5px 5px 0;
+		height: 0;
+		position: absolute;
+		right: 10px;
+		top: 44%;
+		width: 0;
+	}
 
-  @media screen and (min-width: 600px) {
-    .netflix-container {
-      max-width: calc(100% - 4rem);
-    }
-  }
+	@media screen and (min-width: 600px) {
+		.netflix-container {
+			max-width: calc(100% - 4rem);
+		}
+	}
 
-  @media screen and (min-width: 960px) {
-    .netflix-container {
-      max-width: calc(100% - 4rem);
-    }
-  }
+	@media screen and (min-width: 960px) {
+		.netflix-container {
+			max-width: calc(100% - 4rem);
+		}
+	}
 
-  @media screen and (min-width: 1280px) {
-    .netflix-container {
-      max-width: calc(83.33333333333334% - 6rem);
-    }
-  }
+	@media screen and (min-width: 1280px) {
+		.netflix-container {
+			max-width: calc(83.33333333333334% - 6rem);
+		}
+	}
 }
