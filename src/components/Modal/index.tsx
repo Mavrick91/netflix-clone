@@ -1,10 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import CloseIcon from "@/assets/images/svg/CloseIcon";
+import LoadingSpinner from "@/assets/images/svg/LoadingSpinner";
 import useClickOutside from "@/hooks/useClickOutside";
 
 type ModalProps = {
@@ -60,28 +61,34 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 		<AnimatePresence>
 			{isOpen && (
 				<motion.div
-					className="fixed inset-0 z-[1000] flex justify-center overflow-y-auto bg-black/50 px-4"
+					className="fixed inset-0 z-[1000] flex justify-center overflow-y-auto bg-black/50 px-10"
 					variants={backdropVariants}
 					initial="hidden"
 					animate="visible"
 					exit="exit"
 				>
-					<motion.div
-						className="relative mt-8"
-						variants={modalVariants}
-						ref={dropdownRef}
-						initial="hidden"
-						animate="visible"
-						exit="exit"
+					<Suspense
+						fallback={
+							<LoadingSpinner className="size-16 self-center text-white" />
+						}
 					>
-						<button
-							className="absolute right-3 top-3 z-[100] rounded-full bg-[#181818] p-1.5 text-white"
-							onClick={onClose}
+						<motion.div
+							className="relative mt-8"
+							variants={modalVariants}
+							ref={dropdownRef}
+							initial="hidden"
+							animate="visible"
+							exit="exit"
 						>
-							<CloseIcon />
-						</button>
-						{children}
-					</motion.div>
+							<button
+								className="absolute right-3 top-3 z-[100] rounded-full bg-[#181818] p-1.5 text-white"
+								onClick={onClose}
+							>
+								<CloseIcon />
+							</button>
+							{children}
+						</motion.div>
+					</Suspense>
 				</motion.div>
 			)}
 		</AnimatePresence>,

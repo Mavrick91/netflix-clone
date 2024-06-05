@@ -1,30 +1,28 @@
 import BrowseBanner from "@/app/browse/_components/BrowseBanner";
 import CarouselSection from "@/components/CarouselSection";
-import { DetailsMovie, DetailsTVShow, Movie, TVShow } from "@/types";
+import { Movie, TVShow } from "@/types";
 
 type MediaDisplayProps = {
-	bannerMedia: DetailsMovie | DetailsTVShow;
+	bannerMedia: Movie | TVShow;
 	mediaSections: any[];
-	mediaRecommendation: Movie[] | TVShow[];
+	mediaType: "movie" | "tv";
 };
 
 const MediaDisplay = ({
 	bannerMedia,
 	mediaSections,
-	mediaRecommendation,
+	mediaType,
 }: MediaDisplayProps) => {
 	return (
 		<div>
-			<BrowseBanner
-				bannerMedia={bannerMedia}
-				mediaRecommendation={mediaRecommendation}
-			/>
+			<BrowseBanner bannerMedia={bannerMedia} mediaType={mediaType} />
 			<div className="relative z-40 flex flex-col space-y-9 bg-[#141414]">
 				{mediaSections.map((section) => (
 					<CarouselSection
 						title={section.title}
 						key={section.title}
 						medias={section.data}
+						mediaType={mediaType}
 					/>
 				))}
 			</div>

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import BorderExpand from "@/components/BorderExpand";
 import useDynamicHeight from "@/hooks/useDynamicHeight";
 import { Movie, TVShow } from "@/types";
@@ -6,17 +8,13 @@ import RecommendationMovie from "./RecommendationMovie";
 
 type MoreLikeThisProps = {
 	mediaRecommendation: Movie[] | TVShow[];
-	isCollapsed: boolean;
-	setIsCollapsed: (value: boolean) => void;
 };
 
 const GAP = 16;
 
-const MoreLikeThis: React.FC<MoreLikeThisProps> = ({
-	mediaRecommendation,
-	isCollapsed,
-	setIsCollapsed,
-}) => {
+const MoreLikeThis: React.FC<MoreLikeThisProps> = ({ mediaRecommendation }) => {
+	const [isCollapsed, setIsCollapsed] = useState(true);
+
 	const { itemRef, collapsedHeight, totalHeight } = useDynamicHeight(
 		mediaRecommendation,
 		3,
@@ -24,7 +22,7 @@ const MoreLikeThis: React.FC<MoreLikeThisProps> = ({
 	);
 
 	return (
-		<div className="mb-24">
+		<div>
 			<h3 className="mb-5 mt-12 text-2xl font-bold text-white">
 				More Like This
 			</h3>

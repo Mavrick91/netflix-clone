@@ -5,7 +5,7 @@ import { isInfoParsedMovie } from "@/utils/utils";
 import MoreInfoInfo from "../MoreInfoInfo";
 
 const InfoSection = ({ infoParsed }: { infoParsed: InfoParsed }) => (
-	<div className="mb-8 pb-8 text-sm text-white">
+	<div className="mb-8 mt-24 pb-8 text-sm text-white">
 		<h2 className="mb-4 text-2xl">
 			About <span className="font-bold">{infoParsed.title}</span>
 		</h2>

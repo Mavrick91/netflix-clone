@@ -1,20 +1,23 @@
 "use client";
 
-import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 import "./carousel.css";
 
 import Slider, { Settings } from "react-slick";
 
+import useManageQueryParams from "@/hooks/useManageQueryParams";
 import { Movie } from "@/types";
 
 import ImageTMDB from "../ImageTMDB";
 
 type Props = {
 	movies: Movie[];
+	mediaType: "movie" | "tv";
 };
 
-const NetflixCarousel = ({ movies }: Props) => {
+const NetflixCarousel = ({ movies, mediaType }: Props) => {
+	const { addQueryParams } = useManageQueryParams();
 	const settings: Settings = {
 		infinite: true,
 		speed: 500,
@@ -63,7 +66,14 @@ const NetflixCarousel = ({ movies }: Props) => {
 					if (!movie.backdrop_path) return null;
 
 					return (
-						<div key={movie.title} className="slick-slide-custom rounded">
+						<button
+							type="button"
+							key={movie.title}
+							className="slick-slide-custom rounded"
+							onClick={() =>
+								addQueryParams({ jbv: `${movie.id}`, type: mediaType })
+							}
+						>
 							<ImageTMDB
 								className="overflow-hidden rounded transition-all duration-300 ease-in-out hover:z-50 hover:scale-110"
 								image={movie.backdrop_path}
@@ -71,10 +81,9 @@ const NetflixCarousel = ({ movies }: Props) => {
 									alt: movie.title,
 									width: 272,
 									height: 153,
-									quality: 100,
 								}}
 							/>
-						</div>
+						</button>
 					);
 				})}
 			</Slider>

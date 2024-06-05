@@ -1,6 +1,14 @@
-import { useMemo, useState } from "react";
+"use client";
 
-import { DetailsMovie, DetailsTVShow, Movie, TVShow } from "@/types";
+import { useSuspenseQueries } from "@tanstack/react-query";
+import { useMemo } from "react";
+
+import {
+	getDetailsMovieBannerMedia,
+	getDetailsTVShowBannerMedia,
+	getMoviesRecommendations,
+	getTVShowsRecommendations,
+} from "@/actions/tmdb";
 import { InfoParsed, InfoParsedSchema } from "@/types/InfoParsed";
 import {
 	mapMovieToInfoParsed,
@@ -16,46 +24,60 @@ import MoreLikeThis from "./MoreLikeThis";
 import TVShowEpisodes from "./TVShowEpisodes";
 
 type ModalInfoProps = {
-	bannerMedia: DetailsMovie | DetailsTVShow;
-	mediaRecommendation: Movie[] | TVShow[];
+	mediaId: number;
+	mediaType: "movie" | "tv";
 };
 
-const ModalMoreInfo: React.FC<ModalInfoProps> = ({
-	bannerMedia,
-	mediaRecommendation,
-}) => {
-	const [isCollapsed, setIsCollapsed] = useState(true);
+const ModalMoreInfo: React.FC<ModalInfoProps> = ({ mediaId, mediaType }) => {
+	const [detailsMedia, recommendations] = useSuspenseQueries({
+		queries: [
+			{
+				queryKey: ["media", "details", mediaId],
+				queryFn: async () =>
+					mediaType === "movie"
+						? getDetailsMovieBannerMedia(mediaId)
+						: getDetailsTVShowBannerMedia(mediaId),
+			},
+			{
+				queryKey: ["media", "recommendation", mediaId],
+				queryFn: async () =>
+					mediaType === "movie"
+						? getMoviesRecommendations(mediaId)
+						: getTVShowsRecommendations(mediaId),
+			},
+		],
+	});
 
 	const infoParsed: InfoParsed | null = useMemo(() => {
 		try {
-			if (isDetailsMovie(bannerMedia)) {
-				return InfoParsedSchema.parse(mapMovieToInfoParsed(bannerMedia));
+			if (isDetailsMovie(detailsMedia.data)) {
+				return InfoParsedSchema.parse(mapMovieToInfoParsed(detailsMedia.data));
 			} else {
-				return InfoParsedSchema.parse(mapTVShowToInfoParsed(bannerMedia));
+				return InfoParsedSchema.parse(mapTVShowToInfoParsed(detailsMedia.data));
 			}
 		} catch (e) {
-			console.error("Error parsing info:", e);
-			return null;
+			throw Error("An error occurred while parsing the data.");
 		}
-	}, [bannerMedia]);
+	}, [detailsMedia]);
 
-	if (!infoParsed) {
-		return null;
+	console.log("🚀 ~ recommendations.data:", recommendations.data);
+	if (!detailsMedia.data || !recommendations.data || !infoParsed) {
+		throw new Error(
+			detailsMedia.error?.message || recommendations.error?.message || "Error",
+		);
 	}
 
 	return (
 		<div className="max-w-[939px] overflow-hidden rounded-t">
-			<Header bannerMedia={bannerMedia} />
+			<Header bannerMedia={detailsMedia.data} />
 			<div className="bg-[#131313] px-4 sm:px-6 md:px-8 lg:px-10">
 				<Content infoParsed={infoParsed} />
 				{!isInfoParsedMovie(infoParsed) && (
 					<TVShowEpisodes infoParsed={infoParsed} />
 				)}
-				<MoreLikeThis
-					mediaRecommendation={mediaRecommendation}
-					isCollapsed={isCollapsed}
-					setIsCollapsed={setIsCollapsed}
-				/>
+				{!!recommendations.data.total_results && (
+					<MoreLikeThis mediaRecommendation={recommendations.data.results} />
+				)}
 				<InfoSection infoParsed={infoParsed} />
 			</div>
 		</div>

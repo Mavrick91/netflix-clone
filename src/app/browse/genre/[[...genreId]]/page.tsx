@@ -1,15 +1,7 @@
-import {
-	fetchMovieData,
-	fetchTVData,
-	getDetailsMovieBannerMedia,
-	getDetailsTVShowBannerMedia,
-	getMoviesRecommendations,
-	getTVShowsRecommendations,
-} from "@/actions/tmdb";
+import { fetchMovieData, fetchTVData } from "@/actions/tmdb";
 import MainHeader from "@/components/MainHeader";
 import MediaDisplay from "@/components/MediaDisplay";
 import { getCategoryData } from "@/utils/media";
-import { getRandomMedia } from "@/utils/utils";
 
 type GenrePageProps = {
 	params: { genreId: string[] };
@@ -32,14 +24,7 @@ const GenrePage = async ({ params, searchParams }: GenrePageProps) => {
 			? await fetchTVData(getBannerMedia)
 			: { banner: null, mediaSections: [] };
 
-	const [detailsBannerMedia, mediaRecommendation] = await Promise.all([
-		isMovieCategory
-			? getDetailsMovieBannerMedia(banner.id)
-			: getDetailsTVShowBannerMedia(banner.id),
-		isMovieCategory
-			? getMoviesRecommendations(banner.id)
-			: getTVShowsRecommendations(banner.id),
-	]);
+	if (!banner) throw new Error("No banner media found");
 
 	return (
 		<>
@@ -50,8 +35,8 @@ const GenrePage = async ({ params, searchParams }: GenrePageProps) => {
 			/>
 			<MediaDisplay
 				mediaSections={mediaSections}
-				bannerMedia={detailsBannerMedia}
-				mediaRecommendation={mediaRecommendation.results}
+				bannerMedia={banner}
+				mediaType={isMovieCategory ? "movie" : "tv"}
 			/>
 		</>
 	);
