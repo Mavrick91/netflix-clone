@@ -56,16 +56,9 @@ const ModalMoreInfo: React.FC<ModalInfoProps> = ({ mediaId, mediaType }) => {
 				return InfoParsedSchema.parse(mapTVShowToInfoParsed(detailsMedia.data));
 			}
 		} catch (e) {
-			throw Error("An error occurred while parsing the data.");
+			throw Error("This media does not exist anymore: 345");
 		}
 	}, [detailsMedia]);
-
-	console.log("🚀 ~ recommendations.data:", recommendations.data);
-	if (!detailsMedia.data || !recommendations.data || !infoParsed) {
-		throw new Error(
-			detailsMedia.error?.message || recommendations.error?.message || "Error",
-		);
-	}
 
 	return (
 		<div className="max-w-[939px] overflow-hidden rounded-t">

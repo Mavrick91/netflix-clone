@@ -31,8 +31,7 @@ const tmdbFetch = async (
 	});
 
 	if (!response.ok) {
-		const errorText = await response.text();
-		throw new Error(`Fetch error: ${errorText}`);
+		throw new Error("An error occurred: 623");
 	}
 
 	return response.json();

@@ -24,7 +24,7 @@ const GenrePage = async ({ params, searchParams }: GenrePageProps) => {
 			? await fetchTVData(getBannerMedia)
 			: { banner: null, mediaSections: [] };
 
-	if (!banner) throw new Error("No banner media found");
+	if (!banner) throw new Error("This media does not exist anymore: 346");
 
 	return (
 		<>
