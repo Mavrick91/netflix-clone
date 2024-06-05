@@ -19,12 +19,14 @@ type MainHeaderProps = {
 	categories?: CategoriesItem[];
 	categoryId?: typeof ShowTVCategory | typeof MovieCategory;
 	genreIdSelected?: string | null;
+	isError?: boolean;
 };
 
 const MainHeader: React.FC<MainHeaderProps> = ({
 	categories,
 	genreIdSelected,
 	categoryId,
+	isError,
 }) => {
 	const pathname = usePathname();
 	const { logout } = useAuth();
@@ -76,21 +78,25 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 					<button type="button" onClick={() => logout()}>
 						<NetflixLogo />
 					</button>
-					<nav className="ml-14 hidden lg:flex">
-						<ul className="flex space-x-6 text-sm">
-							{NAV_LINKS.map(({ id, name }) => (
-								<li key={id} className={getLinkClasses(id, name)}>
-									<LinkComponent href={id}>{name}</LinkComponent>
-								</li>
-							))}
-						</ul>
-					</nav>
-					<div className="lg:hidden">
-						<MainDropdown items={NAV_LINKS} label="Browse" />
-					</div>
+					{!isError && (
+						<nav className="ml-14 hidden lg:flex">
+							<ul className="flex space-x-6 text-sm">
+								{NAV_LINKS.map(({ id, name }) => (
+									<li key={id} className={getLinkClasses(id, name)}>
+										<LinkComponent href={id}>{name}</LinkComponent>
+									</li>
+								))}
+							</ul>
+						</nav>
+					)}
+					{!isError && (
+						<div className="lg:hidden">
+							<MainDropdown items={NAV_LINKS} label="Browse" />
+						</div>
+					)}
 				</div>
 			</header>
-			{categories && categoryId && (
+			{categories && categoryId && !isError && (
 				<div
 					className={classNames(
 						paddingClasses,
