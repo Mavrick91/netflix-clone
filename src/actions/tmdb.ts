@@ -144,6 +144,8 @@ export const fetchMovieData = async (getBannerMedia: any) => {
 export const getTVShowEpisodesBySeason = async (
 	tvShowId: number,
 	seasonNumber: number,
-): Promise<DetailsSeason> => {
-	return tmdbFetch(`/tv/${tvShowId}/season/${seasonNumber}`);
-};
+): Promise<DetailsSeason> =>
+	tmdbFetch(`/tv/${tvShowId}/season/${seasonNumber}`);
+
+export const getSearchMulti = async (query: string) =>
+	tmdbFetch("/search/multi", {}, { query });

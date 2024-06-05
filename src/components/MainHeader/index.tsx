@@ -13,6 +13,8 @@ import { NAV_LINKS } from "@/constants/route";
 import { useAuth } from "@/Providers/AuthProvider";
 import { CategoriesItem } from "@/types";
 
+import SearchMedia from "./SearchMedia";
+
 const paddingClasses = "px-[4%]";
 
 type MainHeaderProps = {
@@ -74,24 +76,31 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 					},
 				)}
 			>
-				<div className="flex items-center">
-					<button type="button" onClick={() => logout()}>
-						<NetflixLogo />
-					</button>
+				<div className="flex items-center justify-between">
+					<div className="flex items-center">
+						<button type="button" onClick={() => logout()}>
+							<NetflixLogo />
+						</button>
+						{!isError && (
+							<nav className="ml-14 hidden lg:flex">
+								<ul className="flex space-x-6 text-sm">
+									{NAV_LINKS.map(({ id, name }) => (
+										<li key={id} className={getLinkClasses(id, name)}>
+											<LinkComponent href={id}>{name}</LinkComponent>
+										</li>
+									))}
+								</ul>
+							</nav>
+						)}
+						{!isError && (
+							<div className="lg:hidden">
+								<MainDropdown items={NAV_LINKS} label="Browse" />
+							</div>
+						)}
+					</div>
 					{!isError && (
-						<nav className="ml-14 hidden lg:flex">
-							<ul className="flex space-x-6 text-sm">
-								{NAV_LINKS.map(({ id, name }) => (
-									<li key={id} className={getLinkClasses(id, name)}>
-										<LinkComponent href={id}>{name}</LinkComponent>
-									</li>
-								))}
-							</ul>
-						</nav>
-					)}
-					{!isError && (
-						<div className="lg:hidden">
-							<MainDropdown items={NAV_LINKS} label="Browse" />
+						<div className="hidden sm:flex">
+							<SearchMedia />
 						</div>
 					)}
 				</div>
