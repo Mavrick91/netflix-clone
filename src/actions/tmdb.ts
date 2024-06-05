@@ -111,7 +111,7 @@ export const fetchTVData = async (getBannerMedia: any) => {
 		getTvShowsByGenre("10759"),
 	]);
 
-	const banner = getRandomMedia(bannerMedia.results);
+	const banner = getRandomMedia(bannerMedia.results) as TVShow;
 	const mediaSections: MediaSection[] = [
 		{ title: "Western TV Shows", data: westernTVShows.results },
 		{ title: "Korean TV Shows", data: koreanTVShows.results },
@@ -131,7 +131,7 @@ export const fetchMovieData = async (getBannerMedia: any) => {
 			getMoviesByGenre("28"),
 		]);
 
-	const banner = getRandomMedia(bannerMedia.results);
+	const banner = getRandomMedia(bannerMedia.results) as Movie;
 	const mediaSections: MediaSection[] = [
 		{ title: "Western Movies", data: westernMovies.results },
 		{ title: "Comedy Movies", data: comedyMovies.results },
