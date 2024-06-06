@@ -14,7 +14,9 @@ const ImageTMDB: React.FC<ImageTMDBProps> = ({
 	className,
 	imageProps,
 }) => {
-	const imageUrl = `https://image.tmdb.org/t/p/original/${image}`;
+	const imageUrl = image
+		? `https://image.tmdb.org/t/p/original/${image}`
+		: "/images/media-placeholder.jpeg";
 
 	return (
 		<div className={classNames("relative", className)}>

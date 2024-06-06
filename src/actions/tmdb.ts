@@ -5,6 +5,7 @@ import {
 	DetailsMovie,
 	DetailsTVShow,
 	MediaResults,
+	MediaSearch,
 	MediaSection,
 	Movie,
 	TVShow,
@@ -96,7 +97,9 @@ export const getTVShowsRecommendations = async (
 	return tmdbFetch(`/tv/${tvShowId}/recommendations`);
 };
 
-export const fetchTVData = async (getBannerMedia: any) => {
+export const fetchTVData = async (
+	getBannerMedia: Promise<MediaResults<Movie>> | Promise<MediaResults<TVShow>>,
+) => {
 	const [
 		bannerMedia,
 		westernTVShows,
@@ -122,7 +125,9 @@ export const fetchTVData = async (getBannerMedia: any) => {
 	return { banner, mediaSections };
 };
 
-export const fetchMovieData = async (getBannerMedia: any) => {
+export const fetchMovieData = async (
+	getBannerMedia: Promise<MediaResults<Movie>> | Promise<MediaResults<TVShow>>,
+) => {
 	const [bannerMedia, westernMovies, comedyMovies, excitingMovies] =
 		await Promise.all([
 			getBannerMedia,
@@ -147,5 +152,9 @@ export const getTVShowEpisodesBySeason = async (
 ): Promise<DetailsSeason> =>
 	tmdbFetch(`/tv/${tvShowId}/season/${seasonNumber}`);
 
-export const getSearchMulti = async (query: string) =>
-	tmdbFetch("/search/multi", {}, { query });
+export const getSearchMulti = async (
+	query: string,
+	page: number,
+): Promise<MediaResults<MediaSearch>> => {
+	return tmdbFetch("/search/multi", {}, { query, page: `${page}` });
+};

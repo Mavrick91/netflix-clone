@@ -1,73 +1,64 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useEffect, useState } from "react";
 
 import MagnifyingGlassIcon from "@/assets/images/svg/MagnifyingGlassIcon";
-
-const searchSchema = z.object({
-	query: z.string().min(1, "Search term is required"),
-});
-
-type SearchFormValues = z.infer<typeof searchSchema>;
+import useManageQueryParams from "@/hooks/useManageQueryParams";
 
 const SearchMedia = () => {
 	const searchParams = useSearchParams();
 	const queryParams = searchParams.get("q");
+	const [query, setQuery] = useState(queryParams || "");
 	const [displaySearch, setDisplaySearch] = useState(!!queryParams);
 	const [animationComplete, setAnimationComplete] = useState(false);
 	const router = useRouter();
 	const pathname = usePathname();
+	const { addQueryParams } = useManageQueryParams();
 
 	const isSearchRoute = pathname === "/search";
 
-	const { register, handleSubmit, setFocus } = useForm<SearchFormValues>({
-		resolver: zodResolver(searchSchema),
-		defaultValues: {
-			query: queryParams || "",
-		},
-	});
-
-	const onSubmit = async (data: SearchFormValues) => {
-		router.push(`/search?q=${data.query}`);
-	};
+	useEffect(() => {
+		if (query && !isSearchRoute) {
+			router.push(`/search?q=${query}`);
+		} else if (!query && isSearchRoute) {
+			router.push("/browse");
+		}
+	}, [addQueryParams, isSearchRoute, query, router]);
 
 	if (!isSearchRoute && !!queryParams) router.replace("/browse");
 
 	return (
-		<div className="text-white">
+		<>
 			<AnimatePresence onExitComplete={() => setAnimationComplete(false)}>
 				{displaySearch && (
 					<motion.div
-						className="relative flex items-center border bg-black/75 px-2 py-1"
+						className="relative flex items-center border bg-black/75 px-2 lg:py-1"
 						initial={{ width: queryParams ? 255 : 50 }}
 						animate={{ width: 255 }}
 						exit={{ width: 50 }}
 						transition={{ duration: 0.3, ease: "easeOut" }}
 						onAnimationComplete={() => {
 							setAnimationComplete(true);
-							setFocus("query");
 						}}
 					>
-						<MagnifyingGlassIcon className="shrink-0" />
-						<form onSubmit={handleSubmit(onSubmit)} className="grow">
+						<MagnifyingGlassIcon className="size-4 shrink-0 lg:size-6" />
+						<div className="flex h-[22px] items-center lg:h-6">
 							<input
 								autoFocus
 								placeholder="Movies, tv show, peoples..."
-								className="w-full bg-transparent py-1 pl-2 text-sm leading-3 focus-visible:outline-none"
-								{...register("query")}
+								className="w-full bg-transparent pl-2 text-[13px] leading-6 focus-visible:outline-none lg:py-1 lg:pl-2 lg:text-sm lg:leading-3"
+								value={query}
+								onChange={(e) => {
+									addQueryParams({ q: e.target.value });
+									setQuery(e.target.value);
+								}}
 								onBlur={() => {
 									if (!isSearchRoute) {
 										setDisplaySearch(false);
 									}
 								}}
 							/>
-							<button type="submit" className="sr-only">
-								Submit
-							</button>
-						</form>
+						</div>
 					</motion.div>
 				)}
 			</AnimatePresence>
@@ -76,7 +67,7 @@ const SearchMedia = () => {
 					<MagnifyingGlassIcon />
 				</button>
 			)}
-		</div>
+		</>
 	);
 };
 

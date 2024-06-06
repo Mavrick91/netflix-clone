@@ -8,7 +8,7 @@ const ImageClient = (props: ImageProps) => {
 			{...props}
 			alt={props.alt || "image"}
 			quality={100}
-			className="object-cover"
+			className="h-full object-cover"
 		/>
 	);
 };

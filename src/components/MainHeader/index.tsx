@@ -99,7 +99,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 						)}
 					</div>
 					{!isError && (
-						<div className="hidden sm:flex">
+						<div className="hidden text-white sm:flex">
 							<SearchMedia />
 						</div>
 					)}

@@ -17,10 +17,14 @@ const BannerContent: React.FC<BannerContentProps> = ({
 }) => {
 	const { addQueryParams } = useManageQueryParams();
 
+	const imageUrl = bannerMedia.backdrop_path
+		? `https://image.tmdb.org/t/p/original/${bannerMedia.backdrop_path}`
+		: "/images/media-placeholder.jpeg";
+
 	return (
 		<>
 			<ImageClient
-				src={`https://image.tmdb.org/t/p/original/${bannerMedia.backdrop_path}`}
+				src={imageUrl}
 				alt={bannerMedia.backdrop_path}
 				fill
 				priority

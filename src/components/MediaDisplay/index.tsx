@@ -1,4 +1,4 @@
-import BrowseBanner from "@/app/browse/_components/BrowseBanner";
+import BrowseBanner from "@/app/(auth)/browse/_components/BrowseBanner";
 import CarouselSection from "@/components/CarouselSection";
 import { Movie, TVShow } from "@/types";
 

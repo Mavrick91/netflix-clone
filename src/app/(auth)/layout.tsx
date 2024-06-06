@@ -6,7 +6,7 @@ import Modal from "@/components/Modal";
 import ModalMoreInfo from "@/components/Modal/ModalMoreInfo";
 import useManageQueryParams from "@/hooks/useManageQueryParams";
 
-export default function BrowseLayout({
+export default function AuthLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;

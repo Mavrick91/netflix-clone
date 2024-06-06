@@ -10,9 +10,11 @@ import {
 	DetailsMovie,
 	DetailsTVShow,
 	MediaResults,
+	MediaSearch,
 	Movie,
 	TVShow,
 } from "@/types";
+import { Person } from "@/types/person";
 
 type CategoryData = {
 	genreList: Categories;
@@ -69,4 +71,17 @@ export const isDetailsMovie = (
 
 export const isTVShow = (info: Movie | TVShow): info is TVShow => {
 	return (info as TVShow).name !== undefined;
+};
+
+const isMediaSearch = (item: MediaSearch | Person): item is MediaSearch => {
+	return (
+		(item as MediaSearch).media_type == "movie" ||
+		(item as MediaSearch).media_type == "tv"
+	);
+};
+
+export const getMediaFiltered = (
+	media: (MediaSearch | Person)[],
+): MediaSearch[] => {
+	return media.filter(isMediaSearch);
 };

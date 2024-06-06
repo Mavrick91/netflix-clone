@@ -36,3 +36,21 @@ export interface SpokenLanguage {
 	iso_639_1: string;
 	name: string;
 }
+
+export interface MediaSearch {
+	backdrop_path: string;
+	id: number;
+	original_title: string;
+	overview: string;
+	poster_path: string;
+	media_type: string;
+	adult: false;
+	title: string;
+	original_language: string;
+	genre_ids: number[];
+	popularity: number;
+	release_date: string;
+	video: false;
+	vote_average: number;
+	vote_count: number;
+}

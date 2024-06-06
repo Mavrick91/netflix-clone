@@ -8,6 +8,8 @@ import CloseIcon from "@/assets/images/svg/CloseIcon";
 import LoadingSpinner from "@/assets/images/svg/LoadingSpinner";
 import useClickOutside from "@/hooks/useClickOutside";
 
+import ErrorBoundary from "../ErrorBoundary";
+
 type ModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
@@ -67,28 +69,30 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 					animate="visible"
 					exit="exit"
 				>
-					<Suspense
-						fallback={
-							<LoadingSpinner className="size-16 self-center text-white" />
-						}
-					>
-						<motion.div
-							className="relative mt-8"
-							variants={modalVariants}
-							ref={dropdownRef}
-							initial="hidden"
-							animate="visible"
-							exit="exit"
+					<ErrorBoundary>
+						<Suspense
+							fallback={
+								<LoadingSpinner className="size-16 self-center text-white" />
+							}
 						>
-							<button
-								className="absolute right-3 top-3 z-[100] rounded-full bg-[#181818] p-1.5 text-white"
-								onClick={onClose}
+							<motion.div
+								className="relative mt-8"
+								variants={modalVariants}
+								ref={dropdownRef}
+								initial="hidden"
+								animate="visible"
+								exit="exit"
 							>
-								<CloseIcon />
-							</button>
-							{children}
-						</motion.div>
-					</Suspense>
+								<button
+									className="absolute right-3 top-3 z-[100] rounded-full bg-[#181818] p-1.5 text-white"
+									onClick={onClose}
+								>
+									<CloseIcon />
+								</button>
+								{children}
+							</motion.div>
+						</Suspense>
+					</ErrorBoundary>
 				</motion.div>
 			)}
 		</AnimatePresence>,
