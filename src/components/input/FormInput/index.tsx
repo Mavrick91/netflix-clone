@@ -86,7 +86,7 @@ type RadioProps = InputHTMLAttributes<HTMLInputElement> &
 	Omit<ControllerProps, "render" | "name">;
 
 const RHFRadio = ({ shouldUnregister, ...props }: RadioProps) => {
-	const { name, control, disabled } = useContext(FormInputContext)!;
+	const { name, control } = useContext(FormInputContext)!;
 
 	return (
 		<Controller

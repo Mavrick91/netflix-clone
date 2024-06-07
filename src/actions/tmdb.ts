@@ -156,5 +156,5 @@ export const getSearchMulti = async (
 	query: string,
 	page: number,
 ): Promise<MediaResults<MediaSearch>> => {
-	return tmdbFetch("/search/multi", {}, { query, page: `${page}` });
+	return tmdbFetch("/search/multi", {}, { query, page: `${page}`, language: "en-US" });
 };

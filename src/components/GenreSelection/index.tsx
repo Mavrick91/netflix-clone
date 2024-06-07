@@ -52,7 +52,7 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({
 	return (
 		<div className="relative z-10 flex items-center border-white py-2">
 			<div
-				className={classNames("flex items-center shrink-0", {
+				className={classNames("flex items-center shrink-0 mr-5 lg:mr-10", {
 					"text-white text-sm sm:text-lg md:text-2xl lg:text-4xl font-bold":
 						!categorySelected,
 					"text-lg text-gray-300 leading-6": categorySelected,
@@ -73,7 +73,7 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({
 					{categorySelected.name}
 				</div>
 			) : (
-				<MainDropdown items={formattedCategories} label="Genres" />
+				<MainDropdown items={formattedCategories} label="Genres" numberOfColumn={3} />
 			)}
 		</div>
 	);

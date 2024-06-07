@@ -21,7 +21,6 @@ const tmdbFetch = async (
 	params: Record<string, string> = {},
 ) => {
 	const url = buildUrlWithParams(endpoint, params);
-	console.log("🚀 ~ url:", url);
 
 	const response = await fetch(url, {
 		...options,

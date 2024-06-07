@@ -34,6 +34,8 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 	const { logout } = useAuth();
 	const [isScrolled, setIsScrolled] = useState(false);
 
+	const isSearchPage = pathname.includes("/search");
+
 	const getActiveLink = useCallback(
 		(path: string, name: string) => {
 			if (categoryId === ShowTVCategory && name === NAV_LINKS[1].name) {
@@ -70,9 +72,9 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 					paddingClasses,
 					"py-4 flex flex-col justify-center h-[41px] md:h-[54px] lg:h-[68px] w-full transition-colors duration-500",
 					{
-						"bg-black bg-opacity-100": isScrolled || categories,
+						"bg-black bg-opacity-100": isScrolled || categories || isSearchPage,
 						"bg-gradient-to-b from-black/70 to-transparent bg-opacity-70":
-							!isScrolled && !categories,
+							!isScrolled && !categories && !isSearchPage,
 					},
 				)}
 			>
@@ -93,7 +95,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 							</nav>
 						)}
 						{!isError && (
-							<div className="lg:hidden">
+							<div className="ml-5 lg:ml-10 lg:hidden">
 								<MainDropdown items={NAV_LINKS} label="Browse" />
 							</div>
 						)}
@@ -111,16 +113,16 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 						paddingClasses,
 						"py-1.5 transition-all duration-500",
 						{
-							"bg-black/100": isScrolled,
+							"bg-black/100": isScrolled || isSearchPage,
 							"bg-black/0": !isScrolled,
 						},
 					)}
 				>
-					<GenreSelection
-						categories={categories}
-						categoryId={categoryId}
-						genreIdSelected={genreIdSelected}
-					/>
+						<GenreSelection
+							categories={categories}
+							categoryId={categoryId}
+							genreIdSelected={genreIdSelected}
+						/>
 				</div>
 			)}
 		</div>
