@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { clearToken, setCookie } from "@/actions/cookie";
-import { AUTH_PATHS } from "@/constants/route";
+import { AUTH_PATHS, NO_AUTH_PATHS } from "@/constants/route";
 import { auth } from "@/firebase";
 
 interface AuthContextType {
@@ -28,16 +28,10 @@ const handleAuthStateChange = async (
 	currentUser: User | null,
 	setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>,
 	setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-	pathname: string,
-	router: any,
 ) => {
 	if (user && !currentUser) {
 		const token = await user.getIdToken();
 		await setCookie(token);
-
-		if (AUTH_PATHS.includes(pathname)) {
-			router.push("/browse");
-		}
 	} else if (!user) {
 		await clearToken();
 	}
@@ -54,14 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			handleAuthStateChange(
-				user,
-				currentUser,
-				setCurrentUser,
-				setLoading,
-				pathname,
-				router,
-			);
+			handleAuthStateChange(user, currentUser, setCurrentUser, setLoading);
 		});
 
 		return unsubscribe;
@@ -75,6 +62,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	if (loading) {
+		return null;
+	}
+
+	if (currentUser && AUTH_PATHS.includes(pathname)) {
+		router.replace("/browse");
+		return null;
+	} else if (!currentUser && NO_AUTH_PATHS.includes(pathname)) {
+		router.replace("/");
 		return null;
 	}
 

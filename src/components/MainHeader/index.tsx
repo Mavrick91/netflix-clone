@@ -118,11 +118,11 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 						},
 					)}
 				>
-						<GenreSelection
-							categories={categories}
-							categoryId={categoryId}
-							genreIdSelected={genreIdSelected}
-						/>
+					<GenreSelection
+						categories={categories}
+						categoryId={categoryId}
+						genreIdSelected={genreIdSelected}
+					/>
 				</div>
 			)}
 		</div>

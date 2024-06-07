@@ -35,9 +35,9 @@ body {
 
 @layer base {
 	.debug {
-		@apply border-2 border-red-500
+		@apply border-2 border-red-500;
 	}
-	
+
 	.arrow-down {
 		border-color: #fff transparent transparent;
 		border-style: solid;

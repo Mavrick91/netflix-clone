@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -31,7 +30,6 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const LoginForm = () => {
-	const router = useRouter();
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -56,10 +54,6 @@ const LoginForm = () => {
 			email: string;
 			password: string;
 		}) => signInWithEmailAndPassword(auth, email, password),
-		onSuccess: () => {
-			console.log("success");
-			router.push("/browse");
-		},
 	});
 
 	const onSubmit: SubmitHandler<FormData> = async (data) => {

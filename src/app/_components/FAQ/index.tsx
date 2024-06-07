@@ -55,7 +55,9 @@ const FAQ_QUESTIONS = [
 const FAQ = () => {
 	return (
 		<div className="netflix-container mx-auto flex flex-col items-center justify-center px-6 py-20 text-primary-white">
-			<h2 className="text-center text-[32px] font-black lg:text-5xl">Frequently Asked Questions</h2>
+			<h2 className="text-center text-[32px] font-black lg:text-5xl">
+				Frequently Asked Questions
+			</h2>
 			<div className="my-6 w-full">
 				<ul className="space-y-2 text-lg lg:text-2xl">
 					{FAQ_QUESTIONS.map((faq, index) => (

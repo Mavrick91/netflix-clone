@@ -73,7 +73,11 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({
 					{categorySelected.name}
 				</div>
 			) : (
-				<MainDropdown items={formattedCategories} label="Genres" numberOfColumn={3} />
+				<MainDropdown
+					items={formattedCategories}
+					label="Genres"
+					numberOfColumn={3}
+				/>
 			)}
 		</div>
 	);
