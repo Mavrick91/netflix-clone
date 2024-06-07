@@ -1,29 +1,24 @@
-import ImageClient from "@/components/ImageClient";
+/* eslint-disable @next/next/no-img-element */
 
 const Category2 = () => {
 	return (
-		<div className="netflix-container mx-auto flex items-center justify-center py-20 text-primary-white">
-			<div className="h-[519px] basis-1/2">
-				<div className="relative h-full">
-					<ImageClient
-						priority={false}
-						alt="Device Pile Image"
-						fill
-						src="/images/device-pile.png"
-						sizes="(max-width: 768px) 100vw, 
-                   (max-width: 1200px) 50vw, 
-                   33vw"
-					/>
-					<div className="absolute left-[15%] top-[7%] -z-10 scale-90">
+		<div className="netflix-container mx-auto flex size-full flex-col-reverse items-center px-2 py-[56px] text-primary-white lg:flex-row-reverse lg:gap-5 lg:px-8 lg:py-20">
+			<div className="basis-1/2">
+				<div className="relative flex justify-center">
+					<img alt="" src="/images/device-pile.png" />
+					<div className="absolute left-1/2 top-[34%] -z-10 size-full max-h-[47%] max-w-[63%] -translate-x-1/2 -translate-y-1/2 overflow-hidden">
 						<video autoPlay playsInline muted loop>
 							<source src="/videos/video-devices.mp4" type="video/mp4" />
 						</video>
 					</div>
 				</div>
 			</div>
-			<div className="flex basis-1/2 flex-col gap-4">
-				<h2 className="text-5xl font-black">Watch everywhere</h2>
-				<p className="text-2xl">
+
+			<div className="mb-6 basis-1/2 gap-4">
+				<h2 className="text-center text-[32px] font-black lg:text-left lg:text-5xl">
+					Watch everywhere
+				</h2>
+				<p className="mt-4 text-center text-lg lg:text-left lg:text-2xl">
 					Stream unlimited movies and TV shows on your phone, tablet, laptop,
 					and TV.
 				</p>

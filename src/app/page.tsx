@@ -12,7 +12,7 @@ import NetflixPlan from "./_components/NetflixPlan";
 export default function Home() {
   return (
     <div>
-      <div className="relative flex min-h-[44rem] flex-col">
+      <div className="relative flex min-h-[30rem] flex-col lg:min-h-[44rem]">
         <ImageClient
           priority
           fill
@@ -39,11 +39,11 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="relative z-10 flex h-full grow flex-col items-center justify-center gap-4 text-primary-white">
-          <h1 className="text-5xl font-bold">
+        <div className="relative z-10 mx-8 flex h-full grow flex-col items-center justify-center gap-4 text-center text-primary-white">
+          <h1 className="text-[29px] font-bold md:text-5xl">
             Unlimited movies, TV shows, and more
           </h1>
-          <p className="text-2xl">Watch anywhere. Cancel anytime.</p>
+          <p className="text-lg lg:text-2xl">Watch anywhere. Cancel anytime.</p>
         </div>
       </div>
       <NetflixPlan />

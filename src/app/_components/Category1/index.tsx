@@ -1,32 +1,27 @@
-import ImageClient from "@/components/ImageClient";
+/* eslint-disable @next/next/no-img-element */
 
 const Category1 = () => {
 	return (
-		<div className="netflix-container mx-auto flex items-center justify-center py-20 text-primary-white">
-			<div className="flex basis-1/2 flex-col gap-4">
-				<h2 className="text-5xl font-black">Enjoy on your TV</h2>
-				<p className="text-2xl">
-					Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray
-					players, and more.
-				</p>
-			</div>
-			<div className="h-[519px] basis-1/2">
-				<div className="relative h-full">
-					<ImageClient
-						priority
-						alt=""
-						fill
-						src="/images/tv.png"
-						sizes="(max-width: 768px) 100vw, 
-					 (max-width: 1200px) 50vw, 
-					 33vw"
-					/>
-					<div className="absolute left-[15%] top-[20%] -z-10">
+		<div className="netflix-container mx-auto flex size-full flex-col-reverse items-center px-2 py-[56px] text-primary-white lg:flex-row lg:gap-5 lg:px-8 lg:py-20">
+			<div className="basis-1/2">
+				<div className="relative flex justify-center">
+					<img alt="" src="/images/tv.png" />
+					<div className="absolute left-1/2 top-[44%] -z-10 size-full max-h-[47%] max-w-[63%] -translate-x-1/2 -translate-y-1/2 overflow-hidden">
 						<video autoPlay playsInline muted loop>
 							<source src="/videos/video-tv-0819.mp4" type="video/mp4" />
 						</video>
 					</div>
 				</div>
+			</div>
+
+			<div className="mb-6 basis-1/2 gap-4">
+				<h2 className="text-center text-[32px] font-black lg:text-left lg:text-5xl">
+					Enjoy on your TV
+				</h2>
+				<p className="mt-4 text-center text-lg lg:text-left lg:text-2xl">
+					Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray
+					players, and more.
+				</p>
 			</div>
 		</div>
 	);
