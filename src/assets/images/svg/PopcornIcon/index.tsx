@@ -1,4 +1,4 @@
-const PopcornIcon = (props) => {
+const PopcornIcon = (props: { className?: string }) => {
 	return (
 		<svg width="96" height="96" fill="none" {...props}>
 			<path

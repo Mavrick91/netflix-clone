@@ -9,7 +9,7 @@ const NetflixPlan = () => {
 	return (
 		<div className="absolute z-20 w-full -translate-y-1/2">
 			<div
-				className="relative flex justify-center items-center rounded-md p-2 lg:p-6 lg:mx-20"
+				className="relative flex items-center justify-center rounded-md p-2 lg:mx-20 lg:p-6"
 				style={{
 					background:
 						"radial-gradient( 51.39% 511.66% at 47.68% -217.91%, #ff9900 0%, #e50914 17.27%, #0e1b4f 79.44%, #000413 100% )",
@@ -17,7 +17,7 @@ const NetflixPlan = () => {
 				}}
 			>
 				<PopcornIcon className="hidden sm:block" />
-				<div className="sm:pl-8 text-sm text-primary-white lg:text-xl ">
+				<div className="text-sm text-primary-white sm:pl-8 lg:text-xl ">
 					<p className="font-medium">
 						The Netflix you love for just $6.99.
 					</p>
