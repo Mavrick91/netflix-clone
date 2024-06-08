@@ -25,14 +25,26 @@ type CategoryData = {
 	isMovieCategory: boolean;
 };
 
+export const isGenreMovie = (
+	genreId: string,
+	categoryType: string,
+): boolean => {
+	return genreId === MovieCategory || categoryType === MovieCategory;
+};
+
+export const isGenreTVShow = (
+	genreId: string,
+	categoryType: string,
+): boolean => {
+	return genreId === ShowTVCategory || categoryType === ShowTVCategory;
+};
+
 export const getCategoryData = async (
 	genreId: string,
 	categoryType: string,
 ): Promise<CategoryData> => {
-	const isTVCategory =
-		genreId === ShowTVCategory || categoryType === ShowTVCategory;
-	const isMovieCategory =
-		genreId === MovieCategory || categoryType === MovieCategory;
+	const isTVCategory = isGenreTVShow(genreId, categoryType);
+	const isMovieCategory = isGenreMovie(genreId, categoryType);
 
 	if (isTVCategory) {
 		const genreList = await getGenreTvShows();

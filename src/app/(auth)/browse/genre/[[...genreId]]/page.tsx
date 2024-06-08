@@ -1,12 +1,25 @@
+import { Metadata } from "next";
+
 import { fetchMovieData, fetchTVData } from "@/actions/tmdb";
 import MainHeader from "@/components/MainHeader";
 import MediaDisplay from "@/components/MediaDisplay";
-import { getCategoryData } from "@/utils/media";
+import { getCategoryData, isGenreMovie } from "@/utils/media";
 
 type GenrePageProps = {
 	params: { genreId: string[] };
 	searchParams: { cb: string };
 };
+
+export async function generateMetadata({
+	params,
+	searchParams,
+}: GenrePageProps): Promise<Metadata> {
+	return {
+		title: isGenreMovie(params.genreId[0], searchParams.cb)
+			? "Movies - Netflix Clone"
+			: "TV Shows - Netflix Clone",
+	};
+}
 
 const GenrePage = async ({ params, searchParams }: GenrePageProps) => {
 	const {
