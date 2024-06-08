@@ -1,5 +1,10 @@
-import BannerContent from "@/components/BannerContent";
+import dynamic from "next/dynamic";
+
 import { Movie, TVShow } from "@/types";
+
+const BannerContent = dynamic(() => import("@/components/BannerContent"), {
+	ssr: false,
+});
 
 type BrowseBannerProps = {
 	bannerMedia: Movie | TVShow;

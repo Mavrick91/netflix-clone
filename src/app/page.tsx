@@ -32,6 +32,7 @@ export default function Home() {
 						<NetflixLogo />
 						<LinkComponent
 							href="/login"
+							prefetch
 							className={buttonVariants({ size: "sm" })}
 						>
 							Sign In

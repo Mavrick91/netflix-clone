@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 import CloseIcon from "@/assets/images/svg/CloseIcon";
@@ -45,6 +45,13 @@ const backdropVariants = {
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 	const { dropdownRef } = useClickOutside();
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+		return () => setMounted(false);
+	}, []);
+
 	useEffect(() => {
 		if (isOpen) {
 			document.body.style.overflow = "hidden";
@@ -56,6 +63,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 			document.body.style.overflow = "";
 		};
 	}, [isOpen]);
+
+	if (!mounted) {
+		return null;
+	}
+
+	const modalRoot = document.getElementById("modal-root");
+	if (!modalRoot) {
+		return null;
+	}
 
 	return ReactDOM.createPortal(
 		<AnimatePresence>
@@ -92,7 +108,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 				</motion.div>
 			)}
 		</AnimatePresence>,
-		document.getElementById("modal-root")!,
+		modalRoot,
 	);
 };
 

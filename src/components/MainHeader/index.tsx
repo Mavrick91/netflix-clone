@@ -88,7 +88,9 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 								<ul className="flex space-x-6 text-sm">
 									{NAV_LINKS.map(({ id, name }) => (
 										<li key={id} className={getLinkClasses(id, name)}>
-											<LinkComponent href={id} prefetch>{name}</LinkComponent>
+											<LinkComponent href={id} prefetch>
+												{name}
+											</LinkComponent>
 										</li>
 									))}
 								</ul>

@@ -1,5 +1,9 @@
-import Carousel from "../Carousel";
-import HeaderCarousel from "../HeaderCarousel";
+import dynamic from "next/dynamic";
+
+const Carousel = dynamic(() => import("../Carousel"), { ssr: false });
+const HeaderCarousel = dynamic(() => import("../HeaderCarousel"), {
+	ssr: false,
+});
 
 type Props = {
 	title: string;
@@ -9,10 +13,10 @@ type Props = {
 
 const CarouselSection = ({ title, medias, mediaType }: Props) => {
 	return (
-		<div>
+		<section aria-label={title}>
 			<HeaderCarousel title={title} />
 			<Carousel movies={medias} mediaType={mediaType} />
-		</div>
+		</section>
 	);
 };
 

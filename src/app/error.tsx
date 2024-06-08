@@ -1,12 +1,13 @@
-"use client"; // Error components must be Client Components
+"use client";
 
 import classNames from "classnames";
-import { useEffect } from "react";
+import dynamic from "next/dynamic";
 
 import { buttonVariants } from "@/components/Button";
-import ImageClient from "@/components/ImageClient";
-import LinkComponent from "@/components/LinkComponent";
-import MainHeader from "@/components/MainHeader";
+
+const ImageClient = dynamic(() => import("@/components/ImageClient"));
+const LinkComponent = dynamic(() => import("@/components/LinkComponent"));
+const MainHeader = dynamic(() => import("@/components/MainHeader"));
 
 export default function Error({
 	error,
@@ -14,10 +15,6 @@ export default function Error({
 	error: Error & { digest?: string };
 	reset: () => void;
 }) {
-	useEffect(() => {
-		console.error(error);
-	}, [error]);
-
 	return (
 		<div>
 			<MainHeader isError />
@@ -44,6 +41,7 @@ export default function Error({
 						<div>
 							<LinkComponent
 								href="/browse"
+								prefetch
 								className={classNames(
 									"!font-semibold !text-base",
 									buttonVariants({ variant: "white" }),

@@ -63,7 +63,11 @@ const SearchMedia = () => {
 				)}
 			</AnimatePresence>
 			{!displaySearch && !animationComplete && (
-				<button type="button" onClick={() => setDisplaySearch(true)}>
+				<button
+					type="button"
+					aria-label="magnifying-glass-button"
+					onClick={() => setDisplaySearch(true)}
+				>
 					<MagnifyingGlassIcon />
 				</button>
 			)}

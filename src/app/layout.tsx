@@ -1,16 +1,25 @@
 import "./globals.css";
 
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
 
 import Providers from "@/Providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const SpeedInsights = dynamic(
+	() => import("@vercel/speed-insights/next").then((mod) => mod.SpeedInsights),
+	{ ssr: false },
+);
+const Analytics = dynamic(
+	() => import("@vercel/analytics/react").then((mod) => mod.Analytics),
+	{ ssr: false },
+);
+
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
 	title: "Netflix Clone",
+	description: "A Netflix clone built with Next.js and Tailwind CSS",
 };
 
 export default function RootLayout({
@@ -25,8 +34,8 @@ export default function RootLayout({
 					{children}
 					<SpeedInsights />
 					<Analytics />
+					<div id="modal-root" />
 				</Providers>
-				<div id="modal-root" />
 			</body>
 		</html>
 	);

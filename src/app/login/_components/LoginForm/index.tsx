@@ -4,9 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { setCookie } from "@/actions/cookie";
 import { Button } from "@/components/Button";
 import FormInput from "@/components/input/FormInput";
 import WarningError from "@/components/WarningError";
@@ -30,11 +32,12 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const LoginForm = () => {
+	const router = useRouter();
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: "",
-			password: "",
+			email: "clownclowed@gmail.com",
+			password: "aaaaaa",
 		},
 	});
 
@@ -54,6 +57,14 @@ const LoginForm = () => {
 			email: string;
 			password: string;
 		}) => signInWithEmailAndPassword(auth, email, password),
+		onSuccess: async (userCredential) => {
+			const token = userCredential
+				? await userCredential.user?.getIdToken()
+				: "";
+			if (!token) return;
+			await setCookie(token);
+			router.push("/browse");
+		},
 	});
 
 	const onSubmit: SubmitHandler<FormData> = async (data) => {
@@ -105,6 +116,7 @@ const LoginForm = () => {
 						className="font-medium text-white underline-offset-2 hover:underline"
 						target="_self"
 						href="/signup"
+						prefetch
 					>
 						Sign up now
 					</Link>

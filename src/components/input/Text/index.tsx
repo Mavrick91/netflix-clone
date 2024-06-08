@@ -13,6 +13,7 @@ const Text = ({ label, mode = "dark", ...props }: Props) => {
 	return (
 		<div className="group relative inline-flex flex-wrap align-top">
 			<label
+				htmlFor={props.id}
 				className={classNames(
 					"absolute inset-x-4 top-3.5 z-10 select-none truncate whitespace-nowrap transition-all group-focus-within:top-2 group-focus-within:text-xs",
 					{
@@ -49,6 +50,7 @@ const Text = ({ label, mode = "dark", ...props }: Props) => {
 						<button
 							onClick={() => setShowPassword(!showPassword)}
 							type="button"
+							aria-label="Show password"
 						>
 							<Icon
 								icon={showPassword ? "ph:eye-slash" : "ph:eye"}

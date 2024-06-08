@@ -13,7 +13,7 @@ export default function AuthLayout({
 }>) {
 	const searchParams = useSearchParams()!;
 	const mediaId = searchParams.get("jbv");
-	const mediaType = searchParams.get("type") as "movie" | "tv" | undefined;
+	const mediaType = searchParams.get("type") as "movie" | "tv" | null;
 	const { removeQueryParams } = useManageQueryParams();
 
 	if (mediaId && !mediaType) {
