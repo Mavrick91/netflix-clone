@@ -12,12 +12,15 @@ import NetflixPlan from "./_components/NetflixPlan";
 export default function Home() {
 	return (
 		<div>
-			<div className="relative flex min-h-[30rem] flex-col lg:min-h-[44rem]">
+			<div
+				className="relative flex min-h-[30rem] flex-col lg:min-h-[44rem]"
+				aria-labelledby="home-heading"
+			>
 				<ImageClient
 					priority
 					fill
 					src="/images/background-signin.jpg"
-					alt="background signin"
+					alt="Background image for sign-in"
 					className="z-0"
 				/>
 				<div
@@ -41,7 +44,7 @@ export default function Home() {
 				</header>
 
 				<div className="relative z-10 mx-8 flex h-full grow flex-col items-center justify-center gap-4 text-center text-primary-white">
-					<h1 className="text-[29px] font-bold md:text-5xl">
+					<h1 id="home-heading" className="text-[29px] font-bold md:text-5xl">
 						Unlimited movies, TV shows, and more
 					</h1>
 					<p className="text-lg lg:text-2xl">Watch anywhere. Cancel anytime.</p>

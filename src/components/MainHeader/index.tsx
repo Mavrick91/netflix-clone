@@ -80,11 +80,18 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 			>
 				<div className="flex items-center justify-between">
 					<div className="flex items-center">
-						<button type="button" onClick={() => logout()}>
+						<button
+							type="button"
+							onClick={() => logout()}
+							aria-label="Netflix Logo"
+						>
 							<NetflixLogo />
 						</button>
 						{!isError && (
-							<nav className="ml-14 hidden lg:flex">
+							<nav
+								className="ml-14 hidden lg:flex"
+								aria-label="Main Navigation"
+							>
 								<ul className="flex space-x-6 text-sm">
 									{NAV_LINKS.map(({ id, name }) => (
 										<li key={id} className={getLinkClasses(id, name)}>
