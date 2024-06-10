@@ -40,7 +40,7 @@ const MainDropdown = ({
 	};
 
 	return (
-		<div className="relative z-[1000]  flex w-full ">
+		<div className="relative z-[1000] flex w-full ">
 			<button
 				type="button"
 				ref={buttonRef}
@@ -53,7 +53,7 @@ const MainDropdown = ({
 				)}
 			>
 				{label}
-				<div className="arrow-down" />
+				<div className="arrow-down right-[10px] top-[44%]" />
 			</button>
 
 			{isDropdownOpen && (

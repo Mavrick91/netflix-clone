@@ -10,9 +10,9 @@ import MainDropdown from "@/components/MainDropdown";
 import NetflixLogo from "@/components/NetflixLogo";
 import { MovieCategory, ShowTVCategory } from "@/constants/media-ids";
 import { NAV_LINKS } from "@/constants/route";
-import { useAuth } from "@/Providers/AuthProvider";
 import { CategoriesItem } from "@/types";
 
+import ProfileDropdown from "./ProfileDropdown";
 import SearchMedia from "./SearchMedia";
 
 const paddingClasses = "px-[4%]";
@@ -31,7 +31,6 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 	isError,
 }) => {
 	const pathname = usePathname();
-	const { logout } = useAuth();
 	const [isScrolled, setIsScrolled] = useState(false);
 
 	const isSearchPage = pathname.includes("/search");
@@ -80,13 +79,9 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 			>
 				<div className="flex items-center justify-between">
 					<div className="flex items-center">
-						<button
-							type="button"
-							onClick={() => logout()}
-							aria-label="Netflix Logo"
-						>
+						<LinkComponent href="/browse" prefetch aria-label="Netflix Logo">
 							<NetflixLogo />
-						</button>
+						</LinkComponent>
 						{!isError && (
 							<nav
 								className="ml-14 hidden lg:flex"
@@ -110,8 +105,11 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 						)}
 					</div>
 					{!isError && (
-						<div className="hidden text-white sm:flex">
-							<SearchMedia />
+						<div className="flex items-center gap-3">
+							<div className="hidden text-white sm:flex">
+								<SearchMedia />
+							</div>
+							<ProfileDropdown />
 						</div>
 					)}
 				</div>
