@@ -1,5 +1,5 @@
 type AccountIconProps = {
-  className?: string;
+	className?: string;
 };
 
 const AccountIcon = (props: AccountIconProps) => {
@@ -13,7 +13,7 @@ const AccountIcon = (props: AccountIconProps) => {
 			role="img"
 			data-icon="UserStandard"
 			aria-hidden="true"
-      {...props}
+			{...props}
 		>
 			<path
 				fillRule="evenodd"

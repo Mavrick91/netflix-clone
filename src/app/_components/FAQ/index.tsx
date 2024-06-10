@@ -6,14 +6,14 @@ const FAQ_QUESTIONS = [
 		answer: (
 			<>
 				<p>
-					Netflix is a streaming service that offers a wide variety of
+					{`Netflix is a streaming service that offers a wide variety of
 					award-winning TV shows, movies, anime, documentaries, and more on
-					thousands of internet-connected devices.
+					thousands of internet-connected devices.`}
 				</p>
 				<p>
-					You can watch as much as you want, whenever you want – all for one low
+					{`You can watch as much as you want, whenever you want – all for one low
 					monthly price. There's always something new to discover and new TV
-					shows and movies are added every week!
+					shows and movies are added every week!`}
 				</p>
 			</>
 		),
@@ -27,16 +27,16 @@ const FAQ_QUESTIONS = [
 		answer: (
 			<>
 				<p>
-					Watch anywhere, anytime. Sign in with your Netflix account to watch
+					{`Watch anywhere, anytime. Sign in with your Netflix account to watch
 					instantly on the web at netflix.com from your personal computer or on
 					any internet-connected device that offers the Netflix app, including
 					smart TVs, smartphones, tablets, streaming media players, and game
-					consoles.
+					consoles.`}
 				</p>
 				<p>
-					You can also download your favourite programmes with the iOS, Android,
+					{`You can also download your favourite programmes with the iOS, Android,
 					or Windows 10 app. Use downloads to watch while you're on the go and
-					without an internet connection. Take Netflix with you anywhere.
+					without an internet connection. Take Netflix with you anywhere.`}
 				</p>
 			</>
 		),
@@ -54,14 +54,14 @@ const FAQ_QUESTIONS = [
 		answer: (
 			<>
 				<p>
-					The Netflix Children's experience is included in your membership to
+					{`The Netflix Children's experience is included in your membership to
 					give parents control while children enjoy family-friendly TV
-					programmes and films in their own space.
+					programmes and films in their own space.`}
 				</p>
 				<p>
-					Children's profiles come with PIN-protected parental controls that let
+					{`Children's profiles come with PIN-protected parental controls that let
 					you restrict the maturity rating of content children can watch and
-					block specific titles you don’t want children to see.
+					block specific titles you don’t want children to see.`}
 				</p>
 			</>
 		),

@@ -18,17 +18,13 @@ const SearchMedia = () => {
 
 	const isSearchRoute = pathname === "/search";
 
-	// Function to check if the screen is small
 	const checkScreenSize = () => {
 		setIsSmallScreen(window.innerWidth < 576); // 640px is the breakpoint for 'sm' in Tailwind CSS
 	};
 
 	useEffect(() => {
-		// Set the initial screen size
 		checkScreenSize();
-		// Add event listener to check screen size on resize
 		window.addEventListener("resize", checkScreenSize);
-		// Cleanup event listener on component unmount
 		return () => window.removeEventListener("resize", checkScreenSize);
 	}, []);
 
@@ -47,7 +43,7 @@ const SearchMedia = () => {
 			<AnimatePresence onExitComplete={() => setAnimationComplete(false)}>
 				{displaySearch && (
 					<motion.div
-						className="relative flex sm items-center border bg-black/75 px-2 lg:py-1"
+						className="relative flex items-center border bg-black/75 px-2 lg:py-1"
 						initial={{ width: queryParams ? (isSmallScreen ? 180 : 255) : 50 }}
 						animate={{ width: isSmallScreen ? 180 : 255 }}
 						exit={{ width: 50 }}

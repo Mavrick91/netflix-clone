@@ -11,7 +11,7 @@ import {
 	useState,
 } from "react";
 
-import { clearToken, setCookie } from "@/actions/cookie";
+import { clearToken } from "@/actions/cookie";
 import { auth } from "@/firebase";
 
 interface AuthContextProps {
