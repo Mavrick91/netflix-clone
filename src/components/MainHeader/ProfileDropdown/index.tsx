@@ -27,7 +27,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = () => {
 	};
 
 	return (
-		<div className="relative size-10 z-20 py-1">
+		<div className="relative z-20 size-10 py-1">
 			<button
 				type="button"
 				className="flex size-full justify-center"

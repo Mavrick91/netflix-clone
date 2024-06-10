@@ -12,6 +12,7 @@ const MembershipBilling = ({ user }: MembershipBillingProps) => {
 	const subTitle = (
 		<div className="mt-3 hidden flex-col sm:flex md:col-span-3">
 			<Button
+				className="text-black"
 				style={{
 					backgroundColor: "#e6e6e6",
 					backgroundImage: "linear-gradient(180deg,#e6e6e6,#ddd)",

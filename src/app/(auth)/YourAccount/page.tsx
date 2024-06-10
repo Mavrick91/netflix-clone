@@ -3,11 +3,11 @@
 import { format } from "date-fns";
 
 import MemeberSinceIcon from "@/assets/images/svg/MemeberSinceIcon";
+import MainHeader from "@/components/MainHeader";
 import { useAuth } from "@/Providers/AuthProvider";
 
 import MembershipBilling from "./_components/MembershipBilling";
 import PlanDetails from "./_components/PlanDetails";
-import MainHeader from "@/components/MainHeader";
 
 type YourAccountProps = {};
 
@@ -21,7 +21,7 @@ const YourAccountPage = ({}: YourAccountProps) => {
 	return (
 		<>
 			<MainHeader />
-			<div className="h-full pt-14 sm:pt-16 lg:pt-24 bg-[#f3f3f3] p-4 sm:px-14">
+			<div className="h-full bg-[#f3f3f3] p-4 pt-14 sm:px-14 sm:pt-16 lg:pt-24">
 				<div className="mx-auto max-w-5xl">
 					<div className="flex flex-col sm:flex-row sm:gap-3 md:pb-4">
 						<h1 className="text-2xl text-[#333] md:text-4xl">Account</h1>
