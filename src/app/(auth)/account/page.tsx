@@ -4,14 +4,13 @@ import { format } from "date-fns";
 
 import MemeberSinceIcon from "@/assets/images/svg/MemeberSinceIcon";
 import MainHeader from "@/components/MainHeader";
+import MembershipBilling from "@/components/MembershipBilling";
+import PlanDetails from "@/components/PlanDetails";
 import { useAuth } from "@/Providers/AuthProvider";
 
-import MembershipBilling from "./_components/MembershipBilling";
-import PlanDetails from "./_components/PlanDetails";
+type AccountPageProps = {};
 
-type YourAccountProps = {};
-
-const YourAccountPage = ({}: YourAccountProps) => {
+const AccountPage = ({}: AccountPageProps) => {
 	const { user } = useAuth();
 
 	if (!user) {
@@ -41,4 +40,4 @@ const YourAccountPage = ({}: YourAccountProps) => {
 	);
 };
 
-export default YourAccountPage;
+export default AccountPage;

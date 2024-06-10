@@ -1,12 +1,10 @@
 import { MovieCategory, ShowTVCategory } from "./media-ids";
 
 export const NO_AUTH_PATHS = ["/", "/login", "/signup"];
-export const AUTH_PATHS = [
-	"/browse",
-	"/browse/genre",
-	"/search",
-	"/YourAccount",
-];
+
+export const OPAQUE_PATHS_HEADERS = ["/search", "/account", "/browse/genre"];
+
+export const AUTH_PATHS = ["/browse", ...OPAQUE_PATHS_HEADERS];
 
 export const NAV_LINKS = [
 	{ id: "/browse", name: "Home" },

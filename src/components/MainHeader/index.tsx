@@ -9,7 +9,7 @@ import LinkComponent from "@/components/LinkComponent";
 import MainDropdown from "@/components/MainDropdown";
 import NetflixLogo from "@/components/NetflixLogo";
 import { MovieCategory, ShowTVCategory } from "@/constants/media-ids";
-import { NAV_LINKS } from "@/constants/route";
+import { NAV_LINKS, OPAQUE_PATHS_HEADERS } from "@/constants/route";
 import { CategoriesItem } from "@/types";
 
 import ProfileDropdown from "./ProfileDropdown";
@@ -33,7 +33,9 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 	const pathname = usePathname();
 	const [isScrolled, setIsScrolled] = useState(false);
 
-	const shouldDisplayBgBlack = ["/search", "/YourAccount"].includes(pathname);
+	const shouldDisplayBgBlack = OPAQUE_PATHS_HEADERS.some((path) =>
+		path === pathname,
+	);
 
 	const getActiveLink = useCallback(
 		(path: string, name: string) => {

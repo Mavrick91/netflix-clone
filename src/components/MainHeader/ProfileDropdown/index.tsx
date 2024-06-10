@@ -60,7 +60,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = () => {
 								<ul>
 									<li className="p-3">
 										<LinkComponent
-											href="/YourAccount"
+											href="/account"
 											className="flex items-center gap-3"
 										>
 											<AccountIcon className="text-[#B3B3B3]" />

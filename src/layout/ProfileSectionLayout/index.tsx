@@ -25,7 +25,7 @@ const ProfileSectionLayout = ({
 
 			<div
 				className={classNames(
-					"hidden sm:flex debug flex-col sm:border-t sm:border-[#999] pb-5 pt-4 items-start md:grid grid-cols-8 md:gap-14",
+					"hidden sm:flex flex-col sm:border-t sm:border-[#999] pb-5 pt-4 items-start md:grid grid-cols-8 md:gap-14",
 					className,
 				)}
 			>
