@@ -2,15 +2,18 @@
 
 import { useSearchParams } from "next/navigation";
 
+import LoadingSpinner from "@/assets/images/svg/LoadingSpinner";
 import Modal from "@/components/Modal";
 import ModalMoreInfo from "@/components/Modal/ModalMoreInfo";
 import useManageQueryParams from "@/hooks/useManageQueryParams";
+import { useAuth } from "@/Providers/AuthProvider";
 
 export default function AuthLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const { loading } = useAuth();
 	const searchParams = useSearchParams()!;
 	const mediaId = searchParams.get("jbv");
 	const mediaType = searchParams.get("type") as "movie" | "tv" | null;
@@ -24,8 +27,16 @@ export default function AuthLayout({
 		throw new Error("Invalid media type");
 	}
 
+	if (loading) {
+		return (
+			<div className="flex size-full items-center justify-center">
+				<LoadingSpinner className="size-16 text-white" />
+			</div>
+		);
+	}
+
 	return (
-		<div>
+		<div className="h-full">
 			{children}
 
 			<Modal
