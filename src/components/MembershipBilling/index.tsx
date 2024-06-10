@@ -29,9 +29,12 @@ const MembershipBilling = ({ user }: MembershipBillingProps) => {
 			<div className="flex flex-col gap-3 sm:hidden">
 				<p className="font-medium text-[#333]">{user.email}</p>
 				<p className="text-[#737373]">Password: ********</p>
-				<div className="border-t border-[#ccc] pb-1 pt-4 font-light">
+				<LinkComponent
+					href="/account/update-email"
+					className="border-t border-[#ccc] pb-1 pt-4 font-light"
+				>
 					Change account email
-				</div>
+				</LinkComponent>
 				<div className="border-t border-[#ccc] pb-1 pt-4 font-light">
 					Change password
 				</div>
@@ -41,7 +44,7 @@ const MembershipBilling = ({ user }: MembershipBillingProps) => {
 				<div className="flex items-center justify-between gap-10">
 					<p className="break-all font-medium text-[#333]">{user.email}</p>
 					<LinkComponent
-						href="/login"
+						href="/account/update-email"
 						className="whitespace-nowrap text-[#0073e6] underline-offset-2 hover:underline"
 					>
 						Change account email

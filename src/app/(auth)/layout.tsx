@@ -13,7 +13,7 @@ export default function AuthLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { loading } = useAuth();
+	const { loading, user } = useAuth();
 	const searchParams = useSearchParams()!;
 	const mediaId = searchParams.get("jbv");
 	const mediaType = searchParams.get("type") as "movie" | "tv" | null;
@@ -33,6 +33,10 @@ export default function AuthLayout({
 				<LoadingSpinner className="size-16 text-white" />
 			</div>
 		);
+	}
+
+	if (!user) {
+		return null;
 	}
 
 	return (

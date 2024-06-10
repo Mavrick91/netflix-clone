@@ -2,7 +2,12 @@ import { MovieCategory, ShowTVCategory } from "./media-ids";
 
 export const NO_AUTH_PATHS = ["/", "/login", "/signup"];
 
-export const OPAQUE_PATHS_HEADERS = ["/search", "/account", "/browse/genre"];
+export const OPAQUE_PATHS_HEADERS = [
+	"/search",
+	"/account",
+	"/browse/genre",
+	"/account/update-email",
+];
 
 export const AUTH_PATHS = ["/browse", ...OPAQUE_PATHS_HEADERS];
 

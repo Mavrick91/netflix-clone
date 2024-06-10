@@ -33,9 +33,9 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 	const pathname = usePathname();
 	const [isScrolled, setIsScrolled] = useState(false);
 
-	const shouldDisplayBgBlack = OPAQUE_PATHS_HEADERS.some((path) =>
-		path === pathname,
-	);
+	const shouldDisplayBgBlack = OPAQUE_PATHS_HEADERS.some((path) => {
+		return path === pathname;
+	});
 
 	const getActiveLink = useCallback(
 		(path: string, name: string) => {

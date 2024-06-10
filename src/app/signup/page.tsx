@@ -2,10 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+	createUserWithEmailAndPassword,
+	sendEmailVerification,
+	UserCredential,
+} from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -16,6 +19,7 @@ import { auth } from "@/firebase";
 
 import Step1 from "./_components/Step1";
 
+// Define the schema using Zod
 const formSchema = z.object({
 	email: z
 		.string({
@@ -43,33 +47,31 @@ const SignUpPage = () => {
 		},
 	});
 	const { handleSubmit } = methods;
-	const {
-		mutate: signUp,
-		isPending,
-		error,
-		isSuccess,
-	} = useMutation({
-		mutationFn: async ({
-			email,
-			password,
-		}: {
-			email: string;
-			password: string;
-		}) => createUserWithEmailAndPassword(auth, email, password),
+
+	const signUpMutation = useMutation<
+		UserCredential,
+		Error,
+		{ email: string; password: string }
+	>({
+		mutationFn: async ({ email, password }) => {
+			const userCredential = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password,
+			);
+			await sendEmailVerification(userCredential.user);
+			return userCredential;
+		},
+		onSuccess: () => {
+			router.push("/");
+		},
+		onError: (error) => {
+			console.error("Error signing up:", error);
+		},
 	});
 
-	useEffect(() => {
-		if (isSuccess) {
-			router.push("/");
-		}
-	}, [isSuccess, router]);
-
 	const processForm: SubmitHandler<FormData> = async (data) => {
-		try {
-			signUp({ email: data.email, password: data.password });
-		} catch (error) {
-			console.error("Error signing up:", error);
-		}
+		signUpMutation.mutate({ email: data.email, password: data.password });
 	};
 
 	return (
@@ -94,7 +96,7 @@ const SignUpPage = () => {
 						className="mx-auto flex w-[500px] flex-col px-8 pb-16 pt-5"
 						tabIndex={0}
 					>
-						{error && (
+						{signUpMutation.isError && (
 							<div className="mt-8">
 								<WarningError>
 									Sorry, we are unable to complete the sign-up process now.
@@ -105,7 +107,7 @@ const SignUpPage = () => {
 
 						<Step1 />
 						<Button
-							loading={isPending}
+							loading={signUpMutation.isPending}
 							type="submit"
 							tabIndex={0}
 							className="mx-auto mt-6 h-auto w-full py-4 text-2xl"
