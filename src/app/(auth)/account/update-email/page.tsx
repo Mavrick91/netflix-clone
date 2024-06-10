@@ -9,6 +9,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/Button";
 import FormInput from "@/components/input/FormInput";
+import useToast from "@/hooks/useToast";
 import ProfileSectionLayout from "@/layout/ProfileSectionLayout";
 import { useAuth } from "@/Providers/AuthProvider";
 
@@ -21,6 +22,7 @@ type FormData = z.infer<typeof schema>;
 type UpdateEmailProps = {};
 
 const UpdateEmail = ({}: UpdateEmailProps) => {
+	const showToast = useToast();
 	const { user } = useAuth();
 	const router = useRouter();
 	const methods = useForm<FormData>({
@@ -38,9 +40,11 @@ const UpdateEmail = ({}: UpdateEmailProps) => {
 		},
 		onError: (err: any) => {
 			console.log("🚀 ~ onError: ~ err", err);
+			showToast("Error while updating your email", "error");
 		},
 		onSuccess: async () => {
 			await reload(user!);
+			showToast("Email updated successfully", "success");
 			router.push("/account");
 		},
 	});
@@ -50,7 +54,7 @@ const UpdateEmail = ({}: UpdateEmailProps) => {
 			mutate(data);
 		} catch (err: any) {
 			console.log(err.message);
-			throw new Error("Can't update your password. Try again later.");
+			throw new Error("Can't update your email. Try again later.");
 		}
 	};
 

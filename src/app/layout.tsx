@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 import Providers from "@/Providers";
 
@@ -35,6 +36,7 @@ export default function RootLayout({
 					<SpeedInsights />
 					<Analytics />
 					<div id="modal-root" />
+					<Toaster />
 				</Providers>
 			</body>
 		</html>

@@ -7,6 +7,7 @@ export const OPAQUE_PATHS_HEADERS = [
 	"/account",
 	"/browse/genre",
 	"/account/update-email",
+	"/account/update-password",
 ];
 
 export const AUTH_PATHS = ["/browse", ...OPAQUE_PATHS_HEADERS];

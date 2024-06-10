@@ -35,9 +35,12 @@ const MembershipBilling = ({ user }: MembershipBillingProps) => {
 				>
 					Change account email
 				</LinkComponent>
-				<div className="border-t border-[#ccc] pb-1 pt-4 font-light">
+				<LinkComponent
+					href="/account/update-password"
+					className="border-t border-[#ccc] pb-1 pt-4 font-light"
+				>
 					Change password
-				</div>
+				</LinkComponent>
 			</div>
 
 			<div className="mt-5 hidden w-full flex-col gap-3 sm:flex md:mt-0">
@@ -53,7 +56,7 @@ const MembershipBilling = ({ user }: MembershipBillingProps) => {
 				<div className="flex items-center justify-between">
 					<p className="text-[#737373]">Password: ********</p>
 					<LinkComponent
-						href="/login"
+						href="/account/update-password"
 						className="text-[#0073e6] underline-offset-2 hover:underline"
 					>
 						Change password
