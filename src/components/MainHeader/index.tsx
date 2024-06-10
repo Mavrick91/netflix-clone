@@ -33,7 +33,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 	const pathname = usePathname();
 	const [isScrolled, setIsScrolled] = useState(false);
 
-	const isSearchPage = pathname.includes("/search");
+	const shouldDisplayBgBlack = ["/search", "/YourAccount"].includes(pathname);
 
 	const getActiveLink = useCallback(
 		(path: string, name: string) => {
@@ -71,9 +71,9 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 					paddingClasses,
 					"py-4 flex flex-col justify-center h-[41px] md:h-[54px] lg:h-[68px] w-full transition-colors duration-500",
 					{
-						"bg-black bg-opacity-100": isScrolled || categories || isSearchPage,
+						"bg-black bg-opacity-100": isScrolled || categories || shouldDisplayBgBlack,
 						"bg-gradient-to-b from-black/70 to-transparent bg-opacity-70":
-							!isScrolled && !categories && !isSearchPage,
+							!isScrolled && !categories && !shouldDisplayBgBlack,
 					},
 				)}
 			>
@@ -120,7 +120,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({
 						paddingClasses,
 						"py-1.5 transition-all duration-500",
 						{
-							"bg-black/100": isScrolled || isSearchPage,
+							"bg-black/100": isScrolled || shouldDisplayBgBlack,
 							"bg-black/0": !isScrolled,
 						},
 					)}
