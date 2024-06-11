@@ -100,6 +100,12 @@ async function handleCheckoutSession(session: Stripe.Checkout.Session) {
 
 		await userRef.set(cardData, { merge: true });
 	}
+
+	await stripe.customers.update(session.customer as string, {
+		invoice_settings: {
+			default_payment_method: subscription.default_payment_method as string,
+		},
+	});
 }
 
 async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
