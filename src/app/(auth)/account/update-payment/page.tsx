@@ -82,9 +82,6 @@ const UpdateCardForm = ({ customerId }: { customerId: string }) => {
 				metadata: {
 					userId: user!.uid,
 				},
-				billing_details: {
-					// Optionally include billing details here
-				},
 			});
 
 		if (stripeError) {
@@ -92,7 +89,7 @@ const UpdateCardForm = ({ customerId }: { customerId: string }) => {
 		}
 
 		try {
-			await updatePayment(paymentMethod.id);
+			updatePayment(paymentMethod.id);
 		} catch (err: any) {}
 	};
 
@@ -117,11 +114,7 @@ const UpdateCardForm = ({ customerId }: { customerId: string }) => {
 						<CardCvcElement options={{ style: elementStyles }} />
 					</div>
 				</div>
-				<Button
-					type="submit"
-					disabled={!stripe}
-					loading={isPending || isSubmitting}
-				>
+				<Button type="submit" loading={isPending || isSubmitting}>
 					Update Card
 				</Button>
 			</form>
