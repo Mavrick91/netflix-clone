@@ -1,6 +1,8 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { memo } from "react";
 import { PaymentIcon } from "react-svg-credit-card-payment-icons";
 
 import { Button } from "@/components/Button";
@@ -48,6 +50,17 @@ const MembershipBilling = () => {
 							width={30}
 						/>
 						<span>**** **** ****</span> <span>{user.last4}</span>
+					</div>
+				)}
+				{user?.plan && user.current_period_end && (
+					<div className="border-t border-[#ccc] pt-4">
+						<p className="font-medium text-[#333]">Next Billing</p>
+						<p className="mt-3 text-[#737373]">
+							{format(
+								new Date(user.current_period_end * 1000),
+								"EEEE, MMMM d, yyyy",
+							)}
+						</p>
 					</div>
 				)}
 
@@ -111,9 +124,20 @@ const MembershipBilling = () => {
 						</LinkComponent>
 					</div>
 				)}
+				{user?.plan && user.current_period_end && (
+					<div className="">
+						<p className="font-medium text-[#333]">Next Billing</p>
+						<p className="mt-3 text-[#737373]">
+							{format(
+								new Date(user.current_period_end * 1000),
+								"EEEE, MMMM d, yyyy",
+							)}
+						</p>
+					</div>
+				)}
 			</div>
 		</ProfileSectionLayout>
 	);
 };
 
-export default MembershipBilling;
+export default memo(MembershipBilling);

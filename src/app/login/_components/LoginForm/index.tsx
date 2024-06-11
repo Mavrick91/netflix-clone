@@ -41,9 +41,9 @@ const LoginForm = () => {
 		},
 	});
 
-	const { handleSubmit, watch } = methods;
+	const { handleSubmit, getValues } = methods;
 
-	const watchEmail = watch("email");
+	const watchEmail = getValues("email");
 
 	const {
 		mutate: signIn,

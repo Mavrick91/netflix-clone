@@ -27,6 +27,7 @@ export interface User extends FirebaseUser {
 	status?: string;
 	last4?: string;
 	cardBrand?: string;
+	current_period_end?: number;
 }
 
 interface AuthContextProps {
@@ -34,6 +35,8 @@ interface AuthContextProps {
 	loading: boolean;
 	logout: () => Promise<void>;
 	setUser: (user: User | null) => void;
+	updateUser: (userData: Partial<User>) => void;
+	reloadUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -41,6 +44,8 @@ const AuthContext = createContext<AuthContextProps>({
 	loading: true,
 	logout: async () => {},
 	setUser: () => {},
+	updateUser: () => {},
+	reloadUser: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -53,14 +58,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			if (firebaseUser) {
 				const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
 				const userData = userDoc.exists() ? userDoc.data() : {};
-				setUser({ ...firebaseUser, ...userData });
+
+				const userWithPrototype = Object.assign(
+					Object.create(Object.getPrototypeOf(firebaseUser)),
+					firebaseUser,
+					userData,
+				);
+
+				setUser(userWithPrototype as User);
 			} else {
 				setUser(null);
 			}
 			setLoading(false);
 		});
 
-		return () => unsubscribe();
+		return () => {
+			unsubscribe();
+		};
 	}, []);
 
 	const logout = useCallback(async () => {
@@ -69,9 +83,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		router.push("/");
 	}, [router]);
 
+	const updateUser = useCallback(
+		(userData: Partial<User>) => {
+			if (user) {
+				const updatedUser = Object.assign(
+					Object.create(Object.getPrototypeOf(user)),
+					user,
+					userData,
+				);
+				setUser(updatedUser);
+			}
+		},
+		[user],
+	);
+
+	const reloadUser = useCallback(async () => {
+		const currentUser = auth.currentUser;
+		if (currentUser) {
+			await currentUser.reload();
+			const refreshedUser = auth.currentUser;
+			if (refreshedUser) {
+				const userDoc = await getDoc(doc(db, "users", refreshedUser.uid));
+				const userData = userDoc.exists() ? userDoc.data() : {};
+
+				const userWithPrototype = Object.assign(
+					Object.create(Object.getPrototypeOf(refreshedUser)),
+					refreshedUser,
+					userData,
+				);
+
+				setUser(userWithPrototype as User);
+			}
+		}
+	}, []);
+
 	const contextValue = useMemo(
-		() => ({ user, loading, logout, setUser }),
-		[user, loading, logout, setUser],
+		() => ({ user, loading, logout, setUser, updateUser, reloadUser }),
+		[user, loading, logout, setUser, updateUser, reloadUser],
 	);
 
 	return (

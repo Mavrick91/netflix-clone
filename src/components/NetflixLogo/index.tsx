@@ -8,6 +8,7 @@ const NetflixLogo = () => {
 				alt="Netflix Logo"
 				width={170}
 				height={26}
+				style={{ width: "100%", height: "auto" }}
 			/>
 		</div>
 	);

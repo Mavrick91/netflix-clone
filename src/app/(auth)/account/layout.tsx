@@ -3,7 +3,7 @@
 import { format } from "date-fns";
 import { doc, onSnapshot } from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import ChevronIcon from "@/assets/images/svg/ChevronIcon";
 import MemeberSinceIcon from "@/assets/images/svg/MemeberSinceIcon";
@@ -16,9 +16,10 @@ export default function AccountLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { user, setUser } = useAuth();
+	const { user, updateUser } = useAuth();
 	const router = useRouter();
 	const pathname = usePathname();
+	const initialLoad = useRef(true);
 
 	useEffect(() => {
 		if (!user) return;
@@ -26,16 +27,20 @@ export default function AccountLayout({
 		const userDocRef = doc(db, "users", user.uid);
 
 		const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+			if (initialLoad.current) {
+				initialLoad.current = false;
+				return;
+			}
+
 			if (docSnapshot.exists()) {
 				const userData = docSnapshot.data();
-				setUser({ ...user, ...userData });
+				updateUser(userData);
 			} else {
 				console.error("User document does not exist.");
 			}
 		});
 
 		return () => unsubscribe();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

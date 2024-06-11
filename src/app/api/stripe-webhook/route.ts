@@ -134,6 +134,8 @@ async function handleSubscriptionDeletion(subscription: Stripe.Subscription) {
 		status: "canceled",
 		stripeSubscriptionId: null,
 		plan: null,
+		current_period_end: null,
+		createdAt: null,
 	};
 
 	await userRef.set(data, { merge: true });

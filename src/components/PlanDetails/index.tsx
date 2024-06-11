@@ -18,8 +18,8 @@ const PlanDetails = ({}: PlanDetailsProps) => {
 		const userPlan = PLANS.find((p) => p.priceId === plan);
 
 		return (
-			<>
-				<p className="flex flex-col gap-1 font-medium text-[#333]">
+			<div className="flex items-center gap-3">
+				<p className="flex shrink-0 flex-col gap-1 font-medium text-[#333]">
 					<span>{userPlan?.title}</span> <span>{userPlan?.subTitle}</span>
 				</p>
 				<ImageClient
@@ -28,18 +28,20 @@ const PlanDetails = ({}: PlanDetailsProps) => {
 							? "/images/4k-fullhd.png"
 							: "/images/1080p-full-hd.png"
 					}
-					width={50}
-					height={20}
+					width={40}
+					height={10}
+					priority
 					alt="plan icon"
+					style={{ width: "100%", height: "auto" }}
 				/>
-			</>
+			</div>
 		);
 	}, []);
 
 	return (
 		<ProfileSectionLayout title="PLAN DETAILS">
 			<div className="flex flex-col justify-between sm:flex-row sm:items-center md:col-span-5">
-				<div className="mb-2 flex items-center gap-3 sm:mb-0">
+				<div className="mb-2 flex items-center gap-5 sm:mb-0">
 					{user?.plan ? getUserPlan(user.plan) : "-"}
 				</div>
 

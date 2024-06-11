@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { reload, updateEmail } from "firebase/auth";
+import { updateEmail } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,7 +23,7 @@ type UpdateEmailProps = {};
 
 const UpdateEmail = ({}: UpdateEmailProps) => {
 	const showToast = useToast();
-	const { user } = useAuth();
+	const { user, reloadUser } = useAuth();
 	const router = useRouter();
 	const methods = useForm<FormData>({
 		resolver: zodResolver(schema),
@@ -39,11 +39,10 @@ const UpdateEmail = ({}: UpdateEmailProps) => {
 			await updateEmail(user, data.newEmail);
 		},
 		onError: (err: any) => {
-			console.log("🚀 ~ onError: ~ err", err);
 			showToast("Error while updating your email", "error");
 		},
 		onSuccess: async () => {
-			await reload(user!);
+			await reloadUser();
 			showToast("Email updated successfully", "success");
 			router.push("/account");
 		},
@@ -53,7 +52,6 @@ const UpdateEmail = ({}: UpdateEmailProps) => {
 		try {
 			mutate(data);
 		} catch (err: any) {
-			console.log(err.message);
 			throw new Error("Can't update your email. Try again later.");
 		}
 	};
