@@ -1,17 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
+import { getServerStripe } from "@/actions/stripe";
 import { adminDb } from "@/firebaseAdmin";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-	apiVersion: "2024-04-10",
-});
-
-export const config = {
-	api: {
-		bodyParser: false,
-	},
-};
 
 export async function POST(req: NextRequest) {
 	const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -22,6 +13,7 @@ export async function POST(req: NextRequest) {
 		const sig = req.headers.get("stripe-signature") as string;
 
 		try {
+			const stripe = await getServerStripe();
 			event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
 		} catch (err: any) {
 			console.error("⚠️  Webhook signature verification failed.", err.message);
@@ -31,15 +23,21 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		// Handle the event
 		switch (event.type) {
 			case "checkout.session.completed":
 				const session = event.data.object as Stripe.Checkout.Session;
 				await handleCheckoutSession(session);
 				break;
-			// ... handle other event types
+			case "customer.subscription.updated":
+				const subscription = event.data.object as Stripe.Subscription;
+				await handleSubscriptionUpdate(subscription);
+				break;
+			case "customer.subscription.deleted":
+				const deletedSubscription = event.data.object as Stripe.Subscription;
+				await handleSubscriptionDeletion(deletedSubscription);
+				break;
 			default:
-				console.log(`Unhandled event type ${event.type}`);
+			// console.log(`Unhandled event type ${event.type}`);
 		}
 
 		return NextResponse.json({ received: true });
@@ -72,6 +70,41 @@ async function handleCheckoutSession(session: Stripe.Checkout.Session) {
 	}
 
 	await userRef.set(data, { merge: true });
+}
 
-	console.log(`Stored subscription data for user ${userId}`);
+async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
+	const userId = subscription.metadata?.userId;
+
+	if (!userId) {
+		throw new Error("User ID not found in subscription metadata");
+	}
+
+	const userRef = adminDb.collection("users").doc(userId);
+
+	const data: Record<string, any> = {
+		stripeSubscriptionId: subscription.id,
+		status: subscription.status,
+		current_period_end: subscription.current_period_end,
+		plan: subscription.items.data[0].price.id,
+	};
+
+	await userRef.set(data, { merge: true });
+}
+
+async function handleSubscriptionDeletion(subscription: Stripe.Subscription) {
+	const userId = subscription.metadata?.userId;
+
+	if (!userId) {
+		throw new Error("User ID not found in subscription metadata");
+	}
+
+	const userRef = adminDb.collection("users").doc(userId);
+
+	const data: Record<string, any> = {
+		status: "canceled",
+		stripeSubscriptionId: null,
+		plan: null,
+	};
+
+	await userRef.set(data, { merge: true });
 }

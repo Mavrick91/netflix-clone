@@ -13,13 +13,14 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useMemo,
 	useState,
 } from "react";
 
 import { clearToken } from "@/actions/cookie";
 import { auth, db } from "@/firebase";
 
-interface User extends FirebaseUser {
+export interface User extends FirebaseUser {
 	stripeCustomerId?: string;
 	stripeSubscriptionId?: string;
 	plan?: string;
@@ -30,17 +31,18 @@ interface AuthContextProps {
 	user: User | null;
 	loading: boolean;
 	logout: () => Promise<void>;
+	setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({
 	user: null,
 	loading: true,
 	logout: async () => {},
+	setUser: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState<User | null>(null);
-	console.log("🚀 ~ AuthProvider ~ user:", user);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 
@@ -65,10 +67,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		router.push("/");
 	}, [router]);
 
+	const contextValue = useMemo(
+		() => ({ user, loading, logout, setUser }),
+		[user, loading, logout, setUser],
+	);
+
 	return (
-		<AuthContext.Provider value={{ user, loading, logout }}>
-			{children}
-		</AuthContext.Provider>
+		<AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
 	);
 };
 
