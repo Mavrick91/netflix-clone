@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
+import { PaymentIcon } from "react-svg-credit-card-payment-icons";
 
 import { Button } from "@/components/Button";
 import LinkComponent from "@/components/LinkComponent";
@@ -9,10 +10,10 @@ import ProfileSectionLayout from "@/layout/ProfileSectionLayout";
 import { useAuth } from "@/Providers/AuthProvider";
 
 const MembershipBilling = () => {
-	const { user, setUser } = useAuth();
+	const { user } = useAuth();
 
 	const { mutate: deleteSubscription, isPending } = useMutation({
-		mutationFn: async () => handleSubscriptionCancellation(user, setUser),
+		mutationFn: async () => handleSubscriptionCancellation(user),
 	});
 
 	const subTitle = (
@@ -38,6 +39,18 @@ const MembershipBilling = () => {
 			<div className="flex flex-col gap-3 sm:hidden">
 				<p className="font-medium text-[#333]">{user!.email}</p>
 				<p className="text-[#737373]">Password: ********</p>
+				{user?.cardBrand && (
+					<div className="flex items-center gap-2 border-t border-[#ccc] pt-4 text-[#333]">
+						<PaymentIcon
+							// @ts-ignore
+							type={user.cardBrand}
+							format="flatRounded"
+							width={30}
+						/>
+						<span>**** **** ****</span> <span>{user.last4}</span>
+					</div>
+				)}
+
 				<LinkComponent
 					href="/account/update-email"
 					className="border-t border-[#ccc] pb-1 pt-4 font-light"
@@ -50,6 +63,14 @@ const MembershipBilling = () => {
 				>
 					Change password
 				</LinkComponent>
+				{user?.cardBrand && (
+					<LinkComponent
+						href="/account/update-payment"
+						className="border-t border-[#ccc] pb-1 pt-4 font-light"
+					>
+						Update payment method
+					</LinkComponent>
+				)}
 			</div>
 
 			<div className="mt-5 hidden w-full flex-col gap-3 sm:flex md:mt-0">

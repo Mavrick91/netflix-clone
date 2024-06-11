@@ -25,6 +25,8 @@ export interface User extends FirebaseUser {
 	stripeSubscriptionId?: string;
 	plan?: string;
 	status?: string;
+  last4?: string;
+  cardBrand?: string;
 }
 
 interface AuthContextProps {

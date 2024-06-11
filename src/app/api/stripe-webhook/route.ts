@@ -36,6 +36,18 @@ export async function POST(req: NextRequest) {
 				const deletedSubscription = event.data.object as Stripe.Subscription;
 				await handleSubscriptionDeletion(deletedSubscription);
 				break;
+			case "payment_method.attached":
+				const attachedPaymentMethod = event.data.object as Stripe.PaymentMethod;
+				await handlePaymentMethodUpdate(attachedPaymentMethod);
+				break;
+				case "payment_method.detached":
+				const detachedPaymentMethod = event.data.object as Stripe.PaymentMethod;
+				await handlePaymentMethodUpdate(detachedPaymentMethod);
+				break;
+				case "customer.updated":
+				const updatedCustomer = event.data.object as Stripe.Customer;
+				await handleCustomerUpdate(updatedCustomer);
+				break;
 			default:
 			// console.log(`Unhandled event type ${event.type}`);
 		}
@@ -52,6 +64,7 @@ export async function POST(req: NextRequest) {
 
 async function handleCheckoutSession(session: Stripe.Checkout.Session) {
 	const userId = session.metadata?.userId;
+	const stripe = await getServerStripe();
 
 	if (!userId) {
 		throw new Error("User ID not found in session metadata");
@@ -70,6 +83,23 @@ async function handleCheckoutSession(session: Stripe.Checkout.Session) {
 	}
 
 	await userRef.set(data, { merge: true });
+
+	const subscription = await stripe.subscriptions.retrieve(
+		session.subscription as string,
+	);
+	const paymentMethod = await stripe.paymentMethods.retrieve(
+		subscription.default_payment_method as string,
+	);
+	const card = paymentMethod.card;
+
+	if (card) {
+		const cardData: Record<string, any> = {
+			cardBrand: card.brand,
+			last4: card.last4,
+		};
+
+		await userRef.set(cardData, { merge: true });
+	}
 }
 
 async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
@@ -104,6 +134,44 @@ async function handleSubscriptionDeletion(subscription: Stripe.Subscription) {
 		status: "canceled",
 		stripeSubscriptionId: null,
 		plan: null,
+	};
+
+	await userRef.set(data, { merge: true });
+}
+
+async function handlePaymentMethodUpdate(paymentMethod: Stripe.PaymentMethod) {
+	const userId = paymentMethod.metadata?.userId;
+
+	if (!userId) {
+		throw new Error("User ID not found in payment method metadata");
+	}
+
+	const userRef = adminDb.collection("users").doc(userId);
+
+	const card = paymentMethod.card;
+
+	if (card) {
+		const cardData: Record<string, any> = {
+			cardBrand: card.brand,
+			last4: card.last4,
+		};
+
+		await userRef.set(cardData, { merge: true });
+	}
+}
+
+async function handleCustomerUpdate(customer: Stripe.Customer) {
+	const userId = customer.metadata?.userId;
+
+	if (!userId) {
+		throw new Error("User ID not found in customer metadata");
+	}
+
+	const userRef = adminDb.collection("users").doc(userId);
+
+	const data: Record<string, any> = {
+		stripeCustomerId: customer.id,
+		status: customer.deleted ? "deleted" : "active",
 	};
 
 	await userRef.set(data, { merge: true });

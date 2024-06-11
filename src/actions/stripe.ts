@@ -15,7 +15,7 @@ export const createCheckoutSession = async (
 	successUrl: string,
 	cancelUrl: string,
 	userId: string,
-	customerEmail: string | null,
+	stripeCustomerId?: string,
 ) => {
 	try {
 		const stripe = await getServerStripe();
@@ -36,7 +36,7 @@ export const createCheckoutSession = async (
 			mode: "subscription",
 			success_url: successUrl,
 			cancel_url: cancelUrl,
-			customer_email: customerEmail ? customerEmail : undefined,
+			customer: stripeCustomerId ? stripeCustomerId : undefined,
 			metadata: {
 				userId: userId,
 				plan: priceId,
@@ -62,5 +62,44 @@ export const cancelSubscription = async (stripeSubscriptionId?: string) => {
 		await stripe.subscriptions.cancel(stripeSubscriptionId);
 	} catch (error: any) {
 		console.error("Error canceling subscription:", error.message);
+	}
+};
+
+export const updateCard = async (
+	customerId: string,
+	paymentMethodId: string,
+) => {
+	try {
+		const stripe = await getServerStripe();
+
+		const customer = (await stripe.customers.retrieve(
+			customerId,
+		)) as Stripe.Customer;
+
+		if (!customer.deleted && customer.invoice_settings.default_payment_method) {
+			await stripe.paymentMethods.detach(
+				customer.invoice_settings.default_payment_method as string,
+			);
+		}
+
+		await stripe.paymentMethods.attach(paymentMethodId, {
+			customer: customerId,
+		});
+
+		await stripe.customers.update(customerId, {
+			invoice_settings: { default_payment_method: paymentMethodId },
+			metadata: {
+				userId: customer.metadata.userId,
+			},
+		});
+
+		await stripe.paymentMethods.update(paymentMethodId, {
+			metadata: {
+				userId: customer.metadata.userId,
+			},
+		});
+	} catch (error: any) {
+		console.error("Error updating card:", error.message);
+		throw new Error("Unable to update card");
 	}
 };

@@ -1,11 +1,14 @@
 "use client";
 
 import { format } from "date-fns";
+import { doc, onSnapshot } from "firebase/firestore";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import ChevronIcon from "@/assets/images/svg/ChevronIcon";
 import MemeberSinceIcon from "@/assets/images/svg/MemeberSinceIcon";
 import MainHeader from "@/components/MainHeader";
+import { db } from "@/firebase";
 import { useAuth } from "@/Providers/AuthProvider";
 
 export default function AccountLayout({
@@ -13,9 +16,27 @@ export default function AccountLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { user } = useAuth();
+	const { user, setUser } = useAuth();
 	const router = useRouter();
 	const pathname = usePathname();
+
+	useEffect(() => {
+		if (!user) return;
+
+		const userDocRef = doc(db, "users", user.uid);
+
+		const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+			if (docSnapshot.exists()) {
+				const userData = docSnapshot.data();
+				setUser({ ...user, ...userData });
+			} else {
+				console.error("User document does not exist.");
+			}
+		});
+
+		return () => unsubscribe();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<>
