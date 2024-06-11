@@ -1,31 +1,31 @@
 .wrapper-payment-input {
-  margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .wrapper-payment-input label {
-  display: block;
-  margin-bottom: 8px;
-  color: #333;
-  font-weight: 600;
+	display: block;
+	margin-bottom: 8px;
+	color: #333;
+	font-weight: 600;
 }
 
 .StripeElement {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  transition: box-shadow 150ms ease;
+	padding: 10px 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: white;
+	box-shadow: 0 1px 3px 0 #e6ebf1;
+	transition: box-shadow 150ms ease;
 }
 
 .StripeElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df;
+	box-shadow: 0 1px 3px 0 #cfd7df;
 }
 
 .StripeElement--invalid {
-  border-color: #fa755a;
+	border-color: #fa755a;
 }
 
 .StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
+	background-color: #fefde5 !important;
 }

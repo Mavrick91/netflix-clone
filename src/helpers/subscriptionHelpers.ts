@@ -1,18 +1,14 @@
-
 import { cancelSubscription, createCheckoutSession } from "@/actions/stripe";
 import { User } from "@/Providers/AuthProvider";
 import { getClientStripe } from "@/utils/stripeClient";
 
-export const handleSubscriptionCancellation = async (
-	user: User | null,
-) => {
+export const handleSubscriptionCancellation = async (user: User | null) => {
 	if (!user) {
 		console.error("No user found.");
 		return;
 	}
 
 	await cancelSubscription(user.stripeSubscriptionId);
-
 };
 
 export const handlePlanChange = async (user: User | null, priceId: string) => {
@@ -32,7 +28,7 @@ export const handlePlanChange = async (user: User | null, priceId: string) => {
 			successUrl,
 			cancelUrl,
 			user.uid,
-      user.stripeCustomerId,
+			user.stripeCustomerId,
 		);
 
 		const { error } = await stripe!.redirectToCheckout({

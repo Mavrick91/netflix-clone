@@ -17,7 +17,7 @@ const MembershipBilling = () => {
 	});
 
 	const subTitle = (
-		<div className="mt-3 hidden flex-col sm:flex md:col-span-3">
+		<div className="mb-5 flex-col sm:flex md:col-span-3">
 			<Button
 				loading={isPending}
 				onClick={deleteSubscription}
@@ -73,7 +73,7 @@ const MembershipBilling = () => {
 				)}
 			</div>
 
-			<div className="mt-5 hidden w-full flex-col gap-3 sm:flex md:mt-0">
+			<div className="hidden w-full flex-col gap-3 sm:flex md:mt-0">
 				<div className="flex items-center justify-between gap-10">
 					<p className="break-all font-medium text-[#333]">{user!.email}</p>
 					<LinkComponent
@@ -92,6 +92,25 @@ const MembershipBilling = () => {
 						Change password
 					</LinkComponent>
 				</div>
+				{user?.cardBrand && (
+					<div className="flex items-center justify-between border-[#ccc] md:border-t md:pt-4">
+						<div className="flex items-center gap-2 text-[#333]">
+							<PaymentIcon
+								// @ts-ignore
+								type={user.cardBrand}
+								format="flatRounded"
+								width={30}
+							/>
+							<span>**** **** ****</span> <span>{user.last4}</span>
+						</div>
+						<LinkComponent
+							href="/account/update-payment"
+							className="text-[#0073e6] underline-offset-2 hover:underline"
+						>
+							Update payment method
+						</LinkComponent>
+					</div>
+				)}
 			</div>
 		</ProfileSectionLayout>
 	);

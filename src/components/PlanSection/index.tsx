@@ -104,7 +104,7 @@ const PlanSection = ({
 							aria-disabled={isDisabled}
 							disabled={isDisabled}
 							className={classNames(
-								"col-span-12 flex w-[333px] flex-col rounded-[18px] border border-[#808080b3] text-left transition-all lg:col-span-6 xl:col-span-4",
+								"col-span-12 flex flex-col md:col-span-6 rounded-[18px] border border-[#808080b3] text-left transition-all lg:col-span-4",
 								{
 									"opacity-50": isDisabled,
 									"box-shadow": isSelected
@@ -134,33 +134,28 @@ const PlanSection = ({
 									<Icon icon="carbon:checkmark-filled" />
 								</motion.span>
 							</label>
-							<div>
-								<ul className="my-4 px-6">
-									{plan.advantages.map((advantage, idx) => (
-										<li
-											key={advantage.title}
-											className="border-b border-[#80808066] py-3 last:border-none"
-										>
-											<div className="flex flex-col">
-												<div className="text-[13px] font-medium text-[#767676]">
-													{advantage.title}
-												</div>
-												<div
-													className={classNames(
-														"font-medium text-[#000000b3]",
-														{
-															"text-sm": idx !== 0,
-															"text-base": idx === 0,
-														},
-													)}
-												>
-													{advantage.description}
-												</div>
+							<ul className="my-4 w-full px-6">
+								{plan.advantages.map((advantage, idx) => (
+									<li
+										key={advantage.title}
+										className="border-b border-[#80808066] py-3 last:border-none"
+									>
+										<div className="flex flex-col">
+											<div className="text-[13px] font-medium text-[#767676]">
+												{advantage.title}
 											</div>
-										</li>
-									))}
-								</ul>
-							</div>
+											<div
+												className={classNames("font-medium text-[#000000b3]", {
+													"text-sm": idx !== 0,
+													"text-base": idx === 0,
+												})}
+											>
+												{advantage.description}
+											</div>
+										</div>
+									</li>
+								))}
+							</ul>
 						</button>
 					);
 				})}

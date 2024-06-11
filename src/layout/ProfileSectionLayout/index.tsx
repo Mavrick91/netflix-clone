@@ -14,11 +14,11 @@ const ProfileSectionLayout = ({
 	className = "",
 	subTitle,
 }: ProfileSectionLayoutProps) => {
-	const [isMobile, setIsMobile] = useState<boolean>(false);
+	const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
 	useEffect(() => {
 		const handleResize = () => {
-			setIsMobile(window.innerWidth >= 576);
+			setIsDesktop(window.innerWidth >= 576);
 		};
 
 		handleResize();
@@ -31,18 +31,27 @@ const ProfileSectionLayout = ({
 
 	return (
 		<>
-			{!isMobile && (
+			{!isDesktop && (
 				<div
 					className={`border border-[#999] bg-white p-3 sm:hidden ${className}`}
 				>
 					{title && (
-						<h2 className="mb-5 pt-4 text-lg text-[#737373]">{title}</h2>
+						<h2
+							className={classNames("pt-4 text-lg text-[#737373]", {
+								"mb-5": !subTitle,
+								"mb-2": subTitle,
+							})}
+						>
+							{title}
+						</h2>
 					)}
+					{subTitle}
+
 					{children}
 				</div>
 			)}
 
-			{isMobile && (
+			{isDesktop && (
 				<div
 					className={classNames(
 						"hidden sm:flex flex-col sm:border-t sm:border-[#999] pb-5 pt-4 items-start md:grid grid-cols-8 md:gap-14",
@@ -52,7 +61,7 @@ const ProfileSectionLayout = ({
 					{(title || subTitle) && (
 						<div className="flex flex-col md:col-span-3">
 							{title && (
-								<h2 className="text-lg text-[#737373] md:col-span-3">
+								<h2 className="mb-3 text-lg text-[#737373] md:col-span-3">
 									{title}
 								</h2>
 							)}

@@ -40,11 +40,11 @@ export async function POST(req: NextRequest) {
 				const attachedPaymentMethod = event.data.object as Stripe.PaymentMethod;
 				await handlePaymentMethodUpdate(attachedPaymentMethod);
 				break;
-				case "payment_method.detached":
+			case "payment_method.detached":
 				const detachedPaymentMethod = event.data.object as Stripe.PaymentMethod;
 				await handlePaymentMethodUpdate(detachedPaymentMethod);
 				break;
-				case "customer.updated":
+			case "customer.updated":
 				const updatedCustomer = event.data.object as Stripe.Customer;
 				await handleCustomerUpdate(updatedCustomer);
 				break;
