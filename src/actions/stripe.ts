@@ -15,7 +15,7 @@ export const createCheckoutSession = async (
 	successUrl: string,
 	cancelUrl: string,
 	userId: string,
-	userStripeCustomerId?: string,
+	customerEmail: string | null,
 ) => {
 	try {
 		const stripe = await getServerStripe();
@@ -36,7 +36,7 @@ export const createCheckoutSession = async (
 			mode: "subscription",
 			success_url: successUrl,
 			cancel_url: cancelUrl,
-			customer: userStripeCustomerId ? userStripeCustomerId : undefined,
+			customer_email: customerEmail ? customerEmail : undefined,
 			metadata: {
 				userId: userId,
 				plan: priceId,

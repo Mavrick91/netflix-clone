@@ -52,7 +52,7 @@ export const handlePlanChange = async (user: User | null, priceId: string) => {
 			successUrl,
 			cancelUrl,
 			user.uid,
-			user.stripeCustomerId,
+			user.email,
 		);
 
 		const { error } = await stripe!.redirectToCheckout({
