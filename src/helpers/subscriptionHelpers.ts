@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 
 import { cancelSubscription, createCheckoutSession } from "@/actions/stripe";
 import { db } from "@/firebase";
@@ -16,8 +16,18 @@ export const handleSubscriptionCancellation = async (
 
 	await cancelSubscription(user.stripeSubscriptionId);
 
-	// Add a short delay for the subscription to be cancelled in firebase database
-	await new Promise((resolve) => setTimeout(resolve, 1000));
+	const userDocRef = doc(db, "users", user.uid);
+
+	const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+		if (docSnapshot.exists()) {
+			const userData = docSnapshot.data();
+			setUser({ ...user, ...userData });
+		} else {
+			console.error("User document does not exist.");
+		}
+	});
+
+	setTimeout(() => unsubscribe(), 5000);
 
 	const userDoc = await getDoc(doc(db, "users", user.uid));
 	const userData = userDoc.exists() ? userDoc.data() : {};

@@ -8,34 +8,19 @@ import { handleSubscriptionCancellation } from "@/helpers/subscriptionHelpers";
 import ProfileSectionLayout from "@/layout/ProfileSectionLayout";
 import { useAuth } from "@/Providers/AuthProvider";
 
-const MembershipBilling: React.FC = () => {
+const MembershipBilling = () => {
 	const { user, setUser } = useAuth();
 
 	const { mutate: deleteSubscription, isPending } = useMutation({
-		mutationFn: async () => {
-			if (user) {
-				await handleSubscriptionCancellation(user, setUser);
-			}
-		},
+		mutationFn: async () => handleSubscriptionCancellation(user, setUser),
 	});
-
-	const renderChangeAccountLinks = (className: string) => (
-		<>
-			<LinkComponent href="/account/update-email" className={className}>
-				Change account email
-			</LinkComponent>
-			<LinkComponent href="/account/update-password" className={className}>
-				Change password
-			</LinkComponent>
-		</>
-	);
 
 	const subTitle = (
 		<div className="mt-3 hidden flex-col sm:flex md:col-span-3">
 			<Button
 				loading={isPending}
 				onClick={deleteSubscription}
-				disabled={!user?.plan || user?.status === "canceled"}
+				disabled={!user!.plan || user!.status === "canceled"}
 				className="text-black"
 				style={{
 					backgroundColor: "#e6e6e6",
@@ -51,24 +36,40 @@ const MembershipBilling: React.FC = () => {
 	return (
 		<ProfileSectionLayout title="MEMBERSHIP & BILLING" subTitle={subTitle}>
 			<div className="flex flex-col gap-3 sm:hidden">
-				<p className="font-medium text-[#333]">{user?.email}</p>
+				<p className="font-medium text-[#333]">{user!.email}</p>
 				<p className="text-[#737373]">Password: ********</p>
-				{renderChangeAccountLinks(
-					"border-t border-[#ccc] pb-1 pt-4 font-light",
-				)}
+				<LinkComponent
+					href="/account/update-email"
+					className="border-t border-[#ccc] pb-1 pt-4 font-light"
+				>
+					Change account email
+				</LinkComponent>
+				<LinkComponent
+					href="/account/update-password"
+					className="border-t border-[#ccc] pb-1 pt-4 font-light"
+				>
+					Change password
+				</LinkComponent>
 			</div>
+
 			<div className="mt-5 hidden w-full flex-col gap-3 sm:flex md:mt-0">
 				<div className="flex items-center justify-between gap-10">
-					<p className="break-all font-medium text-[#333]">{user?.email}</p>
-					{renderChangeAccountLinks(
-						"whitespace-nowrap text-[#0073e6] underline-offset-2 hover:underline",
-					)}
+					<p className="break-all font-medium text-[#333]">{user!.email}</p>
+					<LinkComponent
+						href="/account/update-email"
+						className="whitespace-nowrap text-[#0073e6] underline-offset-2 hover:underline"
+					>
+						Change account email
+					</LinkComponent>
 				</div>
 				<div className="flex items-center justify-between">
 					<p className="text-[#737373]">Password: ********</p>
-					{renderChangeAccountLinks(
-						"text-[#0073e6] underline-offset-2 hover:underline",
-					)}
+					<LinkComponent
+						href="/account/update-password"
+						className="text-[#0073e6] underline-offset-2 hover:underline"
+					>
+						Change password
+					</LinkComponent>
 				</div>
 			</div>
 		</ProfileSectionLayout>
