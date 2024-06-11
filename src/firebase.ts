@@ -1,5 +1,6 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { Auth, getAuth } from "firebase/auth";
+import { Firestore, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyB27VXrL4zfMwu7RqQR41cntwhWc4wsFnA",
@@ -14,10 +15,12 @@ class Firebase {
 	private static instance: Firebase;
 	public app: FirebaseApp;
 	public auth: Auth;
+	public db: Firestore;
 
 	private constructor() {
 		this.app = initializeApp(firebaseConfig);
 		this.auth = getAuth(this.app);
+		this.db = getFirestore(this.app);
 	}
 
 	public static getInstance(): Firebase {
@@ -30,3 +33,4 @@ class Firebase {
 
 const firebaseInstance = Firebase.getInstance();
 export const auth: Auth = firebaseInstance.auth;
+export const db: Firestore = firebaseInstance.db;

@@ -1,6 +1,11 @@
 "use client";
 
-import { onAuthStateChanged, signOut, User } from "firebase/auth";
+import {
+	onAuthStateChanged,
+	signOut,
+	User as FirebaseUser,
+} from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import {
 	createContext,
@@ -12,7 +17,14 @@ import {
 } from "react";
 
 import { clearToken } from "@/actions/cookie";
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
+
+interface User extends FirebaseUser {
+	stripeCustomerId?: string;
+	stripeSubscriptionId?: string;
+	plan?: string;
+	status?: string;
+}
 
 interface AuthContextProps {
 	user: User | null;
@@ -28,12 +40,19 @@ const AuthContext = createContext<AuthContextProps>({
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState<User | null>(null);
+	console.log("🚀 ~ AuthProvider ~ user:", user);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, async (user) => {
-			setUser(user);
+		const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+			if (firebaseUser) {
+				const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+				const userData = userDoc.exists() ? userDoc.data() : {};
+				setUser({ ...firebaseUser, ...userData });
+			} else {
+				setUser(null);
+			}
 			setLoading(false);
 		});
 

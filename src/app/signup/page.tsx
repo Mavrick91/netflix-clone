@@ -7,6 +7,7 @@ import {
 	sendEmailVerification,
 	UserCredential,
 } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -15,7 +16,7 @@ import { z } from "zod";
 import { Button } from "@/components/Button";
 import NetflixLogo from "@/components/NetflixLogo";
 import WarningError from "@/components/WarningError";
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
 
 import Step1 from "./_components/Step1";
 
@@ -60,6 +61,12 @@ const SignUpPage = () => {
 				password,
 			);
 			await sendEmailVerification(userCredential.user);
+			const user = userCredential.user;
+
+			await setDoc(doc(db, "users", user.uid), {
+				email: user.email,
+				createdAt: serverTimestamp(),
+			});
 			return userCredential;
 		},
 		onSuccess: () => {

@@ -43,7 +43,6 @@ function clearTokenAndRedirect(url: string, search: string) {
 export async function middleware(request: NextRequest) {
 	const token = request.cookies.get("token")?.value;
 	const { pathname, search } = request.nextUrl;
-	console.log("🚀 ~ middleware ~ pathname:", pathname);
 
 	if (request.method !== "GET") {
 		return NextResponse.next();

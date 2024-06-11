@@ -20,7 +20,7 @@ export default function AccountLayout({
 	return (
 		<>
 			<MainHeader />
-			<div className="h-full bg-[#f3f3f3] p-4 pt-14 sm:px-14 sm:pt-16 lg:pt-24">
+			<div className="min-h-full bg-[#f3f3f3] p-4 pt-14 sm:px-14 sm:pt-16 lg:pt-24">
 				<div className="mx-auto max-w-5xl">
 					<div className="flex flex-col pb-4 sm:flex-row sm:gap-3">
 						<h1 className="flex items-center gap-3 text-2xl text-[#333] md:text-4xl">
