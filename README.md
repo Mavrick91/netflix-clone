@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Netflix Clone
 
-## Getting Started
+This is a clone of the original Netflix platform. Users can sign up, log in, view movies/series, and display some details. Additionally, there is an account section where users can update their password and email as well as subscribe to a plan using the Stripe API.
 
-First, run the development server:
+## Table of Contents
 
-```bash
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Features](#features)
+
+## Installation
+
+### Prerequisites
+
+- Node.js (v20.x or later)
+- npm (v6.x or later) or yarn (v1.x or later)
+- Firebase project set up
+- Stripe account and keys
+- TMDB (The Movie Database) API key
+
+### Steps
+
+1. **Clone the repository**
+
+   ```sh
+   git clone https://github.com/Mavrick91/netflix-clone
+   cd netflix-clone
+   ```
+
+2. **Install dependencies**
+   Using npm:
+   ```sh
+   npm install
+   ```
+   Or using yarn:
+   ```sh
+   yarn install
+   ```
+
+3. **Set up environment variables**
+   You need to create a `.env.local` file in the root of your project for environment-specific variables. Here are the variables you need to add:
+
+    ```env
+    GOOGLE_TYPE="="*******************""
+    GOOGLE_PROJECT_ID="*******************"
+    GOOGLE_PRIVATE_KEY_ID="*******************"
+    GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n*************\n-----END PRIVATE KEY-----\n"
+    GOOGLE_CLIENT_EMAIL="*******************"
+    GOOGLE_CLIENT_ID="********************"
+    GOOGLE_AUTH_URI="*******************"
+    GOOGLE_TOKEN_URI="*******************"
+    GOOGLE_AUTH_PROVIDER_X509_CERT_URL="*******************"
+    GOOGLE_CLIENT_X509_CERT_URL="*******************"
+
+    TMDB_API_KEY="********************"
+
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="********************"
+    STRIPE_SECRET_KEY="********************"
+
+    STRIPE_WEBHOOK_SECRET="********************"
+    ```
+
+## Usage
+
+### Running Locally
+To start the development server, run:
+```sh
 npm run dev
-# or
+```
+Or with yarn:
+```sh
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Building and Running in Production
+To create an optimized production build, run:
+```sh
+npm run build
+```
+Or with yarn:
+```sh
+yarn build
+```
+Start the application in production mode, run:
+```sh
+npm start
+```
+Or with yarn:
+```sh
+yarn start
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Firebase
+1. Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+2. Navigate to the Project settings and add a new Web app to get your Firebase configuration.
+3. Update the `.env.local` file with your Firebase configuration as provided above.
 
-## Learn More
+### Stripe
+1. Create a Stripe account in the [Stripe Dashboard](https://dashboard.stripe.com/).
+2. Obtain your Stripe public and secret keys and update the `.env.local` file as provided above.
+3. Set up a webhook endpoint for the webhooks, and update the `STRIPE_WEBHOOK_SECRET` in the `.env.local` file.
 
-To learn more about Next.js, take a look at the following resources:
+### TMDB
+1. Create an account at [TMDB](https://www.themoviedb.org/).
+2. Navigate to your account settings and generate an API key.
+3. Update the `.env.local` file with your TMDB API key as provided above.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
+- **Authentication**: Sign up, log in, and secure authorization using Firebase.
+- **Movie/Series Listings**: Browse, search, and view details of movies and series using the TMDB API.
+- **User Account Management**: Update user details like email and password.
+- **Subscription Plans**: Integration with Stripe API for subscribing to different plans.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Note
+The TMDB API is used to fetch movie and TV show data, so a TMDB API key is required for the project to function correctly. Make sure to add your TMDB API key in the `.env.local` file.
