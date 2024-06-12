@@ -4,13 +4,10 @@ import Stripe from "stripe";
 
 import { getErrorMessage, logError } from "@/utils/utils";
 
-export const getServerStripe = () => {
-	const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+export const getServerStripe = async (): Promise<Stripe> =>
+	new Stripe(process.env.STRIPE_SECRET_KEY!, {
 		apiVersion: "2024-04-10",
 	});
-
-	return stripe;
-};
 
 export const createCheckoutSession = async (
 	priceId: string,
@@ -20,7 +17,7 @@ export const createCheckoutSession = async (
 	stripeCustomerId?: string,
 ) => {
 	try {
-		const stripe = getServerStripe();
+		const stripe = await getServerStripe();
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ["card"],
 			line_items: [
@@ -60,7 +57,7 @@ export const cancelSubscription = async (stripeSubscriptionId?: string) => {
 	}
 
 	try {
-		const stripe = getServerStripe();
+		const stripe = await getServerStripe();
 		await stripe.subscriptions.cancel(stripeSubscriptionId);
 	} catch (error: unknown) {
 		const errorMessage = getErrorMessage(error);
@@ -73,7 +70,7 @@ export const updateCard = async (
 	paymentMethodId: string,
 ) => {
 	try {
-		const stripe = getServerStripe();
+		const stripe = await getServerStripe();
 
 		const customer = (await stripe.customers.retrieve(
 			customerId,

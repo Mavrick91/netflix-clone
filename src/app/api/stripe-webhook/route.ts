@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 		const sig = req.headers.get("stripe-signature") as string;
 
 		try {
-			const stripe = getServerStripe();
+			const stripe = await getServerStripe();
 			event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
 		} catch (error: unknown) {
 			const errorMessage = getErrorMessage(error);
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 
 async function handleCheckoutSession(session: Stripe.Checkout.Session) {
 	const userId = session.metadata?.userId;
-	const stripe = getServerStripe();
+	const stripe = await getServerStripe();
 
 	if (!userId) {
 		throw new Error("User ID not found in session metadata");

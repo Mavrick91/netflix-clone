@@ -42,6 +42,10 @@ export default function AccountLayout({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	if (pathname === "/account/update-payment" && !user.stripeCustomerId) {
+		throw new Error("Page not found");
+	}
+
 	return (
 		<>
 			<MainHeader />
