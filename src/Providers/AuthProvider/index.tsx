@@ -116,37 +116,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [state, dispatch] = useReducer(authReducer, initialState);
 	const router = useRouter();
 
-	const initializeUser = async (token?: string) => {
-		const tokenCookie = token || (await getToken());
-		if (tokenCookie) {
-			try {
-				const user = await getUser(tokenCookie);
-				const userParsed = JSON.parse(user);
-
-				dispatch({
-					type: AuthActionTypes.SET_USER,
-					payload: userParsed as User,
-				});
-			} catch (error: unknown) {
-				const errorMessage = getErrorMessage(error);
-				logError(errorMessage);
-				dispatch({ type: AuthActionTypes.SET_USER, payload: null });
-			}
-		} else {
-			dispatch({ type: AuthActionTypes.SET_LOADING, payload: false });
-		}
-	};
-
-	useEffect(() => {
-		initializeUser();
-	}, []);
-
 	const logout = useCallback(async () => {
 		await clearToken();
 		await signOut(auth);
 		dispatch({ type: AuthActionTypes.LOGOUT });
 		router.push("/");
 	}, [router]);
+
+	const initializeUser = useCallback(
+		async (token?: string) => {
+			const tokenCookie = token || (await getToken());
+			if (tokenCookie) {
+				try {
+					const user = await getUser(tokenCookie);
+					const userParsed = JSON.parse(user);
+
+					dispatch({
+						type: AuthActionTypes.SET_USER,
+						payload: userParsed as User,
+					});
+				} catch (error: unknown) {
+					const errorMessage = getErrorMessage(error);
+					logError(errorMessage);
+					dispatch({ type: AuthActionTypes.SET_USER, payload: null });
+					logout();
+				}
+			} else {
+				dispatch({ type: AuthActionTypes.SET_LOADING, payload: false });
+			}
+		},
+		[logout],
+	);
+
+	useEffect(() => {
+		initializeUser();
+	}, [initializeUser]);
 
 	const updateUser = useCallback((userData: Partial<User>) => {
 		dispatch({ type: AuthActionTypes.UPDATE_USER, payload: userData });
@@ -160,7 +164,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 			updateUser,
 			initializeUser,
 		}),
-		[state.user, state.loading, logout, updateUser],
+		[state.user, state.loading, logout, updateUser, initializeUser],
 	);
 
 	return (

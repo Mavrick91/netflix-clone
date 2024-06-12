@@ -34,10 +34,6 @@ export async function POST(req: NextRequest) {
 				const subscription = event.data.object as Stripe.Subscription;
 				await handleSubscriptionUpdate(subscription);
 				break;
-			case "customer.subscription.deleted":
-				const deletedSubscription = event.data.object as Stripe.Subscription;
-				await handleSubscriptionDeletion(deletedSubscription);
-				break;
 			case "payment_method.attached":
 				const attachedPaymentMethod = event.data.object as Stripe.PaymentMethod;
 				await handlePaymentMethodUpdate(attachedPaymentMethod);
@@ -133,26 +129,6 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
 		status: subscription.status,
 		current_period_end: subscription.current_period_end,
 		plan: subscription.items.data[0].price.id,
-	};
-
-	await userRef.set(data, { merge: true });
-}
-
-async function handleSubscriptionDeletion(subscription: Stripe.Subscription) {
-	const userId = subscription.metadata?.userId;
-
-	if (!userId) {
-		throw new Error("User ID not found in subscription metadata");
-	}
-
-	const userRef = adminDb.collection("users").doc(userId);
-
-	const data: Record<string, string | null> = {
-		status: "canceled",
-		stripeSubscriptionId: null,
-		plan: null,
-		current_period_end: null,
-		createdAt: null,
 	};
 
 	await userRef.set(data, { merge: true });

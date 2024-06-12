@@ -1,11 +1,7 @@
-import { cancelSubscription, createCheckoutSession } from "@/actions/stripe";
+import { createCheckoutSession } from "@/actions/stripe";
 import { User } from "@/Providers/AuthProvider";
 import { getClientStripe } from "@/utils/stripeClient";
 import { getErrorMessage, logError } from "@/utils/utils";
-
-export const handleSubscriptionCancellation = async (user: User) => {
-	await cancelSubscription(user.stripeSubscriptionId);
-};
 
 export const handlePlanChange = async (user: User, priceId: string) => {
 	try {

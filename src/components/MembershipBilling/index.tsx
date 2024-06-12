@@ -5,9 +5,9 @@ import { format } from "date-fns";
 import { memo } from "react";
 import { PaymentIcon } from "react-svg-credit-card-payment-icons";
 
+import { cancelSubscription } from "@/actions/stripe";
 import { Button } from "@/components/Button";
 import LinkComponent from "@/components/LinkComponent";
-import { handleSubscriptionCancellation } from "@/helpers/subscriptionHelpers";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import ProfileSectionLayout from "@/layout/ProfileSectionLayout";
 
@@ -15,7 +15,8 @@ const MembershipBilling = () => {
 	const { user } = useAuthenticatedUser();
 
 	const { mutate: deleteSubscription, isPending } = useMutation({
-		mutationFn: async () => handleSubscriptionCancellation(user),
+		mutationFn: async () =>
+			cancelSubscription(user.uid, user.stripeSubscriptionId),
 	});
 
 	const subTitle = (
@@ -23,7 +24,7 @@ const MembershipBilling = () => {
 			<Button
 				loading={isPending}
 				onClick={deleteSubscription}
-				disabled={!!user.plan || user.status === "canceled"}
+				disabled={!user.plan || user.status === "canceled"}
 				className="text-black"
 				style={{
 					backgroundColor: "#e6e6e6",

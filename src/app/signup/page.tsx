@@ -2,12 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import {
-	createUserWithEmailAndPassword,
-	sendEmailVerification,
-	UserCredential,
-} from "firebase/auth";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -17,10 +13,10 @@ import { Button } from "@/components/Button";
 import NetflixLogo from "@/components/NetflixLogo";
 import WarningError from "@/components/WarningError";
 import { auth, db } from "@/firebase";
+import { getErrorMessage, logError } from "@/utils/utils";
 
 import Step1 from "./_components/Step1";
 
-// Define the schema using Zod
 const formSchema = z.object({
 	email: z
 		.string({
@@ -60,20 +56,17 @@ const SignUpPage = () => {
 				email,
 				password,
 			);
-			await sendEmailVerification(userCredential.user);
 			const user = userCredential.user;
+			await setDoc(doc(db, "users", user.uid), {});
 
-			await setDoc(doc(db, "users", user.uid), {
-				email: user.email,
-				createdAt: serverTimestamp(),
-			});
 			return userCredential;
 		},
 		onSuccess: () => {
 			router.push("/");
 		},
-		onError: (error) => {
-			console.error("Error signing up:", error);
+		onError: (error: unknown) => {
+			const errorMessage = getErrorMessage(error);
+			logError(errorMessage);
 		},
 	});
 

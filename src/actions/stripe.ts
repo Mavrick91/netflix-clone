@@ -2,6 +2,7 @@
 
 import Stripe from "stripe";
 
+import { admin, adminDb } from "@/firebaseAdmin";
 import { getErrorMessage, logError } from "@/utils/utils";
 
 export const getServerStripe = async (): Promise<Stripe> =>
@@ -50,15 +51,29 @@ export const createCheckoutSession = async (
 	}
 };
 
-export const cancelSubscription = async (stripeSubscriptionId?: string) => {
+export const cancelSubscription = async (
+	userId: string,
+	stripeSubscriptionId?: string,
+) => {
 	if (!stripeSubscriptionId) {
 		console.error("Subscription ID not provided.");
 		return;
 	}
-
 	try {
 		const stripe = await getServerStripe();
 		await stripe.subscriptions.cancel(stripeSubscriptionId);
+
+		const userRef = adminDb.collection("users").doc(userId);
+
+		const data: Record<string, string | null> = {
+			status: "canceled",
+			stripeSubscriptionId: null,
+			plan: null,
+			current_period_end: null,
+			createdAt: null,
+		};
+
+		await userRef.set(data, { merge: true });
 	} catch (error: unknown) {
 		const errorMessage = getErrorMessage(error);
 		logError(errorMessage);
@@ -98,6 +113,27 @@ export const updateCard = async (
 				userId: customer.metadata.userId,
 			},
 		});
+	} catch (error: unknown) {
+		const errorMessage = getErrorMessage(error);
+		logError(errorMessage);
+	}
+};
+
+export const deleteCustomer = async (userId: string, customerId?: string) => {
+	try {
+		const promises = [];
+
+		if (customerId) {
+			const stripe = await getServerStripe();
+			promises.push(stripe.customers.del(customerId));
+		}
+
+		const userRef = adminDb.collection("users").doc(userId);
+
+		promises.push(userRef.delete());
+		promises.push(admin.auth().deleteUser(userId));
+
+		await Promise.all(promises);
 	} catch (error: unknown) {
 		const errorMessage = getErrorMessage(error);
 		logError(errorMessage);
