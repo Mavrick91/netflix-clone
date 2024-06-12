@@ -1,11 +1,17 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
-export async function setCookie(token: string) {
-	cookies().set("token", token, { httpOnly: true, secure: true, path: "/" });
-	redirect("/browse");
+export const setCookie = (key: string, value: string) => {
+	cookies().set(key, value, { httpOnly: true, secure: true, path: "/" });
+};
+
+export async function setToken(token: string) {
+	setCookie("token", token);
+}
+
+export async function getToken() {
+	return cookies().get("token")?.value;
 }
 
 export async function clearToken() {

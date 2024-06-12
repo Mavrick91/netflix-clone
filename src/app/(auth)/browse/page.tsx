@@ -9,7 +9,7 @@ import {
 import MainHeader from "@/components/MainHeader";
 import MediaDisplay from "@/components/MediaDisplay";
 import { Movie } from "@/types";
-import { getRandomMedia } from "@/utils/utils";
+import { getRandomMedia } from "@/utils/media";
 
 export const metadata: Metadata = {
 	title: "Home - Netflix clone",

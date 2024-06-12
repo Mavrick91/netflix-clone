@@ -14,8 +14,7 @@ import {
 	mapMovieToInfoParsed,
 	mapTVShowToInfoParsed,
 } from "@/utils/mapBannerMedia";
-import { isDetailsMovie } from "@/utils/media";
-import { isInfoParsedMovie } from "@/utils/utils";
+import { isDetailsMovie, isInfoParsedMovie } from "@/utils/media";
 
 import Content from "./Content";
 import Header from "./Header";

@@ -6,7 +6,13 @@ import {
 	ReactNode,
 	useContext,
 } from "react";
-import { Controller, ControllerProps, useFormContext } from "react-hook-form";
+import {
+	Control,
+	Controller,
+	ControllerProps,
+	FieldValues,
+	useFormContext,
+} from "react-hook-form";
 
 import ErrorMessage from "@/components/ErrorMessage";
 import { getNestedError } from "@/utils/form";
@@ -17,7 +23,8 @@ import Text from "../Text";
 type FormInputContextProps = {
 	name: string;
 	error: string | undefined;
-	control: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	control: Control<FieldValues, any>;
 	disabled?: boolean;
 };
 

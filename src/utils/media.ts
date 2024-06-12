@@ -14,6 +14,7 @@ import {
 	Movie,
 	TVShow,
 } from "@/types";
+import { InfoParsed, InfoParsedMovie } from "@/types/InfoParsed";
 import { Person } from "@/types/person";
 
 type CategoryData = {
@@ -23,6 +24,10 @@ type CategoryData = {
 	genreIdSelected: string | null;
 	isTVCategory: boolean;
 	isMovieCategory: boolean;
+};
+
+export const getRandomMedia = (media: (Movie | TVShow)[]) => {
+	return media[Math.floor(Math.random() * media.length)];
 };
 
 export const isGenreMovie = (
@@ -83,6 +88,20 @@ export const isDetailsMovie = (
 
 export const isTVShow = (info: Movie | TVShow): info is TVShow => {
 	return (info as TVShow).name !== undefined;
+};
+
+export const isMovie = (media: Movie | TVShow): media is Movie => {
+	return (media as Movie).title !== undefined;
+};
+
+export const randomBetween = (min: number, max: number) => {
+	return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+export const isInfoParsedMovie = (
+	infoParsed: InfoParsed,
+): infoParsed is InfoParsedMovie => {
+	return (infoParsed as InfoParsedMovie).type === "movie";
 };
 
 const isMediaSearch = (item: MediaSearch | Person): item is MediaSearch => {

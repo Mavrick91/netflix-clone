@@ -1,3 +1,5 @@
+import { TVShow } from "./TVShow";
+
 export interface Movie {
 	backdrop_path: string;
 	id: number;
@@ -34,5 +36,5 @@ export interface Categories {
 
 export interface MediaSection {
 	title: string;
-	data: any[];
+	data: (TVShow | Movie)[];
 }

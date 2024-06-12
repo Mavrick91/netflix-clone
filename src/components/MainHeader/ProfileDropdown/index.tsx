@@ -3,13 +3,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import AccountIcon from "@/assets/images/svg/AccountIcon";
 import ImageClient from "@/components/ImageClient";
 import LinkComponent from "@/components/LinkComponent";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import useClickOutside from "@/hooks/useClickOutside";
-import { useAuth } from "@/Providers/AuthProvider";
 
-type ProfileDropdownProps = {};
-
-const ProfileDropdown: React.FC<ProfileDropdownProps> = () => {
-	const { logout } = useAuth();
+const ProfileDropdown = () => {
+	const { logout } = useAuthenticatedUser();
 	const { buttonRef, dropdownRef, isDropdownOpen, toggleDropdown } =
 		useClickOutside();
 

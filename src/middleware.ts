@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { AUTH_PATHS, NO_AUTH_PATHS } from "./constants/route";
+import { getErrorMessage, logError } from "./utils/utils";
 
 const getVerifyTokenUrl = () => {
 	if (process.env.VERCEL_ENV) {
@@ -23,8 +24,10 @@ async function verifyToken(token: string, url: string) {
 		});
 
 		return response.status === 200;
-	} catch (error) {
-		console.error("Fetch error:", error);
+	} catch (error: unknown) {
+		const errorMessage = getErrorMessage(error);
+		logError(errorMessage);
+
 		return false;
 	}
 }

@@ -3,16 +3,14 @@
 import { useCallback } from "react";
 
 import { PLANS } from "@/constants/plan";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import ProfileSectionLayout from "@/layout/ProfileSectionLayout";
-import { useAuth } from "@/Providers/AuthProvider";
 
 import ImageClient from "../ImageClient";
 import LinkComponent from "../LinkComponent";
 
-type PlanDetailsProps = {};
-
-const PlanDetails = ({}: PlanDetailsProps) => {
-	const { user } = useAuth();
+const PlanDetails = () => {
+	const { user } = useAuthenticatedUser();
 
 	const getUserPlan = useCallback((plan: string) => {
 		const userPlan = PLANS.find((p) => p.priceId === plan);

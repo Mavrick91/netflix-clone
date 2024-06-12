@@ -1,10 +1,10 @@
 import BrowseBanner from "@/app/(auth)/browse/_components/BrowseBanner";
 import CarouselSection from "@/components/CarouselSection";
-import { Movie, TVShow } from "@/types";
+import { MediaSection, Movie, TVShow } from "@/types";
 
 type MediaDisplayProps = {
 	bannerMedia: Movie | TVShow;
-	mediaSections: any[];
+	mediaSections: MediaSection[];
 	mediaType: "movie" | "tv";
 };
 

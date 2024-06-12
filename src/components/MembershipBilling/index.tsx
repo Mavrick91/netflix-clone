@@ -8,11 +8,11 @@ import { PaymentIcon } from "react-svg-credit-card-payment-icons";
 import { Button } from "@/components/Button";
 import LinkComponent from "@/components/LinkComponent";
 import { handleSubscriptionCancellation } from "@/helpers/subscriptionHelpers";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import ProfileSectionLayout from "@/layout/ProfileSectionLayout";
-import { useAuth } from "@/Providers/AuthProvider";
 
 const MembershipBilling = () => {
-	const { user } = useAuth();
+	const { user } = useAuthenticatedUser();
 
 	const { mutate: deleteSubscription, isPending } = useMutation({
 		mutationFn: async () => handleSubscriptionCancellation(user),
@@ -23,7 +23,7 @@ const MembershipBilling = () => {
 			<Button
 				loading={isPending}
 				onClick={deleteSubscription}
-				disabled={!user!.plan || user!.status === "canceled"}
+				disabled={!!user.plan || user.status === "canceled"}
 				className="text-black"
 				style={{
 					backgroundColor: "#e6e6e6",
@@ -39,9 +39,9 @@ const MembershipBilling = () => {
 	return (
 		<ProfileSectionLayout title="MEMBERSHIP & BILLING" subTitle={subTitle}>
 			<div className="flex flex-col gap-3 sm:hidden">
-				<p className="font-medium text-[#333]">{user!.email}</p>
+				<p className="font-medium text-[#333]">{user.email}</p>
 				<p className="text-[#737373]">Password: ********</p>
-				{user?.cardBrand && (
+				{user?.cardBrand && user.last4 && (
 					<div className="flex items-center gap-2 border-t border-[#ccc] pt-4 text-[#333]">
 						<PaymentIcon
 							// @ts-ignore
@@ -67,12 +67,14 @@ const MembershipBilling = () => {
 				<LinkComponent
 					href="/account/update-email"
 					className="border-t border-[#ccc] pb-1 pt-4 font-light"
+					prefetch
 				>
 					Change account email
 				</LinkComponent>
 				<LinkComponent
 					href="/account/update-password"
 					className="border-t border-[#ccc] pb-1 pt-4 font-light"
+					prefetch
 				>
 					Change password
 				</LinkComponent>
@@ -80,6 +82,7 @@ const MembershipBilling = () => {
 					<LinkComponent
 						href="/account/update-payment"
 						className="border-t border-[#ccc] pb-1 pt-4 font-light"
+						prefetch
 					>
 						Update payment method
 					</LinkComponent>
@@ -88,10 +91,11 @@ const MembershipBilling = () => {
 
 			<div className="hidden w-full flex-col gap-3 sm:flex md:mt-0">
 				<div className="flex items-center justify-between gap-10">
-					<p className="break-all font-medium text-[#333]">{user!.email}</p>
+					<p className="break-all font-medium text-[#333]">{user.email}</p>
 					<LinkComponent
 						href="/account/update-email"
 						className="whitespace-nowrap text-[#0073e6] underline-offset-2 hover:underline"
+						prefetch
 					>
 						Change account email
 					</LinkComponent>
@@ -101,6 +105,7 @@ const MembershipBilling = () => {
 					<LinkComponent
 						href="/account/update-password"
 						className="text-[#0073e6] underline-offset-2 hover:underline"
+						prefetch
 					>
 						Change password
 					</LinkComponent>
@@ -109,7 +114,7 @@ const MembershipBilling = () => {
 					<div className="flex items-center justify-between border-[#ccc] md:border-t md:pt-4">
 						<div className="flex items-center gap-2 text-[#333]">
 							<PaymentIcon
-								// @ts-ignore
+								// @ts-expect-error
 								type={user.cardBrand}
 								format="flatRounded"
 								width={30}
@@ -119,6 +124,7 @@ const MembershipBilling = () => {
 						<LinkComponent
 							href="/account/update-payment"
 							className="text-[#0073e6] underline-offset-2 hover:underline"
+							prefetch
 						>
 							Update payment method
 						</LinkComponent>

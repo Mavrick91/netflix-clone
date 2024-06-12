@@ -1,6 +1,6 @@
 import ImageTMDB from "@/components/ImageTMDB";
 import { Movie, TVShow } from "@/types";
-import { isMovie } from "@/utils/utils";
+import { isMovie } from "@/utils/media";
 
 type Props = {
 	media: Movie | TVShow;

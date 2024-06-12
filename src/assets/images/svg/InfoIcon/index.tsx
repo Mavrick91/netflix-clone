@@ -1,4 +1,8 @@
-const InfoIcon = (props: any) => {
+type InfoIconProps = {
+	className?: string;
+};
+
+const InfoIcon = (props: InfoIconProps) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"

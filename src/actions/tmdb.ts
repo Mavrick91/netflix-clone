@@ -11,8 +11,8 @@ import {
 	TVShow,
 } from "@/types";
 import { DetailsSeason } from "@/types/details/DetailsSeason";
+import { getRandomMedia } from "@/utils/media";
 import tmdbFetch from "@/utils/tmdbFetch";
-import { getRandomMedia } from "@/utils/utils";
 
 export const getTrendingMovies = async (): Promise<MediaResults<Movie>> => {
 	return tmdbFetch("/trending/movie/week");

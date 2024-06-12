@@ -3,6 +3,7 @@ import Stripe from "stripe";
 
 import { getServerStripe } from "@/actions/stripe";
 import { adminDb } from "@/firebaseAdmin";
+import { getErrorMessage, logError } from "@/utils/utils";
 
 export async function POST(req: NextRequest) {
 	const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -13,12 +14,13 @@ export async function POST(req: NextRequest) {
 		const sig = req.headers.get("stripe-signature") as string;
 
 		try {
-			const stripe = await getServerStripe();
+			const stripe = getServerStripe();
 			event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
-		} catch (err: any) {
-			console.error("⚠️  Webhook signature verification failed.", err.message);
+		} catch (error: unknown) {
+			const errorMessage = getErrorMessage(error);
+			logError(errorMessage);
 			return NextResponse.json(
-				{ message: `Webhook Error: ${err.message}` },
+				{ message: `Webhook Error: ${errorMessage}` },
 				{ status: 400 },
 			);
 		}
@@ -53,10 +55,12 @@ export async function POST(req: NextRequest) {
 		}
 
 		return NextResponse.json({ received: true });
-	} catch (err: any) {
-		console.error(err);
+	} catch (error: unknown) {
+		const errorMessage = getErrorMessage(error);
+		logError(errorMessage);
+
 		return NextResponse.json(
-			{ message: `Webhook Error: ${err.message}` },
+			{ message: `Webhook Error: ${errorMessage}` },
 			{ status: 500 },
 		);
 	}
@@ -64,7 +68,7 @@ export async function POST(req: NextRequest) {
 
 async function handleCheckoutSession(session: Stripe.Checkout.Session) {
 	const userId = session.metadata?.userId;
-	const stripe = await getServerStripe();
+	const stripe = getServerStripe();
 
 	if (!userId) {
 		throw new Error("User ID not found in session metadata");
@@ -72,7 +76,14 @@ async function handleCheckoutSession(session: Stripe.Checkout.Session) {
 
 	const userRef = adminDb.collection("users").doc(userId);
 
-	const data: Record<string, any> = {
+	const data: Record<
+		string,
+		| string
+		| Stripe.Customer
+		| Stripe.DeletedCustomer
+		| Stripe.Subscription
+		| null
+	> = {
 		stripeCustomerId: session.customer,
 		stripeSubscriptionId: session.subscription,
 		status: "active",
@@ -93,7 +104,7 @@ async function handleCheckoutSession(session: Stripe.Checkout.Session) {
 	const card = paymentMethod.card;
 
 	if (card) {
-		const cardData: Record<string, any> = {
+		const cardData: Record<string, string> = {
 			cardBrand: card.brand,
 			last4: card.last4,
 		};
@@ -117,7 +128,7 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
 
 	const userRef = adminDb.collection("users").doc(userId);
 
-	const data: Record<string, any> = {
+	const data: Record<string, string | Stripe.Subscription.Status | number> = {
 		stripeSubscriptionId: subscription.id,
 		status: subscription.status,
 		current_period_end: subscription.current_period_end,
@@ -136,7 +147,7 @@ async function handleSubscriptionDeletion(subscription: Stripe.Subscription) {
 
 	const userRef = adminDb.collection("users").doc(userId);
 
-	const data: Record<string, any> = {
+	const data: Record<string, string | null> = {
 		status: "canceled",
 		stripeSubscriptionId: null,
 		plan: null,
@@ -159,7 +170,7 @@ async function handlePaymentMethodUpdate(paymentMethod: Stripe.PaymentMethod) {
 	const card = paymentMethod.card;
 
 	if (card) {
-		const cardData: Record<string, any> = {
+		const cardData: Record<string, string> = {
 			cardBrand: card.brand,
 			last4: card.last4,
 		};
@@ -177,7 +188,7 @@ async function handleCustomerUpdate(customer: Stripe.Customer) {
 
 	const userRef = adminDb.collection("users").doc(userId);
 
-	const data: Record<string, any> = {
+	const data: Record<string, string> = {
 		stripeCustomerId: customer.id,
 		status: customer.deleted ? "deleted" : "active",
 	};

@@ -1,22 +1,13 @@
 import { cancelSubscription, createCheckoutSession } from "@/actions/stripe";
 import { User } from "@/Providers/AuthProvider";
 import { getClientStripe } from "@/utils/stripeClient";
+import { getErrorMessage, logError } from "@/utils/utils";
 
-export const handleSubscriptionCancellation = async (user: User | null) => {
-	if (!user) {
-		console.error("No user found.");
-		return;
-	}
-
+export const handleSubscriptionCancellation = async (user: User) => {
 	await cancelSubscription(user.stripeSubscriptionId);
 };
 
-export const handlePlanChange = async (user: User | null, priceId: string) => {
-	if (!user) {
-		console.error("No user found.");
-		return;
-	}
-
+export const handlePlanChange = async (user: User, priceId: string) => {
 	try {
 		const stripe = await getClientStripe();
 
@@ -34,8 +25,10 @@ export const handlePlanChange = async (user: User | null, priceId: string) => {
 		const { error } = await stripe!.redirectToCheckout({
 			sessionId: sessionId!,
 		});
-		console.log("🚀 ~ handlePlanChange ~ error:", error);
-	} catch (error: any) {
-		console.error(error.message);
+
+		throw new Error(error.message);
+	} catch (error: unknown) {
+		const errorMessage = getErrorMessage(error);
+		logError(errorMessage);
 	}
 };

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-	onAuthStateChanged,
-	signOut,
-	User as FirebaseUser,
-} from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { signOut, User as FirebaseUser } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import {
 	createContext,
@@ -14,11 +9,13 @@ import {
 	useContext,
 	useEffect,
 	useMemo,
-	useState,
+	useReducer,
 } from "react";
 
-import { clearToken } from "@/actions/cookie";
-import { auth, db } from "@/firebase";
+import { clearToken, getToken } from "@/actions/cookie";
+import { getUser } from "@/actions/firebase";
+import { auth } from "@/firebase";
+import { getErrorMessage, logError } from "@/utils/utils";
 
 export interface User extends FirebaseUser {
 	stripeCustomerId?: string;
@@ -30,96 +27,140 @@ export interface User extends FirebaseUser {
 	current_period_end?: number;
 }
 
-interface AuthContextProps {
+export interface AuthContextType {
 	user: User | null;
 	loading: boolean;
 	logout: () => Promise<void>;
-	setUser: (user: User | null) => void;
 	updateUser: (userData: Partial<User>) => void;
-	reloadUser: () => Promise<void>;
+	initializeUser: (token?: string) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextProps>({
+const AuthContext = createContext<AuthContextType>({
 	user: null,
 	loading: true,
 	logout: async () => {},
-	setUser: () => {},
 	updateUser: () => {},
-	reloadUser: async () => {},
+	initializeUser: async () => {},
 });
 
+const AuthActionTypes = {
+	SET_USER: "SET_USER",
+	SET_LOADING: "SET_LOADING",
+	LOGOUT: "LOGOUT",
+	UPDATE_USER: "UPDATE_USER",
+} as const;
+
+type AuthActionTypes = (typeof AuthActionTypes)[keyof typeof AuthActionTypes];
+
+export interface User extends FirebaseUser {
+	stripeCustomerId?: string;
+	stripeSubscriptionId?: string;
+	plan?: string;
+	status?: string;
+	last4?: string;
+	cardBrand?: string;
+	current_period_end?: number;
+}
+
+interface AuthState {
+	user: User | null;
+	loading: boolean;
+}
+
+interface SetUserAction {
+	type: typeof AuthActionTypes.SET_USER;
+	payload: User | null;
+}
+
+interface SetLoadingAction {
+	type: typeof AuthActionTypes.SET_LOADING;
+	payload: boolean;
+}
+
+interface LogoutAction {
+	type: typeof AuthActionTypes.LOGOUT;
+}
+
+interface UpdateUserAction {
+	type: typeof AuthActionTypes.UPDATE_USER;
+	payload: Partial<User>;
+}
+
+type AuthAction =
+	| SetUserAction
+	| SetLoadingAction
+	| LogoutAction
+	| UpdateUserAction;
+
+const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+	switch (action.type) {
+		case AuthActionTypes.SET_USER:
+			return { ...state, user: action.payload, loading: false };
+		case AuthActionTypes.SET_LOADING:
+			return { ...state, loading: action.payload };
+		case AuthActionTypes.LOGOUT:
+			return { ...state, user: null, loading: false };
+		case AuthActionTypes.UPDATE_USER:
+			return { ...state, user: { ...state.user, ...action.payload } as User };
+		default:
+			return state;
+	}
+};
+
+const initialState = {
+	user: null,
+	loading: true,
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-	const [user, setUser] = useState<User | null>(null);
-	const [loading, setLoading] = useState(true);
+	const [state, dispatch] = useReducer(authReducer, initialState);
 	const router = useRouter();
 
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-			if (firebaseUser) {
-				const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
-				const userData = userDoc.exists() ? userDoc.data() : {};
+	const initializeUser = async (token?: string) => {
+		const tokenCookie = token || (await getToken());
+		if (tokenCookie) {
+			try {
+				const user = await getUser(tokenCookie);
+				const userParsed = JSON.parse(user);
 
-				const userWithPrototype = Object.assign(
-					Object.create(Object.getPrototypeOf(firebaseUser)),
-					firebaseUser,
-					userData,
-				);
-
-				setUser(userWithPrototype as User);
-			} else {
-				setUser(null);
+				dispatch({
+					type: AuthActionTypes.SET_USER,
+					payload: userParsed as User,
+				});
+			} catch (error: unknown) {
+				const errorMessage = getErrorMessage(error);
+				logError(errorMessage);
+				dispatch({ type: AuthActionTypes.SET_USER, payload: null });
 			}
-			setLoading(false);
-		});
+		} else {
+			dispatch({ type: AuthActionTypes.SET_LOADING, payload: false });
+		}
+	};
 
-		return () => {
-			unsubscribe();
-		};
+	useEffect(() => {
+		initializeUser();
 	}, []);
 
 	const logout = useCallback(async () => {
 		await clearToken();
 		await signOut(auth);
+		dispatch({ type: AuthActionTypes.LOGOUT });
 		router.push("/");
 	}, [router]);
 
-	const updateUser = useCallback(
-		(userData: Partial<User>) => {
-			if (user) {
-				const updatedUser = Object.assign(
-					Object.create(Object.getPrototypeOf(user)),
-					user,
-					userData,
-				);
-				setUser(updatedUser);
-			}
-		},
-		[user],
-	);
-
-	const reloadUser = useCallback(async () => {
-		const currentUser = auth.currentUser;
-		if (currentUser) {
-			await currentUser.reload();
-			const refreshedUser = auth.currentUser;
-			if (refreshedUser) {
-				const userDoc = await getDoc(doc(db, "users", refreshedUser.uid));
-				const userData = userDoc.exists() ? userDoc.data() : {};
-
-				const userWithPrototype = Object.assign(
-					Object.create(Object.getPrototypeOf(refreshedUser)),
-					refreshedUser,
-					userData,
-				);
-
-				setUser(userWithPrototype as User);
-			}
-		}
+	const updateUser = useCallback((userData: Partial<User>) => {
+		dispatch({ type: AuthActionTypes.UPDATE_USER, payload: userData });
 	}, []);
 
 	const contextValue = useMemo(
-		() => ({ user, loading, logout, setUser, updateUser, reloadUser }),
-		[user, loading, logout, setUser, updateUser, reloadUser],
+		() => ({
+			user: state.user,
+			loading: state.loading,
+			logout,
+			updateUser,
+			initializeUser,
+		}),
+		[state.user, state.loading, logout, updateUser],
 	);
 
 	return (

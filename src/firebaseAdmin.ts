@@ -16,7 +16,7 @@ const serviceAccount = {
 
 if (!getApps().length) {
 	admin.initializeApp({
-		// @ts-ignore
+		// @ts-expect-error
 		credential: admin.credential.cert(serviceAccount),
 	});
 }

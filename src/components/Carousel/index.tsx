@@ -7,16 +7,17 @@ import "./carousel.css";
 import Slider, { Settings } from "react-slick";
 
 import useManageQueryParams from "@/hooks/useManageQueryParams";
-import { Movie } from "@/types";
+import { Movie, TVShow } from "@/types";
+import { isMovie } from "@/utils/media";
 
 import ImageTMDB from "../ImageTMDB";
 
 type Props = {
-	movies: Movie[];
+	medias: (Movie | TVShow)[];
 	mediaType: "movie" | "tv";
 };
 
-const NetflixCarousel = ({ movies, mediaType }: Props) => {
+const NetflixCarousel = ({ medias, mediaType }: Props) => {
 	const { addQueryParams } = useManageQueryParams();
 	const settings: Settings = {
 		infinite: true,
@@ -62,23 +63,23 @@ const NetflixCarousel = ({ movies, mediaType }: Props) => {
 	return (
 		<div className="netflix-carousel">
 			<Slider {...settings}>
-				{movies.map((movie) => {
-					if (!movie.backdrop_path) return null;
+				{medias.map((media) => {
+					if (!media.backdrop_path) return null;
 
 					return (
 						<button
 							type="button"
-							key={movie.title}
+							key={isMovie(media) ? media.title : media.name}
 							className="slick-slide-custom rounded"
 							onClick={() =>
-								addQueryParams({ jbv: `${movie.id}`, type: mediaType })
+								addQueryParams({ jbv: `${media.id}`, type: mediaType })
 							}
 						>
 							<ImageTMDB
 								className="overflow-hidden rounded transition-all duration-300 ease-in-out hover:z-50 hover:scale-110"
-								image={movie.backdrop_path}
+								image={media.backdrop_path}
 								imageProps={{
-									alt: movie.title,
+									alt: isMovie(media) ? media.title : media.name,
 									width: 272,
 									height: 153,
 								}}
@@ -91,7 +92,7 @@ const NetflixCarousel = ({ movies, mediaType }: Props) => {
 	);
 };
 
-const NextArrow = (props: any) => <div className="slick-next" {...props} />;
-const PrevArrow = (props: any) => <div className="slick-prev" {...props} />;
+const NextArrow = () => <div className="slick-next" />;
+const PrevArrow = () => <div className="slick-prev" />;
 
 export default NetflixCarousel;

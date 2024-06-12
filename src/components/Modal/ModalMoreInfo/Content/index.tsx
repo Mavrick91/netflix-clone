@@ -1,5 +1,6 @@
 import { InfoParsed } from "@/types/InfoParsed";
-import { formatRuntime, isInfoParsedMovie, randomBetween } from "@/utils/utils";
+import { isInfoParsedMovie, randomBetween } from "@/utils/media";
+import { formatRuntime } from "@/utils/utils";
 
 import MoreInfoInfo from "../MoreInfoInfo";
 

@@ -4,7 +4,7 @@ import InfoIcon from "@/assets/images/svg/InfoIcon";
 import ImageClient from "@/components/ImageClient";
 import useManageQueryParams from "@/hooks/useManageQueryParams";
 import { Movie, TVShow } from "@/types";
-import { isMovie } from "@/utils/utils";
+import { isMovie } from "@/utils/media";
 
 type BannerContentProps = {
 	bannerMedia: Movie | TVShow;

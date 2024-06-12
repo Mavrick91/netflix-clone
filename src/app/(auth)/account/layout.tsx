@@ -9,21 +9,19 @@ import ChevronIcon from "@/assets/images/svg/ChevronIcon";
 import MemeberSinceIcon from "@/assets/images/svg/MemeberSinceIcon";
 import MainHeader from "@/components/MainHeader";
 import { db } from "@/firebase";
-import { useAuth } from "@/Providers/AuthProvider";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 
 export default function AccountLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { user, updateUser } = useAuth();
+	const { user, updateUser } = useAuthenticatedUser();
 	const router = useRouter();
 	const pathname = usePathname();
 	const initialLoad = useRef(true);
 
 	useEffect(() => {
-		if (!user) return;
-
 		const userDocRef = doc(db, "users", user.uid);
 
 		const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
@@ -41,6 +39,7 @@ export default function AccountLayout({
 		});
 
 		return () => unsubscribe();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -59,7 +58,7 @@ export default function AccountLayout({
 						</h1>
 						<p className="mt-1 flex items-center gap-2 text-[13px] font-bold text-[#555] sm:m-0">
 							<MemeberSinceIcon /> Member Since{" "}
-							{format(new Date(user!.metadata.creationTime!), "MMMM yyyy")}
+							{format(new Date(user.metadata.creationTime!), "MMMM yyyy")}
 						</p>
 					</div>
 					{children}

@@ -1,6 +1,6 @@
 import LinkComponent from "@/components/LinkComponent";
 import { InfoParsed } from "@/types/InfoParsed";
-import { isInfoParsedMovie } from "@/utils/utils";
+import { isInfoParsedMovie } from "@/utils/media";
 
 import MoreInfoInfo from "../MoreInfoInfo";
 

@@ -16,10 +16,11 @@ import { useForm } from "react-hook-form";
 
 import { updateCard } from "@/actions/stripe";
 import { Button } from "@/components/Button";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import useToast from "@/hooks/useToast";
 import ProfileSectionLayout from "@/layout/ProfileSectionLayout";
-import { useAuth } from "@/Providers/AuthProvider";
 import { getClientStripe } from "@/utils/stripeClient";
+import { getErrorMessage, logError } from "@/utils/utils";
 
 const stripe = getClientStripe();
 
@@ -43,7 +44,7 @@ const elementStyles = {
 };
 
 const UpdateCardForm = ({ customerId }: { customerId: string }) => {
-	const { user } = useAuth();
+	const { user } = useAuthenticatedUser();
 	const showToast = useToast();
 	const stripe = useStripe();
 	const elements = useElements();
@@ -56,8 +57,9 @@ const UpdateCardForm = ({ customerId }: { customerId: string }) => {
 	const { mutate: updatePayment, isPending } = useMutation({
 		mutationFn: async (paymentMethodId: string) =>
 			updateCard(customerId, paymentMethodId),
-		onError: (err: any) => {
-			console.log("🚀 ~ onError: ~ err", err);
+		onError: (error: unknown) => {
+			const errorMessage = getErrorMessage(error);
+			logError(errorMessage);
 			showToast("Error while updating your payment method", "error");
 		},
 		onSuccess: async () => {
@@ -80,7 +82,7 @@ const UpdateCardForm = ({ customerId }: { customerId: string }) => {
 				type: "card",
 				card: cardElement,
 				metadata: {
-					userId: user!.uid,
+					userId: user.uid,
 				},
 			});
 
@@ -88,9 +90,7 @@ const UpdateCardForm = ({ customerId }: { customerId: string }) => {
 			return;
 		}
 
-		try {
-			updatePayment(paymentMethod.id);
-		} catch (err: any) {}
+		updatePayment(paymentMethod.id);
 	};
 
 	return (
@@ -123,11 +123,17 @@ const UpdateCardForm = ({ customerId }: { customerId: string }) => {
 };
 
 const UpdateCardPage = () => {
-	const { user } = useAuth();
+	const { user } = useAuthenticatedUser();
+	const router = useRouter();
+
+	if (!user.stripeCustomerId) {
+		router.push("/account");
+		return;
+	}
 
 	return (
 		<Elements stripe={stripe}>
-			<UpdateCardForm customerId={user?.stripeCustomerId!} />
+			<UpdateCardForm customerId={user.stripeCustomerId} />
 		</Elements>
 	);
 };

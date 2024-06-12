@@ -15,11 +15,8 @@ const GAP = 16;
 const MoreLikeThis: React.FC<MoreLikeThisProps> = ({ mediaRecommendation }) => {
 	const [isCollapsed, setIsCollapsed] = useState(true);
 
-	const { itemRef, collapsedHeight, totalHeight } = useDynamicHeight(
-		mediaRecommendation,
-		3,
-		GAP,
-	);
+	const { itemRef, collapsedHeight, totalHeight } =
+		useDynamicHeight<HTMLDivElement>(mediaRecommendation, 3, GAP);
 
 	return (
 		<div>

@@ -2,8 +2,10 @@
 
 import Stripe from "stripe";
 
-export const getServerStripe = async () => {
-	const stripe = await new Stripe(process.env.STRIPE_SECRET_KEY!, {
+import { getErrorMessage, logError } from "@/utils/utils";
+
+export const getServerStripe = () => {
+	const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 		apiVersion: "2024-04-10",
 	});
 
@@ -18,7 +20,7 @@ export const createCheckoutSession = async (
 	stripeCustomerId?: string,
 ) => {
 	try {
-		const stripe = await getServerStripe();
+		const stripe = getServerStripe();
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ["card"],
 			line_items: [
@@ -45,9 +47,9 @@ export const createCheckoutSession = async (
 		});
 
 		return session.id;
-	} catch (err: any) {
-		console.error(err.message);
-		throw new Error("Unable to create Stripe session");
+	} catch (error: unknown) {
+		const errorMessage = getErrorMessage(error);
+		logError(errorMessage);
 	}
 };
 
@@ -58,10 +60,11 @@ export const cancelSubscription = async (stripeSubscriptionId?: string) => {
 	}
 
 	try {
-		const stripe = await getServerStripe();
+		const stripe = getServerStripe();
 		await stripe.subscriptions.cancel(stripeSubscriptionId);
-	} catch (error: any) {
-		console.error("Error canceling subscription:", error.message);
+	} catch (error: unknown) {
+		const errorMessage = getErrorMessage(error);
+		logError(errorMessage);
 	}
 };
 
@@ -70,7 +73,7 @@ export const updateCard = async (
 	paymentMethodId: string,
 ) => {
 	try {
-		const stripe = await getServerStripe();
+		const stripe = getServerStripe();
 
 		const customer = (await stripe.customers.retrieve(
 			customerId,
@@ -98,8 +101,8 @@ export const updateCard = async (
 				userId: customer.metadata.userId,
 			},
 		});
-	} catch (error: any) {
-		console.error("Error updating card:", error.message);
-		throw new Error("Unable to update card");
+	} catch (error: unknown) {
+		const errorMessage = getErrorMessage(error);
+		logError(errorMessage);
 	}
 };

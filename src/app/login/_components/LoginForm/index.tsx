@@ -8,11 +8,13 @@ import { useRouter } from "next/navigation";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { setCookie } from "@/actions/cookie";
+import { setToken } from "@/actions/cookie";
 import { Button } from "@/components/Button";
 import FormInput from "@/components/input/FormInput";
 import WarningError from "@/components/WarningError";
 import { auth } from "@/firebase";
+import { useAuth } from "@/Providers/AuthProvider";
+import { getErrorMessage, logError } from "@/utils/utils";
 
 const formSchema = z.object({
 	email: z
@@ -33,6 +35,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const LoginForm = () => {
 	const router = useRouter();
+	const { initializeUser } = useAuth();
 	const methods = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -48,7 +51,7 @@ const LoginForm = () => {
 	const {
 		mutate: signIn,
 		isPending,
-		error,
+		isError,
 	} = useMutation({
 		mutationFn: async ({
 			email,
@@ -58,21 +61,21 @@ const LoginForm = () => {
 			password: string;
 		}) => signInWithEmailAndPassword(auth, email, password),
 		onSuccess: async (userCredential) => {
-			const token = userCredential
-				? await userCredential.user?.getIdToken()
-				: "";
-			if (!token) return;
-			await setCookie(token);
+			const token = await userCredential.user?.getIdToken();
+
+			await setToken(token);
+			await initializeUser(token);
+
 			router.push("/browse");
+		},
+		onError: (error: unknown) => {
+			const errorMessage = getErrorMessage(error);
+			logError(errorMessage);
 		},
 	});
 
 	const onSubmit: SubmitHandler<FormData> = async (data) => {
-		try {
-			signIn({ email: data.email, password: data.password });
-		} catch (error) {
-			console.error(error);
-		}
+		signIn({ email: data.email, password: data.password });
 	};
 
 	return (
@@ -85,7 +88,7 @@ const LoginForm = () => {
 					className="flex w-80 flex-col gap-4"
 					onSubmit={handleSubmit(onSubmit)}
 				>
-					{error && (
+					{isError && (
 						<WarningError>
 							<b className="font-medium">Incorrect password for {watchEmail}</b>
 						</WarningError>

@@ -1,5 +1,7 @@
 import dynamic from "next/dynamic";
 
+import { Movie, TVShow } from "@/types";
+
 const Carousel = dynamic(() => import("../Carousel"), { ssr: false });
 const HeaderCarousel = dynamic(() => import("../HeaderCarousel"), {
 	ssr: false,
@@ -7,7 +9,7 @@ const HeaderCarousel = dynamic(() => import("../HeaderCarousel"), {
 
 type Props = {
 	title: string;
-	medias: any[];
+	medias: (Movie | TVShow)[];
 	mediaType: "movie" | "tv";
 };
 
@@ -15,7 +17,7 @@ const CarouselSection = ({ title, medias, mediaType }: Props) => {
 	return (
 		<section aria-label={title}>
 			<HeaderCarousel title={title} />
-			<Carousel movies={medias} mediaType={mediaType} />
+			<Carousel medias={medias} mediaType={mediaType} />
 		</section>
 	);
 };

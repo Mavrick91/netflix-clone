@@ -19,10 +19,8 @@ const TVShowEpisodes = ({ infoParsed }: { infoParsed: InfoParsedTVShow }) => {
 		staleTime: 60 * 60 * 6000, // 6 hours
 	});
 
-	const { itemRef, collapsedHeight, totalHeight } = useDynamicHeight(
-		season?.episodes || [],
-		10,
-	);
+	const { itemRef, collapsedHeight, totalHeight } =
+		useDynamicHeight<HTMLButtonElement>(season?.episodes || [], 10);
 
 	const hasAtLeast11Episodes = useMemo(
 		() => (season?.episodes || []).length >= 11,

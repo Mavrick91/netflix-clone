@@ -2,21 +2,17 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import {
-	EmailAuthProvider,
-	reauthenticateWithCredential,
-	reload,
-	updatePassword,
-} from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { updateFirebaseUser } from "@/actions/firebase";
 import { Button } from "@/components/Button";
 import FormInput from "@/components/input/FormInput";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import useToast from "@/hooks/useToast";
 import ProfileSectionLayout from "@/layout/ProfileSectionLayout";
-import { useAuth } from "@/Providers/AuthProvider";
+import { getErrorMessage, logError } from "@/utils/utils";
 
 const schema = z
 	.object({
@@ -37,10 +33,8 @@ const schema = z
 
 type FormData = z.infer<typeof schema>;
 
-type UpdatePasswordProps = {};
-
-const UpdatePassword = ({}: UpdatePasswordProps) => {
-	const { user } = useAuth();
+const UpdatePassword = () => {
+	const { user } = useAuthenticatedUser();
 	const showToast = useToast();
 	const router = useRouter();
 	const methods = useForm<FormData>({
@@ -55,32 +49,22 @@ const UpdatePassword = ({}: UpdatePasswordProps) => {
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (data: FormData) => {
-			if (!user) return;
-			const credential = EmailAuthProvider.credential(
-				user.email!,
-				data.currentPassword,
-			);
-			await reauthenticateWithCredential(user, credential);
-			await updatePassword(user, data.newPassword);
+			await updateFirebaseUser(user.uid, { password: data.newPassword });
 		},
-		onError: (err: any) => {
-			console.log("🚀 ~ onError: ~ err", err);
+		onError: (error: unknown) => {
+			const errorMessage = getErrorMessage(error);
+			logError(errorMessage);
+
 			showToast("Error while updating your password", "error");
 		},
 		onSuccess: async () => {
-			await reload(user!);
 			showToast("Password updated successfully", "success");
 			router.push("/account");
 		},
 	});
 
 	const onSubmit = (data: FormData) => {
-		try {
-			mutate(data);
-		} catch (err: any) {
-			console.log(err.message);
-			throw new Error("Can't update your password. Try again later.");
-		}
+		mutate(data);
 	};
 
 	return (

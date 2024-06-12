@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const useDynamicHeight = (items: any[], itemCount: number, gap: number = 0) => {
-	const itemRef = useRef<any>(null);
+import { Movie, TVShow } from "@/types";
+import { Episode } from "@/types/details/DetailsSeason";
+
+const useDynamicHeight = <T extends HTMLElement>(
+	items: (Episode | Movie | TVShow)[],
+	itemCount: number,
+	gap: number = 0,
+) => {
+	const itemRef = useRef<T>(null);
 	const [itemHeight, setItemHeight] = useState<number>(0);
 	const [totalHeight, setTotalHeight] = useState<number>(0);
 
