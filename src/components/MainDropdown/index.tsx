@@ -53,7 +53,7 @@ const MainDropdown = ({
 				)}
 			>
 				{label}
-				<div className="arrow-down right-[10px] top-[44%]" />
+				<div className="arrow-down right-3 top-1/2 -translate-y-1/2" />
 			</button>
 
 			{isDropdownOpen && (

@@ -1,5 +1,6 @@
 "use client";
 
+import classNames from "classnames";
 import Image, { ImageProps } from "next/image";
 
 const ImageClient = (props: ImageProps) => {
@@ -8,7 +9,7 @@ const ImageClient = (props: ImageProps) => {
 			{...props}
 			alt={props.alt || "image"}
 			quality={100}
-			className="h-full object-cover"
+			className={classNames("h-full object-cover", props.className)}
 		/>
 	);
 };

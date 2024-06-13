@@ -14,18 +14,16 @@ const ProfileDropdown = () => {
 	const dropdownVariants = {
 		open: {
 			opacity: 1,
-			y: 0,
 			transition: { duration: 0.3 },
 		},
 		closed: {
 			opacity: 0,
-			y: -20,
 			transition: { duration: 0.3 },
 		},
 	};
 
 	return (
-		<div className="relative z-20 size-10 py-1">
+		<div className="relative z-20 size-6 md:size-7 lg:size-8">
 			<button
 				type="button"
 				className="flex size-full justify-center"
@@ -36,9 +34,9 @@ const ProfileDropdown = () => {
 				<ImageClient
 					src="/images/profile-icon-1.png"
 					alt="Profile"
-					width={32}
-					height={32}
-					className="rounded"
+					width={40}
+					height={40}
+					className="rounded-sm"
 				/>
 			</button>
 			<AnimatePresence>
@@ -48,13 +46,14 @@ const ProfileDropdown = () => {
 						animate="open"
 						exit="closed"
 						variants={dropdownVariants}
+						className="absolute right-0 flex flex-col inset-x-0 space-y-3 mt-2"
 					>
-						<div className="arrow-down left-1/2 top-12 shrink-0 -translate-x-1/2 rotate-180" />
+						<div className="arrow-down !relative shrink-0 rotate-180 left-1/2 -translate-x-1/2" />
 						<div
 							className="absolute right-0 flex flex-col text-white"
 							ref={dropdownRef}
 						>
-							<div className="relative -bottom-6 w-56 rounded bg-black text-sm">
+							<div className="relative w-56 rounded bg-black text-sm">
 								<ul>
 									<li className="p-3">
 										<LinkComponent

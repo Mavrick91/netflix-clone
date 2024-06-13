@@ -37,7 +37,7 @@ const SecondaryDropdown = ({
 				className="relative h-auto rounded border border-[#4D4D4D] bg-[#242424] py-1 pl-4 pr-7 text-sm text-white transition-all md:text-base lg:py-2 lg:pr-14 lg:text-lg lg:font-medium"
 			>
 				{label}
-				<div className="arrow-down" />
+				<div className="arrow-down right-3 top-1/2 -translate-y-1/2" />
 			</button>
 
 			{isDropdownOpen && (
